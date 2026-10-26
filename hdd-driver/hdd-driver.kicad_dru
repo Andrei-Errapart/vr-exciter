@@ -1,0 +1,8 @@
+(version 1)
+
+# Keep component courtyards 1 mm away from the board edge. The 1 mm frame is
+# the rule area "EdgeKeepout". Footprints excluded from the BOM (mounting
+# holes and other copper-only parts) are exempt.
+(rule "Component edge keepout"
+	(constraint disallow footprint)
+	(condition "A.Type == 'Footprint' && !A.Exclude_From_Bill_Of_Materials && A.intersectsArea('EdgeKeepout')"))

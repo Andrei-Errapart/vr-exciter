@@ -72,19 +72,26 @@ data.
 
 ### PCB
 
-- **Outline:** a plain rectangle, X −36…38 and Y −3…73 (74 × 76 mm), 1.6 mm
+- **Outline:** a plain rectangle, X −36…38 and Y 0…73 (74 × 73 mm), 1.6 mm
   thick. It started as option B in `doc/outline-options.jpg` (Y 12…88). The
   first test print showed that the bottom edge sat on the motor, so the
   outline moved 15 mm towards the connector end. It now ends about 3 mm short
-  of the motor circle, and its top edge reaches about 3 mm past the drive's
-  connector end. The sides still clear the rail bulges around SFF holes 4
-  and 5.
+  of the motor circle. The top edge used to reach 3 mm past the drive's
+  connector end; it was cut back to sit flush with it. The sides still clear
+  the rail bulges around SFF holes 4 and 5.
+- **Edge keepout:** component courtyards stay 1 mm clear of the board edge.
+  The rule area `EdgeKeepout` (a 1 mm frame inside the outline) and the
+  custom rule in `hdd-driver.kicad_dru` enforce this in DRC. Footprints
+  excluded from the BOM (the mounting holes and other copper-only parts) are
+  exempt.
 - **Mounting:** four M2 screws in holes 2, 3, 7 and 8. Holes are 2.4 mm
   (ISO 273 medium fit), plated with a 4.2 mm pad, and tied to GND.
 - **Corner holes H4–H7:** M3 (3.2 mm, plated, 6.4 mm pad, on GND), 4 mm in
-  from each edge, at X −32 / 34 and Y 1 / 69. They are optional: for rubber
-  feet, or for spacers to a housing. Their courtyards are kept free of parts
-  on both sides.
+  from each edge, at X −32 / 34 and Y 4 / 69. They are optional: for rubber
+  feet, or for spacers to a housing. H6/H7 courtyards are kept free of parts
+  on both sides. Since the top edge was cut back, H4 and H5 overlap the
+  courtyards of U1 (WeAct) and U3 (MT3608); DRC reports this, and it is
+  still open.
 - **Spring contacts:** footprint `HDD_SpringContacts_3P_P2.0mm`, placed on
   screw 7 and rotated 13.5°. Three 1.4 × 4.0 mm pads on **B.Cu**, the side
   facing the drive. The pad centres lie within 0.2 mm of the measured spring
