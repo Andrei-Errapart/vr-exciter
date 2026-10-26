@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "source": "tn1489-security-bulletin-tn1489stpsirt-physical-attacks-on-stm32-and-stm32cube-firmware-stmicroelectronics.pdf",
+  "markdown": "tn1489-security-bulletin-tn1489stpsirt-physical-attacks-on-stm32-and-stm32cube-firmware-stmicroelectronics.md",
+  "images_dir": "tn1489-security-bulletin-tn1489stpsirt-physical-attacks-on-stm32-and-stm32cube-firmware-stmicroelectronics.images",
+  "entries": [
+    {
+      "occurrence": 1,
+      "alt": "Image",
+      "original_file": "image_001_75e71ad9.png",
+      "final_file": "53a5abd6ca961413d7e2a0a012bf48213a396ba93a534a68eab771a17afad7ee.png",
+      "status": "kept",
+      "page": 1,
+      "bbox": {
+        "l": 45.25996780395508,
+        "t": 784.2397613525391,
+        "r": 181.33975219726562,
+        "b": 748.0235748291016
+      },
+      "coord_system": "docling",
+      "content_sha256": "53a5abd6ca961413d7e2a0a012bf48213a396ba93a534a68eab771a17afad7ee"
+    },
+    {
+      "occurrence": 2,
+      "alt": "Image",
+      "original_file": "image_002_3e9f6de8.png",
+      "final_file": "135649db7ca95242a7f5854a046a888d44b1b22c966011bbf8aadd3b57e663b7.png",
+      "status": "kept",
+      "page": 1,
+      "bbox": {
+        "l": 494.7046203613281,
+        "t": 788.0234870910645,
+        "r": 551.8773193359375,
+        "b": 775.0727310180664
+      },
+      "coord_system": "docling",
+      "content_sha256": "135649db7ca95242a7f5854a046a888d44b1b22c966011bbf8aadd3b57e663b7"
+    },
+    {
+      "occurrence": 3,
+      "alt": "Image",
+      "original_file": "image_003_dd63bcf2.png",
+      "final_file": "169904b12c09f294a4c556c60ca56466b244a6c07c523087ab6e0d6170d018e5.png",
+      "status": "kept",
+      "page": 2,
+      "bbox": {
+        "l": 41.47064971923828,
+        "t": 785.133861541748,
+        "r": 83.21121978759766,
+        "b": 761.7953262329102
+      },
+      "coord_system": "docling",
+      "content_sha256": "169904b12c09f294a4c556c60ca56466b244a6c07c523087ab6e0d6170d018e5"
+    },
+    {
+      "occurrence": 4,
+      "alt": "Image",
+      "original_file": "image_004_d44fe25b.png",
+      "final_file": "46114fda951917b9dde9e5fb113c723152a494ef2d0cea8e2533a67c136ddb0e.png",
+      "status": "kept",
+      "page": 3,
+      "bbox": {
+        "l": 41.21180725097656,
+        "t": 784.8728713989258,
+        "r": 83.27590942382812,
+        "b": 761.3307647705078
+      },
+      "coord_system": "docling",
+      "content_sha256": "46114fda951917b9dde9e5fb113c723152a494ef2d0cea8e2533a67c136ddb0e"
+    }
+  ]
+}
