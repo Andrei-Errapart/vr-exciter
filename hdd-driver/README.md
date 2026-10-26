@@ -84,6 +84,11 @@ data.
   custom rule in `hdd-driver.kicad_dru` enforce this in DRC. Footprints
   excluded from the BOM (the mounting holes and other copper-only parts) are
   exempt.
+- **GND pours:** `GND_TOP` on F.Cu and `GND_BOTTOM` on B.Cu cover the whole
+  board (0.3 mm clearance, thermal reliefs). The rule area
+  `J2_SpringKeepout` (J2's B.CrtYd) keeps the bottom pour and vias away from
+  the spring pads. 0.6/0.3 mm GND stitching vias run about every 5 mm round
+  the edge and on a 10 mm grid inside, only where both pours have copper.
 - **Mounting:** four M2 screws in holes 2, 3, 7 and 8. Holes are 2.4 mm
   (ISO 273 medium fit), plated with a 4.2 mm pad, and tied to GND.
 - **Corner holes H4–H7:** M3 (3.2 mm, plated, 6.4 mm pad, on GND), 4 mm in
