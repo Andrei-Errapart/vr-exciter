@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# export-test-model - 3D models for checking the PCB against the drive.
+#
+# Makes a copy of hdd-driver.kicad_pcb in which the motor spring-contact pads
+# are replaced by through-slots (same size and angle), keeps the outline,
+# mounting holes and every drilled hole, and exports:
+#
+#   test-board.stl    board only: 3D-print it, screw it to the drive with the
+#                     M2 screws 2, 3, 7, 8 and look through the slots: each
+#                     spring tip should sit in its slot.
+#   test-board.step   the same, as STEP.
+#   test-assembly.step  board with the module models, for checking heights
+#                       and clearances in a CAD tool.
+#
+# Coordinates are in the drive frame (origin = drive centre line at the
+# connector end), the PCB's aux origin.
+#
+# Usage: scripts/export-test-model [-o OUTDIR] [--thickness MM] [--slot-width MM]
+#   -o OUTDIR        output directory (default: build/test-model)
+#   --thickness MM   board thickness of the test model (default: as designed,
+#                    1.6 mm; a thicker print is stiffer, hole positions stay)
+#   --slot-width MM  slot width (default: the pad width, 1.4 mm)
+
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJ="$(cd "$HERE/.." && pwd)"
+KICAD_APP="${KICAD_APP:-/Applications/KiCad/KiCad.app}"
+KPY="${KPY:-$KICAD_APP/Contents/Frameworks/Python.framework/Versions/Current/bin/python3}"
+KCLI="${KCLI:-$(command -v kicad-cli || echo "$KICAD_APP/Contents/MacOS/kicad-cli")}"
+
+OUT="$PROJ/build/test-model"
+PYARGS=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -o) OUT="$2"; shift 2 ;;
+        --thickness|--slot-width) PYARGS+=("$1" "$2"); shift 2 ;;
+        -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
+        *) echo "unknown option $1" >&2; exit 2 ;;
+    esac
+done
+mkdir -p "$OUT"
+
+TEST_PCB="$OUT/hdd-driver-test.kicad_pcb"
+quiet() { grep -v -e 'create wxApp' -e 'memory leak' -e 'Error retrieving source file' -e '^$' || true; }
+
+"$KPY" "$HERE/export_test_model.py" "$PROJ/hdd-driver.kicad_pcb" "$TEST_PCB" ${PYARGS[@]+"${PYARGS[@]}"} 2>&1 | quiet
+
+# ${KIPRJMOD} must point at the project so the module models are found.
+VARS=(-D "KIPRJMOD=$PROJ")
+"$KCLI" pcb export stl  --force --board-only --drill-origin "${VARS[@]}" -o "$OUT/test-board.stl"  "$TEST_PCB" 2>&1 | quiet
+"$KCLI" pcb export step --force --board-only --drill-origin "${VARS[@]}" -o "$OUT/test-board.step" "$TEST_PCB" 2>&1 | quiet
+"$KCLI" pcb export step --force --drill-origin "${VARS[@]}" -o "$OUT/test-assembly.step" "$TEST_PCB" 2>&1 | quiet
+echo "written to $OUT"

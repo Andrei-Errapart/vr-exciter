@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# make-module-models - regenerate the module 3D models in lib/3d/.
+#
+#   lib/3d/WeAct_STM32G474_CoreBoard.step
+#   lib/3d/SimpleFOC_Mini_v1.0.step
+#   lib/3d/MT3608_Module.step
+#
+# Each model has its origin at the module centre (top view), z = 0 at the
+# underside of the module PCB, and male pin headers pointing down (-z).
+#
+# Steps:
+#  1. (only with --strip) remove the pins-up 2x12 headers from WeAct's STEP;
+#     needs a Python with cadquery-ocp in $OCP_PYTHON.
+#  2. build the source boards in lib/3d/src/ with KiCad's Python (pcbnew).
+#  3. export each source board to STEP with kicad-cli.
+#
+# Usage: scripts/module-models/make-module-models [--strip]
+
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJ="$(cd "$HERE/../.." && pwd)"          # hdd-driver/
+SRC="$PROJ/lib/3d/src"
+KICAD_APP="${KICAD_APP:-/Applications/KiCad/KiCad.app}"
+KPY="${KPY:-$KICAD_APP/Contents/Frameworks/Python.framework/Versions/Current/bin/python3}"
+KCLI="${KCLI:-$(command -v kicad-cli || echo "$KICAD_APP/Contents/MacOS/kicad-cli")}"
+
+if [ "${1:-}" = "--strip" ]; then
+    "${OCP_PYTHON:?set OCP_PYTHON to a python with cadquery-ocp}" "$HERE/strip_step_components.py" \
+        "$SRC/weact-stm32g474-coreboard-v10_3d.step" \
+        "$SRC/weact-stm32g474-coreboard-v10_no-headers.step" P1 P2
+fi
+
+"$KPY" "$HERE/build_sources.py" "$SRC" 2>&1 | grep -v 'create wxApp' || true
+
+export_model() {   # source board, output name, extra kicad-cli flags
+    "$KCLI" pcb export step --force --user-origin 100x100mm "${@:3}" \
+        -o "$PROJ/lib/3d/$2.step" "$SRC/$1.kicad_pcb" 2>&1 | grep -v -e 'create wxApp' -e '^$' || true
+}
+export_model weact_stm32g474_coreboard WeAct_STM32G474_CoreBoard --no-board-body
+export_model simplefoc_mini_v1         SimpleFOC_Mini_v1.0
+export_model mt3608_module             MT3608_Module

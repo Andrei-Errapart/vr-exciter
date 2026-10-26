@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "hdd-driver")(type "KiCad")(uri "${KIPRJMOD}/lib/hdd-driver.kicad_sym")(options "")(descr "hdd-driver project symbols"))
+)
