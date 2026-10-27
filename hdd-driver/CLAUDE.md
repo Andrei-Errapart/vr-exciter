@@ -57,6 +57,15 @@ geometry, pin assignment, power scheme and open checks.
 - **WeAct STEP stripping** needs `cadquery-ocp`, which is not installed
   globally. Use a venv.
 
+## Routing
+
+- **Shunt areas (RS1–RS3 with U4–U6):** hand-routed Kelvin connections,
+  and the tracks are locked. Don't unlock or autoroute those nets
+  (PH_A/B, PH_A/B_DRV, VM, VM_DRV). README "Routing" has the
+  KiCadRoutingTools command used for the rest and the clean-up it needs.
+- **J2_SpringKeepout** (B.Cu) bans vias and pour but allows tracks. The
+  phase tracks enter the spring pads from below on B.Cu.
+
 ## Hardware facts that are easy to get wrong
 
 - **WeAct `VCC`** is the LDO input (3.3–20 V), fed from VBUS through a

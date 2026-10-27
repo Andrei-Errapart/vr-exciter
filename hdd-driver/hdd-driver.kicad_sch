@@ -3093,6 +3093,716 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Amplifier_Current:INA181"
+			(pin_names
+				(offset 0.127)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 3.81 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "INA181"
+				(at 3.81 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+				(at 0 -22.86 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ina181.pdf"
+				(at 0 -20.32 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Bidirectional, Low- and High-Side Voltage Output, Current-Sense Amplifier, SOT-23-6"
+				(at 0 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "current monitor shunt sensor bidirectional"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SOT?23*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "INA181_0_1"
+				(polyline
+					(pts
+						(xy 5.08 0)
+						(xy -5.08 5.08)
+						(xy -5.08 -5.08)
+						(xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "INA181_1_1"
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -7.62 90)
+					(length 6.35)
+					(name "REF"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 7.62 270)
+					(length 3.81)
+					(name "V+"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Amplifier_Current:INA240A1PW"
+			(pin_names
+				(offset 0.127)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 3.81 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "INA240A1PW"
+				(at 3.81 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_SO:TSSOP-8_4.4x3mm_P0.65mm"
+				(at 0 -16.51 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ina240.pdf"
+				(at 3.81 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "High- and Low-Side, Bidirectional, Zero-Drift, Current-Sense Amplifier With Enhanced PWM Rejection, 20V/V, TSSOP-8"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "current monitor shunt sensor bidirectional high low"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TSSOP*4.4x3mm*P0.65mm*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "INA240A1PW_0_1"
+				(polyline
+					(pts
+						(xy 5.08 0)
+						(xy -5.08 5.08)
+						(xy -5.08 -5.08)
+						(xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "INA240A1PW_1_1"
+				(pin passive line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 7.62 270)
+					(length 3.81)
+					(name "V+"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 90)
+					(length 5.08)
+					(name "REF2"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -7.62 90)
+					(length 6.35)
+					(name "REF1"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Diode:BAV99"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "D"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "BAV99"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAV99_SER.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "BAV99 High-speed switching diodes, SOT-23"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "diode"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SOT?23*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "BAV99_0_1"
+				(polyline
+					(pts
+						(xy -5.08 0)
+						(xy 5.08 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "BAV99_1_1"
+				(polyline
+					(pts
+						(xy -3.81 1.27)
+						(xy -1.27 0)
+						(xy -3.81 -1.27)
+						(xy -3.81 1.27)
+						(xy -3.81 1.27)
+						(xy -3.81 1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -1.27)
+						(xy -1.27 1.27)
+						(xy -1.27 1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0)
+						(xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27)
+						(xy 3.81 0)
+						(xy 1.27 -1.27)
+						(xy 1.27 1.27)
+						(xy 1.27 1.27)
+						(xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 1.27)
+						(xy 3.81 -1.27)
+						(xy 3.81 -1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(symbol
 		(lib_id "hdd-driver:WeAct_STM32G474_CoreBoard")
@@ -3309,10 +4019,6 @@
 		)
 		(uuid "52ec1e84-beb7-4ef5-b06e-cb867c3cda1b")
 	)
-	(no_connect
-		(at 127 82.55)
-		(uuid "29206da6-664e-46b5-a1e0-03ad6aec5166")
-	)
 	(label "VCC_MCU"
 		(at 76.2 85.09 180)
 		(effects
@@ -3454,32 +4160,16 @@
 		(uuid "bbdf8440-f46a-410e-9169-8b3fe7450029")
 	)
 	(no_connect
-		(at 127 118.11)
-		(uuid "3aafbc97-2f87-4f8d-9312-5552271ace21")
-	)
-	(no_connect
 		(at 76.2 120.65)
 		(uuid "1e7fefce-c807-4ccf-bd9d-394409f7b73e")
-	)
-	(no_connect
-		(at 127 120.65)
-		(uuid "3eb150d7-543a-494d-a3c9-2c7b07363382")
 	)
 	(no_connect
 		(at 76.2 123.19)
 		(uuid "a044f7c3-88c8-4162-a21c-632e73c58e8e")
 	)
 	(no_connect
-		(at 127 123.19)
-		(uuid "7b57cce7-e94c-46c1-922e-c6eaf28a2478")
-	)
-	(no_connect
 		(at 76.2 125.73)
 		(uuid "53839dad-9738-41e9-be2e-7d0657cbc112")
-	)
-	(no_connect
-		(at 127 125.73)
-		(uuid "f8108535-454a-4afa-9dc7-97e4786bd131")
 	)
 	(no_connect
 		(at 76.2 128.27)
@@ -3941,7 +4631,7 @@
 		)
 		(uuid "d6460dbf-29ea-42a5-a944-8e437e93a063")
 	)
-	(label "VM"
+	(label "VM_DRV"
 		(at 241.3 88.9 0)
 		(effects
 			(font
@@ -3951,7 +4641,7 @@
 		)
 		(uuid "d7bf40b4-bbde-4654-855e-6c53d3456eec")
 	)
-	(label "PH_A"
+	(label "PH_A_DRV"
 		(at 241.3 93.98 0)
 		(effects
 			(font
@@ -3961,7 +4651,7 @@
 		)
 		(uuid "882b041b-5efb-4078-99aa-dcf6ca89a232")
 	)
-	(label "PH_B"
+	(label "PH_B_DRV"
 		(at 241.3 96.52 0)
 		(effects
 			(font
@@ -5390,7 +6080,7 @@
 			)
 		)
 	)
-	(label "VM"
+	(label "VM_DRV"
 		(at 172.72 196.85 90)
 		(effects
 			(font
@@ -5532,7 +6222,7 @@
 			)
 		)
 	)
-	(label "VM"
+	(label "VM_DRV"
 		(at 185.42 196.85 90)
 		(effects
 			(font
@@ -6310,7 +7000,7 @@
 		)
 		(uuid "41adcacf-6292-457c-82ab-893f6fd0b97d")
 	)
-		(symbol
+	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 337.82 73.66 0)
 		(unit 1)
@@ -6374,7 +7064,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "power:GND")
 		(at 337.82 76.20 0)
 		(unit 1)
@@ -6439,7 +7129,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 350.52 73.66 0)
 		(unit 1)
@@ -6503,7 +7193,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "power:GND")
 		(at 350.52 76.20 0)
 		(unit 1)
@@ -6568,7 +7258,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 363.22 73.66 0)
 		(unit 1)
@@ -6632,7 +7322,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "power:GND")
 		(at 363.22 76.20 0)
 		(unit 1)
@@ -6697,7 +7387,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
 		(at 375.92 73.66 0)
 		(unit 1)
@@ -6761,7 +7451,7 @@
 			)
 		)
 	)
-		(symbol
+	(symbol
 		(lib_id "power:GND")
 		(at 375.92 76.20 0)
 		(unit 1)
@@ -6836,6 +7526,2527 @@
 			(justify left bottom)
 		)
 		(uuid "695fac78-85c6-4c38-8853-42881d5ec207")
+	)
+	(label "3V3"
+		(at 127 82.55 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a8583043-226a-40d0-baed-d324bf0c9842")
+	)
+	(label "VR_IN"
+		(at 127 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a1110379-6963-4f9b-89ae-c62231a854be")
+	)
+	(label "I_A"
+		(at 127 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "db56c1f9-7294-40a1-a601-2ad519ddf8fb")
+	)
+	(label "I_B"
+		(at 127 120.65 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bb3bce31-c5a8-4747-ade9-e1abd3a2a2e4")
+	)
+	(label "I_BUS"
+		(at 127 118.11 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "71239121-fb66-4765-8494-472f85fe040b")
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 45.72 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "0bdbf0b1-03aa-4fc2-8684-15546b898b03")
+		(property "Reference" "RS1"
+			(at 47.75 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "20m"
+			(at 45.72 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 43.94 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 45.72 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d48f0951-4b7a-4c60-9a00-69a54dbb0fb6")
+		)
+		(pin "2"
+			(uuid "4501d16f-05ab-4f33-b2b9-13ce59c9a5f6")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "RS1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VM"
+		(at 45.72 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c2573ef6-0dcb-4b65-b915-fe38935a233d")
+	)
+	(label "VM_DRV"
+		(at 45.72 168.91 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "62515ac8-898a-4cd9-8962-8df2cbc59132")
+	)
+	(symbol
+		(lib_id "Amplifier_Current:INA181")
+		(at 66.04 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b7565c27-dbdc-4281-9136-907bc67e475a")
+		(property "Reference" "U4"
+			(at 69.85 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INA181A2"
+			(at 69.85 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+			(at 66.04 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ina181.pdf"
+			(at 66.04 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Bidirectional, Low- and High-Side Voltage Output, Current-Sense Amplifier, SOT-23-6"
+			(at 66.04 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e752c213-5eb1-4a58-a3d5-0732f5fdc9a8")
+		)
+		(pin "2"
+			(uuid "b89b275d-4285-494b-98c6-e6b689d1d351")
+		)
+		(pin "3"
+			(uuid "1b713185-b48d-4ecb-aea8-2b16cf091d7e")
+		)
+		(pin "4"
+			(uuid "d4535588-9c3d-4c9a-bd22-562b30222628")
+		)
+		(pin "5"
+			(uuid "7ec17259-7e39-45ec-a52f-d8675032d8c5")
+		)
+		(pin "6"
+			(uuid "0f92425c-c81d-4d79-a983-ef771a28fa7f")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "U4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "I_BUS"
+		(at 73.66 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ad2bafbf-0ccd-45a4-b935-eda5b96784e7")
+	)
+	(label "VM"
+		(at 58.42 162.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c6288403-f3a4-4d48-89a4-a8dac5d08e4c")
+	)
+	(label "VM_DRV"
+		(at 58.42 167.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "43972e29-738f-424d-bbed-1a4b75f17636")
+	)
+	(label "3V3"
+		(at 63.5 157.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cfe3ca84-fea1-45bc-9768-3f45eb71d033")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 63.5 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "653287dd-7bdc-4f3b-a0a4-8ea63ff83fa1")
+		(property "Reference" "#PWR20"
+			(at 63.5 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 63.5 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 63.5 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 63.5 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ae43545b-9008-4acd-9b33-51fedb44bda8")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 68.58 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "443e717b-6c95-424a-ac13-d7c9976272d4")
+		(property "Reference" "#PWR21"
+			(at 68.58 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 68.58 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 68.58 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 68.58 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9c649241-c287-4634-9fde-0ca6f7fe027b")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 83.82 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "399fc817-1784-4b55-bbb4-63d3dc23ca38")
+		(property "Reference" "C4"
+			(at 84.45 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 84.45 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 84.79 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 83.82 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 83.82 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ff8a2664-f30c-4329-815f-c0cabccea172")
+		)
+		(pin "2"
+			(uuid "260d100e-abd9-4cc3-bf8a-825a01bed972")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "3V3"
+		(at 83.82 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "53ea68e3-9982-4c52-84e8-b3c45ba6a5dc")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 83.82 168.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9f679875-6963-4720-be41-6bb9eda39d1c")
+		(property "Reference" "#PWR22"
+			(at 83.82 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 83.82 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 83.82 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 83.82 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 83.82 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "db5140cd-f8a0-4d1b-a2de-7a8e8696591c")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 106.68 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "349ab1de-5f82-4d35-9965-bb3d8f11158c")
+		(property "Reference" "RS2"
+			(at 108.71 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "20m"
+			(at 106.68 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 104.9 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 106.68 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7895aabb-e724-4611-8b59-519edb4dac3a")
+		)
+		(pin "2"
+			(uuid "acb109e4-b1b4-4bdc-b326-72c00b651aaa")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "RS2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "PH_A_DRV"
+		(at 106.68 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8804c69c-567c-4406-bef9-5872eed25537")
+	)
+	(label "PH_A"
+		(at 106.68 168.91 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "abdcd72f-ea00-4dab-998f-816382ea715e")
+	)
+	(symbol
+		(lib_id "Amplifier_Current:INA240A1PW")
+		(at 127 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d7987e00-5d84-41c6-8770-6c436999a01f")
+		(property "Reference" "U5"
+			(at 130.81 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INA240A1PW"
+			(at 130.81 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-8_4.4x3mm_P0.65mm"
+			(at 127 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ina240.pdf"
+			(at 130.81 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "High- and Low-Side, Bidirectional, Zero-Drift, Current-Sense Amplifier With Enhanced PWM Rejection, 20V/V, TSSOP-8"
+			(at 127 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "14eeabb7-3cd1-43da-91e6-d6981af8b7b9")
+		)
+		(pin "2"
+			(uuid "71771ce6-857f-436c-9a85-bb4155c82869")
+		)
+		(pin "3"
+			(uuid "180a114f-3e31-43a9-9a30-63d6f25e7a21")
+		)
+		(pin "4"
+			(uuid "fa085d28-4e87-4458-b5a7-0505b2e3fedd")
+		)
+		(pin "5"
+			(uuid "97e84c22-7472-4a85-8b9a-b3ddef09e901")
+		)
+		(pin "6"
+			(uuid "cd9f6cec-9b73-47bb-9d80-654970b7554d")
+		)
+		(pin "7"
+			(uuid "3003ad96-b52c-4a0a-8d17-aa9f3c962e25")
+		)
+		(pin "8"
+			(uuid "80333a53-7c00-4223-99dc-b4309da173d8")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "U5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "PH_A"
+		(at 119.38 162.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "476daad9-dabf-4aec-832b-85cdba7e2085")
+	)
+	(label "PH_A_DRV"
+		(at 119.38 167.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f817855f-bf92-447b-a532-524e23ab4215")
+	)
+	(label "3V3"
+		(at 124.46 157.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a17b2269-3d51-4899-a56e-4f6bedbfc198")
+	)
+	(label "3V3"
+		(at 129.54 172.72 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3a1f024d-8ced-4b38-82a3-1ddf59164a5e")
+	)
+	(label "I_A"
+		(at 134.62 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c47d30c9-cdba-4cb9-bf7b-a45df6c1b699")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 124.46 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7c98ccf6-fbbd-4348-98ea-9e30996f8cfe")
+		(property "Reference" "#PWR23"
+			(at 124.46 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 124.46 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 124.46 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 124.46 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 124.46 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ccdd6a1e-757e-4f9d-bd00-6ccb71d038b3")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 124.46 172.72)
+			(xy 124.46 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ab3fb04-fc61-494e-bc1b-b87dfde1be7f")
+	)
+	(wire
+		(pts
+			(xy 127 172.72)
+			(xy 127 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3eb2279b-47a8-4f73-b2e7-172b83d34e76")
+	)
+	(wire
+		(pts
+			(xy 124.46 175.26)
+			(xy 127 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09722866-e455-4ea9-b636-5b0b01411512")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 127 175.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a5489d9d-c1cc-4096-8208-229e3419d11a")
+		(property "Reference" "#PWR24"
+			(at 127 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 127 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 127 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 127 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0f8b8176-32fa-4a61-bb72-71a5e7de3884")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 144.78 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4acc51ae-7053-405d-ab40-9cabd25259fe")
+		(property "Reference" "C5"
+			(at 145.41 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 145.41 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 145.75 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 144.78 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1b5c44f5-dbcd-4b05-ad65-23d32a3f4ac4")
+		)
+		(pin "2"
+			(uuid "6dfadf2d-d681-489f-bfd0-cec98682c789")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "3V3"
+		(at 144.78 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ecac6bd3-0f92-449a-9bea-3e38ae20f128")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 144.78 168.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1e3564c8-e88c-4881-b593-33a5bc1a010c")
+		(property "Reference" "#PWR25"
+			(at 144.78 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 144.78 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 144.78 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "70a75c63-1137-49f3-afe8-e9ef179d702c")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 165.1 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7e6a51c4-eb48-4178-a579-75431b4853b3")
+		(property "Reference" "RS3"
+			(at 167.13 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "20m"
+			(at 165.1 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 163.32 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 165.1 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 165.1 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3088a717-45d0-4bcb-b232-8146dcad8ea8")
+		)
+		(pin "2"
+			(uuid "e239f7ad-f950-48d6-bed1-382795789da1")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "RS3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "PH_B_DRV"
+		(at 165.1 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "81bb9ed4-360a-4f58-8b17-fc0243a4c2bb")
+	)
+	(label "PH_B"
+		(at 165.1 168.91 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a80d2558-9915-40a1-a3cb-62897dbe05eb")
+	)
+	(symbol
+		(lib_id "Amplifier_Current:INA240A1PW")
+		(at 185.42 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c9b46c41-3eed-4c81-8226-6af41a881797")
+		(property "Reference" "U6"
+			(at 189.23 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INA240A1PW"
+			(at 189.23 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-8_4.4x3mm_P0.65mm"
+			(at 185.42 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ina240.pdf"
+			(at 189.23 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "High- and Low-Side, Bidirectional, Zero-Drift, Current-Sense Amplifier With Enhanced PWM Rejection, 20V/V, TSSOP-8"
+			(at 185.42 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2fac1070-930a-46ee-9097-1fcd5f395800")
+		)
+		(pin "2"
+			(uuid "4a85145f-1ee4-4ece-b14a-eed3fb2cb4a1")
+		)
+		(pin "3"
+			(uuid "4f628e0e-e9b8-4676-bb19-24ca698aba52")
+		)
+		(pin "4"
+			(uuid "9a15aefa-98c6-43ee-acc7-2bcf80c7f8dd")
+		)
+		(pin "5"
+			(uuid "4c9d7991-caa4-4a57-bb48-e7af9b329e6e")
+		)
+		(pin "6"
+			(uuid "210b3fab-022e-4378-8916-b831cb4322f9")
+		)
+		(pin "7"
+			(uuid "befaa031-469e-4a46-ac34-db2ac855c2ac")
+		)
+		(pin "8"
+			(uuid "9ac1bc98-374d-46cc-ab10-07cbc2ff820f")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "U6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "PH_B_DRV"
+		(at 177.8 162.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ca278d52-9e86-4c14-a61c-4dc40f84e3ef")
+	)
+	(label "PH_B"
+		(at 177.8 167.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3ddac67f-a523-43f5-bc19-cf9a5987b4be")
+	)
+	(label "3V3"
+		(at 182.88 157.48 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d857361f-604d-4759-9c4a-e9a7a56910e6")
+	)
+	(label "3V3"
+		(at 187.96 172.72 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a4b7bf1d-412d-4a70-846c-bb28d633c248")
+	)
+	(label "I_B"
+		(at 193.04 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5fcadf39-1ad9-4d2e-9ec5-6539002d6006")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 182.88 172.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f6243529-9884-49ba-ac0f-ac356321d7ec")
+		(property "Reference" "#PWR26"
+			(at 182.88 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 182.88 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 182.88 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "132785a7-f244-4330-8506-01b0baaf1fb1")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 182.88 172.72)
+			(xy 182.88 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6c0eaf6-a6c7-4688-a834-c9db6303e70e")
+	)
+	(wire
+		(pts
+			(xy 185.42 172.72)
+			(xy 185.42 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efabeb62-1b08-4f60-9b57-247682b47808")
+	)
+	(wire
+		(pts
+			(xy 182.88 175.26)
+			(xy 185.42 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b23da070-68b1-4c01-a544-af73ee08012b")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 185.42 175.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ccddce0a-3e2b-47ef-b456-aea69fb9608d")
+		(property "Reference" "#PWR27"
+			(at 185.42 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 185.42 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 185.42 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 185.42 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f198baf2-cdc3-4843-b0ec-9a8dbaf1b03f")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 203.2 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fbdbb9f9-2aef-4a07-a70c-35f3f1906b1b")
+		(property "Reference" "C6"
+			(at 203.83 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 203.83 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 204.17 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 203.2 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 203.2 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a14e9537-b21a-4698-986f-34e72cd59cc6")
+		)
+		(pin "2"
+			(uuid "c6b2aea9-7cbb-4b82-b7e1-58a332c8bae8")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "C6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "3V3"
+		(at 203.2 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1b449bf6-05d2-405a-bba2-cf020355186d")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 203.2 168.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2a9eb85f-ca7b-4853-9dec-3aa55f5d9ed3")
+		(property "Reference" "#PWR28"
+			(at 203.2 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 203.2 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 203.2 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 203.2 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 203.2 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fd7601ff-b589-4ed1-b2d8-c941b37b717e")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Screw_Terminal_01x02")
+		(at 226.06 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "495e8cf8-8d34-4f18-ace1-dbca69449732")
+		(property "Reference" "J3"
+			(at 226.06 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VR coil"
+			(at 226.06 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MPT-0,5-2-2.54_1x02_P2.54mm_Horizontal"
+			(at 226.06 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 226.06 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "877b691f-2a17-4d45-adf1-a1b41bd6b6a7")
+		)
+		(pin "2"
+			(uuid "f9495753-ad28-4d93-9abc-8a92b75aae88")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VR_P"
+		(at 220.98 165.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "4906afff-5cfd-4b3b-8941-69cf486d1ba1")
+	)
+	(label "VR_BIAS"
+		(at 220.98 167.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f72f3564-62e4-4fe8-b25a-f50408ac90d5")
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 243.84 165.1 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5f7e5f77-a22e-4cb5-87b5-0616cc6438d6")
+		(property "Reference" "R6"
+			(at 243.84 163.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22k"
+			(at 243.84 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 243.84 166.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 243.84 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 243.84 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "860582cb-2cff-4f2c-9589-dd98bb89e696")
+		)
+		(pin "2"
+			(uuid "a2e58aa0-6524-4018-8a26-86190cf2aac7")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VR_P"
+		(at 240.03 165.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3b5fceca-1ca3-4775-ad54-349bd80bfa7b")
+	)
+	(label "VR_IN"
+		(at 247.65 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "034942b1-efeb-46be-8729-16e41abab097")
+	)
+	(symbol
+		(lib_id "Diode:BAV99")
+		(at 271.78 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f6f5ff55-76e0-4f03-8740-c1f7b8dd2e79")
+		(property "Reference" "D3"
+			(at 271.78 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BAV99"
+			(at 271.78 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 271.78 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAV99_SER.pdf"
+			(at 271.78 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "BAV99 High-speed switching diodes, SOT-23"
+			(at 271.78 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "40fe9a16-f49d-4864-878d-37166e034a68")
+		)
+		(pin "2"
+			(uuid "64883e89-292a-4608-bd38-8dcb6582831d")
+		)
+		(pin "3"
+			(uuid "badb7651-f947-4774-b969-92a3d7f23763")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "D3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "3V3"
+		(at 279.4 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "aa1a9962-1f49-4c4f-8caf-a192463dad0d")
+	)
+	(label "VR_IN"
+		(at 271.78 170.18 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d41b0ca6-0eb4-4217-b070-c93f004c38dd")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 264.16 165.1 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "dbf8c8a9-baaf-46ed-a639-1006d94caafa")
+		(property "Reference" "#PWR29"
+			(at 257.81 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 260.35 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 264.16 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 264.16 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 264.16 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fa1ca8be-43f5-47e5-ab72-73147a02182c")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 289.56 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5d2ba717-6805-4b2b-9970-8dc517405800")
+		(property "Reference" "C7"
+			(at 290.19 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470pF"
+			(at 290.19 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 290.53 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 289.56 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 289.56 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a56adda3-21c2-4637-82f4-862bb4094734")
+		)
+		(pin "2"
+			(uuid "c7bf7cf5-7aab-4700-8ad8-f4d2d1bc3871")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "C7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VR_IN"
+		(at 289.56 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c5120543-854d-4364-9a05-9665b68e1492")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 289.56 168.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "bbac26da-a95f-4371-876e-855a96f706c7")
+		(property "Reference" "#PWR30"
+			(at 289.56 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 289.56 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 289.56 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 289.56 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 289.56 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "65cbfaa4-3cec-4eab-bbbc-ff59b77f6442")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 307.34 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6a3c53b6-8193-4a07-8447-bc4414dbb8dd")
+		(property "Reference" "R7"
+			(at 309.37 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 307.34 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 305.56 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 307.34 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a4706bac-1539-43b9-9a40-99634cf39fbb")
+		)
+		(pin "2"
+			(uuid "c5fc2a29-01fa-46db-a7bb-2802be3a789f")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "3V3"
+		(at 307.34 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "26ebeb26-d78d-4326-9d5e-fb8a86273978")
+	)
+	(label "VR_BIAS"
+		(at 307.34 168.91 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "54a646fd-6a31-41de-bc8d-469ade29ae01")
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 322.58 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ce8d5fba-9dbc-4708-8c5c-bcfe7df85cc2")
+		(property "Reference" "R8"
+			(at 324.61 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 322.58 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 320.8 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 322.58 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 322.58 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "248ae0e1-f55f-40d8-a88f-a62ed114c0c1")
+		)
+		(pin "2"
+			(uuid "741522f9-bdb7-4c93-9fd0-f57f4eb2c996")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "R8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VR_BIAS"
+		(at 322.58 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "01192f90-3468-4995-b897-712227d46235")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 322.58 168.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d9eee85f-2834-4797-b2e1-b7f3d3595585")
+		(property "Reference" "#PWR31"
+			(at 322.58 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 322.58 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 322.58 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 322.58 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 322.58 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "911d2f44-b6e7-47d4-abac-e42cf0389047")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 337.82 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7861cfdc-191d-4c7b-892e-4f68eb396866")
+		(property "Reference" "C8"
+			(at 338.45 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1uF"
+			(at 338.45 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 338.79 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 337.82 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 337.82 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a69191e4-e0aa-4023-929d-ddeb8c9554c2")
+		)
+		(pin "2"
+			(uuid "40618590-9acf-475f-a647-abea7fef0e2f")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VR_BIAS"
+		(at 337.82 161.29 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "78c6a543-eaa7-43de-96a0-40211d49fc2c")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 337.82 168.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7883cda6-d494-4801-ac61-4fcaa7bbdead")
+		(property "Reference" "#PWR32"
+			(at 337.82 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 337.82 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 337.82 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 337.82 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 337.82 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e774fa17-ff1e-4412-8edc-85cb56f68745")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#PWR32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 325.12 200.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5129ceb8-d015-4150-8f2f-ceb534da4d75")
+		(property "Reference" "#FLG04"
+			(at 325.12 198.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 325.12 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 325.12 200.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 325.12 200.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 325.12 200.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "cbc7b754-e376-4a32-bef6-5f0e5dbf65eb")
+		)
+		(instances
+			(project "hdd-driver"
+				(path "/8842fddb-0d40-4774-9e59-67e56b9af559"
+					(reference "#FLG04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "VM_DRV"
+		(at 325.12 200.66 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "92f285fa-d3e7-4a4b-92ce-7b2a1f9b0745")
+	)
+	(text "Current sensing (all outputs to ADC pins; 3V3 from the WeAct board). Shunts: 20 mOhm 1 %, 1206, 0.5 W.\n  RS1 + U4 INA181A2: VM bus current, 1 V/A, 0..3.3 A -> I_BUS = PA3 (ADC1_IN4).\n  RS2/RS3 + U5/U6 INA240A1: inline phase A/B current, 0.4 V/A around 1.65 V, +-4 A\n  -> I_A = PA2 (ADC1_IN3), I_B = PA4 (ADC2_IN17): sample both at once in dual ADC mode.\n  U5 inputs are swapped for layout (IN+ = motor side): I_A reads with the opposite sign to I_B.\n  C1/C2 sit after RS1, so I_BUS is the averaged supply current."
+		(exclude_from_sim no)
+		(at 271.78 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "71ffe256-51ee-418d-a615-8a30722b84f9")
+	)
+	(text "VR pickup coil (under the disc, 60 pulses/rev): one end at VR_BIAS = VDD/2, the other\nthrough R6 and the BAV99 clamp to VR_IN = PA1 (COMP1_INP, ADC12_IN2).\nCOMP1 with DAC3 as threshold and hysteresis -> timer input capture for speed and angle."
+		(exclude_from_sim no)
+		(at 271.78 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b40bdd07-71b0-4b73-b9e5-0fb7417edc3b")
 	)
 	(sheet_instances
 		(path "/"

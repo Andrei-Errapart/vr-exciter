@@ -11,10 +11,15 @@ magnet disc in `../disk/` can spin at 3000 rpm.
 - **Motor supply:** external 12 V on a screw terminal, or USB through an
   MT3608 boost module (5 V → 12 V). Jumper JP1 selects between them.
 - **Supply monitor:** VM ÷ 11 into an ADC pin.
+- **Current sensing:** VM bus current (INA181) and inline phase A/B current
+  (two INA240), all into ADC pins.
+- **Speed/angle pickup:** input for a VR (variable reluctance) pickup coil
+  under the magnet disc, into a comparator and ADC pin.
 
 KiCad 10 project: `hdd-driver.kicad_pro`. The schematic passes ERC with 0
-violations. The PCB is placed but **not routed**: DRC reports only the 45
-unrouted connections.
+violations. The PCB is fully routed: DRC reports 0 unconnected items. The
+remaining DRC errors are the C2/U2 courtyard overlap and U3 in the edge
+keepout, plus silkscreen warnings.
 
 ![PCB layout on the drive](doc/layout-on-hdd-underside.jpg)
 
@@ -28,6 +33,7 @@ unrouted connections.
 | `lib/hdd-driver.pretty/` | Footprints for those parts, plus `MountingHole_2.4mm_M2_Pad` and `MountingHole_3.2mm_M3_Pad` |
 | `lib/3d/*.step` | Module models (WeAct, SimpleFOC Mini, MT3608) with pins-down headers |
 | `lib/3d/src/` | WeAct's original STEP, the same STEP with its headers stripped, and the KiCad source boards the module models are exported from |
+| `Export_HddDriver_V1_zip` | JLCPCB manufacturing package; see [Regenerating generated files](#regenerating-generated-files) |
 | `scripts/export-test-model` | Fit-test 3D models; see [Checking the fit](#checking-the-fit) |
 | `scripts/module-models/` | Regenerates `lib/3d/*.step` (`make-module-models`) |
 | `scripts/library/` | Generators that made the symbols and footprints, plus a small S-expression helper. Rerunning them overwrites edits made in KiCad. |
@@ -123,9 +129,9 @@ data.
 
 ```
 J1 12V IN ─ D1 SS54 ─┬─ +12V ── JP1.1 ┐
- (reverse polarity)  │                ├─ JP1.2 = VM ─┬─ SimpleFOC "+" ── DRV8313 VM
-                     │   VBOOST ─ JP1.3 ┘            ├─ C1 470 µF + C2 100 nF
-                     │      ▲                         └─ R1 100k / R2 10k ─ VM_SENSE ─ PA0
+ (reverse polarity)  │                ├─ JP1.2 = VM ─┬─ RS1 20 mΩ ─ VM_DRV ─┬─ SimpleFOC "+" ── DRV8313 VM
+                     │   VBOOST ─ JP1.3 ┘            │  (U4 INA181: I_BUS)  └─ C1 470 µF + C2 100 nF
+                     │      ▲                        └─ R1 100k / R2 10k ─ VM_SENSE ─ PA0
                      │   U3 MT3608 (set to 12 V)
                      │      ▲
                      └─ D2 B5819W ─ VCC_MCU ─ WeAct VCC (LDO input, 3.3–20 V)
@@ -152,11 +158,30 @@ J1 12V IN ─ D1 SS54 ─┬─ +12V ── JP1.1 ┐
 | DRV_nSLEEP | PB14 (P1.7) | nSP (8) | |
 | DRV_nRESET | PB15 (P1.8) | nRT (6) | |
 | VM_SENSE | PA0, ADC1_IN1 (P2.20) | — | VM / 11; 35 V gives 3.18 V |
-| PH_A/B/C | — | M1/M2/M3 | To the spring pads. Phase order only sets the direction of rotation. |
+| PH_A/B/C | — | M1/M2/M3 | To the spring pads, A and B through RS2/RS3. Phase order only sets the direction of rotation. |
+| I_A | PA2, ADC1_IN3 (P2.18) | — | Phase A current (U5 INA240A1, RS2 20 mΩ): 1.65 V − 0.4 V/A (inverted, see below), ±4 A |
+| I_B | PA4, ADC2_IN17 (P2.16) | — | Phase B current (U6, RS3): same scale. On ADC2, so it can be sampled together with I_A in dual mode. |
+| I_BUS | PA3, ADC1_IN4 (P2.15) | — | VM bus current (U4 INA181A2, RS1 20 mΩ): 1 V/A, 0–3.3 A, after C1/C2 so it is averaged |
+| VR_IN | PA1, COMP1_INP / ADC12_IN2 (P2.17) | — | VR pickup coil on J3, biased to 1.65 V, 22 kΩ + BAV99 clamp, 470 pF |
 
 - **SimpleFOC:** `BLDCDriver3PWM driver(PA8, PA9, PA10, PB12);`. The HDD
-  motor has no sensors, so start with open-loop velocity control. The VR
-  pickup on the disc (60 pulses/rev) can provide speed feedback later.
+  motor has no sensors, so start with open-loop velocity control. Then:
+  1. Close a speed loop on the VR pickup (60 pulses/rev). It also detects a
+     stall.
+  2. Use the VR pulses as a position sensor and run FOC in voltage mode.
+     The VR coil gives no signal at standstill, so start open-loop and switch
+     over once the pulses are steady.
+- **Current sensing:** `InlineCurrentSense` with 0.02 Ω on PA2 and PA4
+  (phase C unmeasured). Use gain **−20 for A** and +20 for B: U5's inputs are
+  swapped for the layout, so I_A reads with the opposite sign. The INA240 rejects the PWM common-mode swing,
+  so it can sample at any point of the PWM cycle. RS1/U4 measure the
+  averaged supply current: use it for stall and overload detection.
+- **VR input:** one coil end sits at `VR_BIAS` (1.65 V, R7/R8/C8), the other
+  goes through R6 22 kΩ to `VR_IN`. The BAV99 clamps `VR_IN` to the rails;
+  22 kΩ keeps the clamp current at about 2 mA even for a 50 V peak. Use COMP1
+  (`VR_IN` on its INP pin, an internal DAC3 channel as threshold, hysteresis
+  on) and route its output to a timer input capture. The same pin is on
+  ADC12_IN2 for looking at the raw waveform.
 - **Phase current:** an HDD spindle motor has only a few ohms per phase.
   Keep `voltage_limit` low, or the DRV8313 overcurrent protection
   (3 A min / 5 A typ) will trip.
@@ -210,12 +235,50 @@ spring slots. The outline was then moved 15 mm away from the motor; see
 - [ ] Route the board. Use wide traces (≥ 0.8 mm) for VM, GND and PH_A/B/C,
       and GND pours on both layers, kept clear of the spring pads.
 - [ ] Confirm that the J1 screw terminal's wire entry faces the board edge in
-      the 3D view.
+      the 3D view. (J3, the VR coil terminal, faces the right edge.)
+- [x] Route the current-sense and VR parts. The shunt areas are routed by hand
+      and their tracks are **locked**. Each INA input runs on its own track to
+      its shunt pad (Kelvin), so trace resistance doesn't add to the 20 mΩ.
+      The rest was routed with KiCadRoutingTools (see [Routing](#routing)).
+- [ ] VR pickup coil: check that its pole face is narrower than the magnet
+      pitch (10 mm), with the long side radial.
+
+## Routing
+
+The board was routed in two steps:
+1. **By hand** (locked tracks):
+   - The three shunts with their Kelvin sense legs.
+   - PH_A/PH_B from the SimpleFOC pads through RS2/RS3 to J2. They run on
+     B.Cu below the spring pads and enter them from the lower end. The vias
+     sit outside `J2_SpringKeepout`.
+   - The VM/VM_DRV stubs at RS1.
+2. **The rest** with
+   [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools),
+   using KiCad's bundled Python:
+
+   ```sh
+   python3 py_router/route.py hdd-driver.kicad_pcb routed.kicad_pcb \
+     --nets /3V3 /I_A /I_B /I_BUS /VR_IN /VR_P /VR_BIAS GND \
+     --track-width 0.3 --power-nets /3V3 --power-nets-widths 0.4 \
+     --keep-input-copper --write-fill --same-net-pad-clearance 0.2 --fab-tier standard
+   ```
+
+   Run it on a copy. Afterwards:
+   - Set its 0.45 mm vias to 0.5/0.3 mm (the project minimum).
+   - Move any via off a pad.
+   - Give GND pads with a one-spoke thermal a solid zone connection.
+   - Copy the board back, but not the `.kicad_pro`: the router lowers
+     `min_hole_clearance` to 0.2 mm in its copy.
+
+   Don't autoroute the shunt nets (PH_A/B, PH_A/B_DRV, VM, VM_DRV). The
+   router doesn't know about Kelvin connections, and in a trial it joined
+   three of the six sense inputs onto the high-current path.
 
 ## Regenerating generated files
 
 | What | Command | Needs |
 |---|---|---|
+| JLCPCB order package | `./Export_HddDriver_V1_zip` writes `HddDriver_V1_<date>.zip` (Gerbers, drills, JLCPCB BOM/CPL, PDFs, STEP, order notes). It runs ERC and DRC first and works on a copy of the board. | KiCad 10, python3, zip. LCSC part numbers are in the script. |
 | Fit-test models | `scripts/export-test-model` | KiCad 10 (`kicad-cli` and its bundled Python) |
 | Module STEP models | `scripts/module-models/make-module-models` | KiCad 10. Add `--strip` with `OCP_PYTHON=<python with cadquery-ocp>` to redo the WeAct header stripping. |
 | Symbols / footprints | `python3 scripts/library/gen_symbols.py`, KiCad Python `scripts/library/gen_footprints.py` | Overwrites lib edits |
