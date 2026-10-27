@@ -1,0 +1,359 @@
+#! /bin/sh
+#
+# Export the JLCPCB manufacturing package for HDD Driver V1 (hdd-driver): a
+# 2-layer, 1.6 mm FR-4 carrier for the WeAct STM32G474, SimpleFOC Mini and
+# MT3608 modules.  Writes HddDriver_V1_<date>.zip next to this script, holding
+#   HddDriver_V1_<date>_gerbers.zip   upload this to jlcpcb.com (Gerbers + drills, flat)
+#   gerbers/                          the same files, unzipped, for inspection
+#   BOM-JLCPCB.csv, CPL-JLCPCB.csv    optional SMT assembly (the SMD parts only)
+#   BOM-hdd-driver.csv                full BOM, modules included
+#   hdd-driver-schematic.pdf, -top.pdf, -bottom.pdf, hdd-driver.step
+#   README.md                         the order parameters, read from the board
+#
+#   ./Export_HddDriver_V1_zip                    # from hdd-driver/
+#   ./Export_HddDriver_V1_zip --skip-preflight   # export despite ERC/DRC errors
+#
+# The board is never modified: zones are refilled on a copy in a temporary
+# directory, and every export reads that copy.  Before exporting, ERC and DRC
+# (zone refill + schematic parity, errors only) must pass.
+#
+# Needs KiCad 10 (kicad-cli and its bundled Python, for pcbnew), python3 and zip.
+set -eu
+
+PCBNAME=hdd-driver
+NAME=HddDriver_V1_$(date +%Y_%m_%d__%H_%M)
+ZIPNAME=${NAME}.zip
+PY=${KICAD_PY:-/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3}
+
+# LCSC part numbers for JLCPCB assembly, keyed by schematic Value and
+# Footprint.  The INA chips, the shunts and some of the rest are JLCPCB
+# "Extended" parts (feeder fee per part type).  An SMD part missing from this
+# table stops the export, so the BOM never ships a blank.
+LCSC_PARTS='
+100nF       Capacitor_SMD:C_0603_1608Metric       C14663    100nF 50V X7R 0603 (Yageo CC0603KRX7R9BB104)
+470pF       Capacitor_SMD:C_0603_1608Metric       C22396    470pF 50V X7R 0603 (Samsung CL10B471KB8NNNC)
+1uF         Capacitor_SMD:C_0603_1608Metric       C15849    1uF 50V X5R 0603 (Samsung CL10A105KB8NNNC)
+100k        Resistor_SMD:R_0603_1608Metric        C25803    100k 1% 0603 (UNI-ROYAL 0603WAF1003T5E)
+10k         Resistor_SMD:R_0603_1608Metric        C25804    10k 1% 0603 (UNI-ROYAL 0603WAF1002T5E)
+22k         Resistor_SMD:R_0603_1608Metric        C31850    22k 1% 0603 (UNI-ROYAL 0603WAF2202T5E)
+20m         Resistor_SMD:R_1206_3216Metric        C441558   20mOhm 1% 1W 1206 shunt (Vishay WSLP1206R0200FEA)
+SS54        Diode_SMD:D_SMA                       C22452    5A 40V Schottky SMA (MDD SS54)
+B5819W      Diode_SMD:D_SOD-123                   C8598     1A 40V Schottky SOD-123 (CJ B5819W SL)
+BAV99       Package_TO_SOT_SMD:SOT-23             C2500     dual switching diode SOT-23 (Nexperia BAV99,215)
+INA181A2    Package_TO_SOT_SMD:SOT-23-6           C2058784  current sense amp, gain 50 (TI INA181A2IDBVR)
+INA240A1PW  Package_SO:TSSOP-8_4.4x3mm_P0.65mm    C93965    current sense amp, gain 20 (TI INA240A1PWR)
+'
+
+SKIP_PREFLIGHT=
+case "${1:-}" in
+    --skip-preflight) SKIP_PREFLIGHT=1 ;;
+    "") ;;
+    *) echo "Usage: $0 [--skip-preflight]" >&2; exit 2 ;;
+esac
+
+PROJ=$(cd "$(dirname "$0")" && pwd)
+cd "$PROJ"
+WORK=$(mktemp -d)
+trap 'rm -rf "$WORK"' EXIT
+
+# ── Work on a copy ───────────────────────────────────────────────
+# lib/3d/src (the model sources, 16 MB) is not needed for the exports.
+cp ${PCBNAME}.kicad_pro ${PCBNAME}.kicad_sch ${PCBNAME}.kicad_pcb ${PCBNAME}.kicad_dru \
+   sym-lib-table fp-lib-table "$WORK/"
+mkdir -p "$WORK/lib/3d"
+cp -R lib/${PCBNAME}.kicad_sym lib/${PCBNAME}.pretty "$WORK/lib/"
+cp lib/3d/*.step "$WORK/lib/3d/"
+PCB=$WORK/${PCBNAME}.kicad_pcb
+SCH=$WORK/${PCBNAME}.kicad_sch
+OUT=$WORK/$NAME
+GERBERS=$OUT/gerbers
+mkdir -p "$GERBERS"
+
+# ── Pre-flight: ERC, zone refill, DRC ────────────────────────────
+echo "==> ERC..."
+if ! kicad-cli sch erc --exit-code-violations --severity-error \
+        -o "$WORK/erc.rpt" "$SCH" >/dev/null && [ -z "$SKIP_PREFLIGHT" ]; then
+    cat "$WORK/erc.rpt"
+    echo "Error: ERC failed (pass --skip-preflight to export anyway)" >&2
+    exit 1
+fi
+echo "==> Refilling zones and running DRC..."
+if ! kicad-cli pcb drc --refill-zones --save-board --schematic-parity \
+        --exit-code-violations --severity-error \
+        -o "$WORK/drc.rpt" "$PCB" >/dev/null && [ -z "$SKIP_PREFLIGHT" ]; then
+    cat "$WORK/drc.rpt"
+    echo "Error: DRC failed (pass --skip-preflight to export anyway)" >&2
+    exit 1
+fi
+
+# ── Gerbers and drills, with JLCPCB's recommended settings ───────
+# Protel extensions (.gtl/.gbl/...), no X2 attributes or netlist, silkscreen
+# clipped by the mask openings.  Separate PTH and NPTH Excellon files in mm.
+echo "==> Exporting Gerbers..."
+kicad-cli pcb export gerbers \
+    --output "$GERBERS/" \
+    --layers "F.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts" \
+    --subtract-soldermask \
+    --no-x2 \
+    --no-netlist \
+    "$PCB" >/dev/null
+rm -f "$GERBERS"/*.gbrjob
+
+echo "==> Exporting drill files..."
+kicad-cli pcb export drill \
+    --output "$GERBERS/" \
+    --format excellon \
+    --drill-origin absolute \
+    --excellon-units mm \
+    --excellon-zeros-format decimal \
+    --excellon-oval-format alternate \
+    --excellon-separate-th \
+    --generate-map \
+    --map-format gerberx2 \
+    "$PCB" >/dev/null
+
+(cd "$GERBERS" && zip -q -X "$OUT/${NAME}_gerbers.zip" *)
+
+# ── Full BOM and SMD placement ───────────────────────────────────
+echo "==> Exporting BOM and pick-and-place..."
+kicad-cli sch export bom \
+    --output "$OUT/BOM-${PCBNAME}.csv" \
+    --fields "Reference,Value,Footprint,QUANTITY" \
+    --labels "Refs,Value,Footprint,Qty" \
+    --group-by "Value,Footprint" \
+    --sort-field "Reference" \
+    --exclude-dnp \
+    "$SCH" >/dev/null
+kicad-cli pcb export pos \
+    --output "$WORK/pos.csv" \
+    --side both \
+    --format csv \
+    --units mm \
+    --smd-only \
+    --exclude-dnp \
+    "$PCB" >/dev/null
+
+# ── JLCPCB assembly BOM and CPL ──────────────────────────────────
+# JLCPCB's column names.  Coordinates are KiCad's absolute ones, the same
+# origin as the Gerbers, so JLCPCB lines the parts up on its own.
+echo "==> Writing JLCPCB BOM and CPL..."
+LCSC_PARTS=$LCSC_PARTS python3 - "$WORK/pos.csv" "$OUT/BOM-JLCPCB.csv" "$OUT/CPL-JLCPCB.csv" <<'PYEOF'
+import csv, os, sys
+pos_path, bom_path, cpl_path = sys.argv[1:]
+
+lcsc = {}
+for line in os.environ['LCSC_PARTS'].strip().splitlines():
+    value, footprint, part, _desc = line.split(None, 3)
+    lcsc[(value, footprint)] = part
+
+with open(pos_path, newline='', encoding='utf-8') as f:
+    rows = list(csv.DictReader(f))
+
+groups, missing = {}, []
+for r in rows:
+    footprint = r['Package']
+    if ':' not in footprint:
+        # kicad-cli writes the footprint name without its library
+        footprint = next((fp for (v, fp) in lcsc if v == r['Val']
+                          and fp.split(':', 1)[1] == footprint), footprint)
+    key = (r['Val'], footprint)
+    if key not in lcsc:
+        missing.append(f"{r['Ref']} ({r['Val']}, {footprint})")
+    groups.setdefault(key, []).append(r['Ref'])
+if missing:
+    sys.exit('Error: no LCSC part number for: ' + ', '.join(missing)
+             + '\n  add them to LCSC_PARTS in Export_HddDriver_V1_zip')
+
+def ref_key(ref):
+    head = ref.rstrip('0123456789')
+    return head, int(ref[len(head):] or 0)
+
+with open(bom_path, 'w', newline='', encoding='utf-8') as f:
+    w = csv.writer(f)
+    w.writerow(['Comment', 'Designator', 'Footprint', 'LCSC Part #'])
+    for (value, footprint), refs in sorted(groups.items(), key=lambda g: ref_key(min(g[1], key=ref_key))):
+        w.writerow([value, ','.join(sorted(refs, key=ref_key)),
+                    footprint.split(':', 1)[1], lcsc[(value, footprint)]])
+
+with open(cpl_path, 'w', newline='', encoding='utf-8') as f:
+    w = csv.writer(f)
+    w.writerow(['Designator', 'Mid X', 'Mid Y', 'Layer', 'Rotation'])
+    for r in sorted(rows, key=lambda r: ref_key(r['Ref'])):
+        side = 'Top' if r['Side'] == 'top' else 'Bottom'
+        w.writerow([r['Ref'], f"{float(r['PosX']):.4f}mm", f"{float(r['PosY']):.4f}mm",
+                    side, f"{float(r['Rot']):g}"])
+print(f"  {len(rows)} SMD parts in {len(groups)} BOM lines")
+PYEOF
+
+# ── STEP and PDFs ────────────────────────────────────────────────
+# The module models are referenced as ${KIPRJMOD}/lib/3d/..., which is the
+# copy in $WORK.
+echo "==> Exporting STEP model and PDFs..."
+kicad-cli pcb export step \
+    --output "$OUT/${PCBNAME}.step" \
+    --subst-models \
+    --no-unspecified \
+    --no-dnp \
+    "$PCB" >/dev/null 2>"$WORK/step.err" || { cat "$WORK/step.err" >&2; exit 1; }
+kicad-cli sch export pdf --output "$OUT/${PCBNAME}-schematic.pdf" "$SCH" >/dev/null
+kicad-cli pcb export pdf \
+    --output "$OUT/${PCBNAME}-top.pdf" \
+    --layers "F.Cu,F.Silkscreen,F.Mask,Edge.Cuts" \
+    --mode-single \
+    "$PCB" >/dev/null
+kicad-cli pcb export pdf \
+    --output "$OUT/${PCBNAME}-bottom.pdf" \
+    --layers "B.Cu,B.Silkscreen,B.Mask,Edge.Cuts" \
+    --mirror \
+    --mode-single \
+    "$PCB" >/dev/null
+
+# ── README: order parameters, read from the board ────────────────
+echo "==> Writing README.md..."
+if ! "$PY" - "$PCB" "$WORK/${PCBNAME}.kicad_pro" "$OUT" "$NAME" >"$WORK/py.out" 2>"$WORK/py.err" <<'PYEOF'
+import json, os, sys
+from collections import Counter
+import pcbnew
+
+pcb_path, pro_path, out_dir, name = sys.argv[1:]
+board = pcbnew.LoadBoard(pcb_path)
+mm = pcbnew.ToMM
+
+def num(x):
+    return f"{round(x, 3):g}"
+
+# The bounding box includes the outline's stroke; the board edge is its centre.
+edge = board.GetBoardEdgesBoundingBox()
+edge_w = max(d.GetWidth() for d in board.GetDrawings() if d.GetLayer() == pcbnew.Edge_Cuts)
+width, height = mm(edge.GetWidth() - edge_w), mm(edge.GetHeight() - edge_w)
+layers = board.GetCopperLayerCount()
+thickness = mm(board.GetDesignSettings().GetBoardThickness())
+
+tracks, vias = Counter(), Counter()
+for t in board.GetTracks():
+    if t.GetClass() == 'PCB_VIA':
+        vias[(mm(t.GetDrill()), mm(t.GetWidth(pcbnew.F_Cu)))] += 1
+    elif t.GetClass() == 'PCB_TRACK':
+        tracks[mm(t.GetWidth())] += 1
+pth, npth = Counter(), Counter()
+for fp in board.GetFootprints():
+    for p in fp.Pads():
+        d = p.GetDrillSize()
+        if d.x:
+            hole = num(mm(d.x)) if d.x == d.y else f"{num(mm(d.x))} × {num(mm(d.y))} slot"
+            (npth if p.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH else pth)[hole] += 1
+
+rules = json.load(open(pro_path, encoding='utf-8'))
+clearance = min(c['clearance'] for c in rules['net_settings']['classes'])
+min_drill = min([d for d, _ in vias] + [float(h.split()[0]) for h in pth])
+
+def ref_key(ref):
+    head = ref.rstrip('0123456789')
+    return head, int(ref[len(head):] or 0)
+
+footprints = sorted(board.GetFootprints(), key=lambda fp: ref_key(fp.GetReference()))
+smd = [(fp.GetReference(), fp.GetValue(), 'Bottom' if fp.IsFlipped() else 'Top')
+       for fp in footprints if fp.GetAttributes() & pcbnew.FP_SMD]
+sides = sorted({side for _, _, side in smd}, reverse=True)
+tht = [f"{fp.GetReference()} ({fp.GetValue()})" for fp in footprints
+       if fp.GetAttributes() & pcbnew.FP_THROUGH_HOLE
+       and not fp.GetAttributes() & pcbnew.FP_EXCLUDE_FROM_BOM
+       and fp.GetReference() != 'J2']     # J2 is only the spring pads, no part
+holes = Counter(fp.GetValue() for fp in footprints if fp.GetReference().startswith('H'))
+
+L = [
+    "# HDD Driver V1 — JLCPCB manufacturing notes",
+    "",
+    f"Board: hdd-driver (HDD Driver V1), {num(width)} × {num(height)} mm, {layers} copper layers.",
+    "",
+    "## Upload",
+    "",
+    f"Upload **`{name}_gerbers.zip`** at jlcpcb.com. It holds the Gerbers (Protel extensions) "
+    "and the Excellon drill files (PTH and NPTH separate). The `gerbers/` folder has the same files unzipped.",
+    "",
+    "## PCB order parameters",
+    "",
+    "| Option | Value |",
+    "|---|---|",
+    "| Base material | FR-4 |",
+    f"| Layers | {layers} |",
+    f"| Dimensions | {num(width)} × {num(height)} mm |",
+    f"| PCB thickness | {num(thickness)} mm |",
+    "| Outer copper weight | 1 oz |",
+    "| Surface finish | **ENIG**: the motor's spring contacts press on the three bare pads on the bottom side |",
+    "| Via covering | Tented |",
+    "| Mark on PCB (order number) | Remove, or accept JLCPCB's placement |",
+    "| Colour, silkscreen | Any |",
+    "",
+    "Everything is within JLCPCB's standard 2-layer capabilities; only ENIG costs extra.",
+    "",
+    "## Design minimums",
+    "",
+    f"- Track width {num(min(tracks))} mm (widths used: {', '.join(num(w) + ' mm' for w in sorted(tracks))}).",
+    f"- Clearance {num(clearance)} mm.",
+    f"- Smallest drill {num(min_drill)} mm.",
+    "- Vias: " + ', '.join(f"{num(d)} mm drill / {num(p)} mm pad" for d, p in sorted(vias))
+    + "; through vias only.",
+    f"- Plated holes: {', '.join(h + ' mm' for h in sorted(pth))}.",
+    f"- Non-plated holes: {', '.join(h + ' mm' for h in sorted(npth)) or 'none'}.",
+    "- Mounting holes: " + ', '.join(f"{n} × {v}" for v, n in sorted(holes.items())) + ", plated.",
+    "- Finest pitch: TSSOP-8, 0.65 mm (U5, U6). No impedance control.",
+    "",
+    "## Assembly (optional)",
+    "",
+    "JLCPCB can place the SMD parts:",
+    "",
+    "| Ref | Value | Side |",
+    "|---|---|---|",
+]
+L += [f"| {r} | {v} | {s} |" for r, v, s in smd]
+L.append("")
+if len(sides) == 1:
+    L.append(f"Upload `BOM-JLCPCB.csv` and `CPL-JLCPCB.csv` and order Economic PCBA, {sides[0].lower()} side.")
+else:
+    bottom = ', '.join(r for r, _, s in smd if s == 'Bottom')
+    L.append("Upload `BOM-JLCPCB.csv` and `CPL-JLCPCB.csv`. The parts sit on **both sides**: "
+             "Economic PCBA places one side only, so either order Standard PCBA with both sides, "
+             f"or order the top side and hand-solder {bottom}.")
+L += [
+    "",
+    "The INA181/INA240 amplifiers and the 20 mΩ shunts are Extended parts, so they add a "
+    "feeder fee each; the quote lists which parts are Basic. Check stock before ordering.",
+    "",
+    "Check the placement preview: the diodes (D1–D3) and the amplifiers (U4–U6) are polarised, "
+    "and JLCPCB's rotation for SOT-23, SMA and TSSOP footprints sometimes differs from KiCad's. "
+    "Pin 1 of each must match the silkscreen dot or bar.",
+    "",
+    "Hand-soldered through-hole parts, not part of the JLCPCB order: "
+    f"{', '.join(tht)}. The modules sit on 2.54 mm female headers. "
+    "Trim their leads flush on the bottom side, which faces the drive's metal base. "
+    "J2 (HDD motor contacts) is copper only: the spring pads and the screw-7 hole. "
+    f"`BOM-hdd-driver.csv` lists every part.",
+    "",
+    "## Files",
+    "",
+    "| File | What |",
+    "|---|---|",
+    f"| `{name}_gerbers.zip` | Gerbers and drill files for upload |",
+    "| `gerbers/` | The same, unzipped; also the drill maps |",
+    "| `BOM-JLCPCB.csv`, `CPL-JLCPCB.csv` | JLCPCB assembly BOM (LCSC part numbers) and placement |",
+    "| `BOM-hdd-driver.csv` | Full BOM from the schematic |",
+    "| `hdd-driver-schematic.pdf` | Schematic |",
+    "| `hdd-driver-top.pdf`, `hdd-driver-bottom.pdf` | Copper, mask and silkscreen; the bottom is mirrored |",
+    "| `hdd-driver.step` | 3D model with the module models |",
+    "",
+]
+with open(os.path.join(out_dir, 'README.md'), 'w', encoding='utf-8') as f:
+    f.write('\n'.join(L))
+PYEOF
+then
+    cat "$WORK/py.out" "$WORK/py.err" >&2
+    exit 1
+fi
+
+# ── Zip ──────────────────────────────────────────────────────────
+rm -f "$ZIPNAME"
+(cd "$WORK" && zip -q -r -X "$PROJ/$ZIPNAME" "$NAME")
+echo
+echo "Done: $ZIPNAME"
+unzip -l "$ZIPNAME"
