@@ -209,10 +209,15 @@ pio run -t upload      # flash over USB DFU
 - **Spinning:** open-loop velocity, with a rotor alignment hold (`L`, 600 ms)
   and a ramp. Trips on phase/bus overcurrent (2.5 A), nFAULT and VM outside
   8.5-30 V.
-- **Bring-up result (HDD motor, VM 11.5 V):** locks and runs steadily at
-  `V0.9 A10 R60` with about 0.12 A bus current and 2 A phase peaks. Below
-  about 30 rpm the rotor swings (open-loop stepping at a very low electrical
-  frequency); do not crawl.
+- **PWM:** 25 kHz center-aligned on TIM1 (`PWM_HZ`). `platformio.ini` needs
+  `lib_archive = no`: with an archive the linker picks SimpleFOC's weak generic
+  `analogWrite` driver (1 kHz, 8 bit) and never links the STM32 one. The first
+  bring-up runs were on that 1 kHz PWM; their conclusions (rotor swinging at low
+  speed, 2 A current "peaks") were artifacts and are void. `S` prints `pwm_hz`.
+- **Measured (HDD motor, VM 11.5 V, 0.9 V limit):** about 0.5 A phase current,
+  0.06 A bus current, `rph` about 1.75 Ω (DMM: 3.8 Ω between phases). `idm`, `iqm`
+  and `iqs` in the telemetry are the currents in the rotor frame at the open-loop
+  field angle; `iqs` is their noise.
 - **Pole pairs** (`POLE_PAIRS`, 6) are unverified, so rpm figures are
   commanded, not measured, until the VR coil is connected.
 - **VR pickup:** `PA1` -> COMP1 (threshold DAC3 CH1, internal) -> TIM2

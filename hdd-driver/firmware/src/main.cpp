@@ -11,6 +11,7 @@
 //   P<n>        motor pole pairs (default POLE_PAIRS)
 //   T<ms>       telemetry period, 0 = off
 //   S           print status
+//   D           (diagnostic, during an alignment hold) histogram of raw ia/ib samples
 //   B           reboot into the ROM DFU bootloader (for flashing without the BOOT0 button)
 //   L<ms>       rotor alignment hold before the ramp (default ALIGN_MS, 0 = skip)
 //
@@ -48,6 +49,9 @@ static constexpr float PHASE_V_PER_A = 0.4f;  // 20 mohm * 20 V/V
 static constexpr float BUS_V_PER_A = 1.0f;    // 20 mohm * 50 V/V
 
 // ---- Limits / defaults ------------------------------------------------------
+#ifndef PWM_HZ
+#define PWM_HZ 25000  // DRV8313 allows up to 250 kHz
+#endif
 static constexpr float POLE_PAIRS = 6;          // unverified: typical 12-pole 3.5" spindle
 static constexpr float MAX_VOLTAGE = 3.0f;      // hard cap for V command
 static constexpr float DEFAULT_VOLTAGE = 1.0f;  // start gently; raise with V
@@ -95,6 +99,14 @@ static uint32_t telemetry_ms = 500, last_telemetry = 0, last_ramp_us = 0;
 static float ia_off = 1.65f, ib_off = 1.65f;  // zero-current voltage, calibrated at boot
 static uint32_t align_ms = ALIGN_MS, align_start = 0, steady_since = 0, last_vr_ms = 0;
 static float vr_pulses_per_rev = VR_PULSES_PER_REV, vr_hz = 0, vr_rpm = 0;
+// Window statistics of the currents in the rotor frame (Clarke + Park at the
+// open-loop field angle). With the voltage on the q axis, Iq is the torque
+// current and Id the part along the rotor axis; at standstill Iq = Uq / R_phase.
+struct CurStats {
+  uint32_t n = 0;
+  float id = 0, iq = 0, iq2 = 0;
+  void reset() { *this = CurStats(); }
+} cs;
 static float ibus_f = 0, ibus_off = 0, ia_peak = 0, ib_peak = 0;
 
 static float volts(int pin) { return analogRead(pin) * ADC_VREF / ADC_MAX; }
@@ -149,6 +161,16 @@ static void printStatus() {
   Serial.print(" ibus="); Serial.print(ibus_f, 3);
   Serial.print(" ia="); Serial.print(ia, 3);
   Serial.print(" ib="); Serial.print(ib, 3);
+  if (cs.n) {
+    float idm = cs.id / cs.n, iqm = cs.iq / cs.n;
+    float iqs = sqrtf(max(0.0f, cs.iq2 / cs.n - iqm * iqm));
+    Serial.print(" idm="); Serial.print(idm, 3);
+    Serial.print(" iqm="); Serial.print(iqm, 3);
+    Serial.print(" iqs="); Serial.print(iqs, 3);
+    if (iqm > 0.05f) { Serial.print(" rph="); Serial.print(motor.voltage_limit / iqm, 3); }
+    Serial.print(" n="); Serial.print(cs.n);
+  }
+  cs.reset();
   Serial.print(" |ia|pk="); Serial.print(ia_peak, 2);
   Serial.print(" |ib|pk="); Serial.print(ib_peak, 2);
   Serial.print(" vr="); Serial.print(volts(PIN_VR), 3);
@@ -157,6 +179,9 @@ static void printStatus() {
   Serial.print(" edges="); Serial.print(vr::edgeCount());
   Serial.print(" cmp="); Serial.print(vr::comparatorHigh());
   Serial.print(" thr="); Serial.print(vr::threshold(), 0);
+  Serial.print(" pwm_hz=");
+  Serial.print((float)HAL_RCC_GetPCLK2Freq() * ((RCC->CFGR & RCC_CFGR_PPRE2) >= RCC_CFGR_PPRE2_2 ? 2 : 1) /
+               (((TIM1->CR1 & TIM_CR1_CMS) ? 2.0f : 1.0f) * (TIM1->ARR + 1) * (TIM1->PSC + 1)), 0);
   Serial.print(" nFT="); Serial.println(digitalRead(PIN_NFAULT));
   ia_peak = ib_peak = 0;
 }
@@ -177,6 +202,30 @@ static void cmdPoles(char* c) {
 }
 static void cmdTelemetry(char* c) { telemetry_ms = max(0, atoi(c)); }
 static void cmdStatus(char*) { printStatus(); }
+// Histogram of raw phase-current samples, in 20 mV bins around the offset.
+// Blocks the loop for ~100 ms; PWM keeps the last duty, so use it in a hold.
+static void cmdDiag(char*) {
+  static uint16_t ha[64], hb[64];
+  memset(ha, 0, sizeof ha); memset(hb, 0, sizeof hb);
+  const int N = 3000;
+  uint32_t t0 = micros();
+  for (int i = 0; i < N; i++) {
+    int ra = analogRead(PIN_IA), rb = analogRead(PIN_IB);
+    // bin = (V - offset) / 20 mV, centered at 32
+    int ba = 32 + (int)floorf(((ra * ADC_VREF / ADC_MAX) - ia_off) / 0.02f);
+    int bb = 32 + (int)floorf(((rb * ADC_VREF / ADC_MAX) - ib_off) / 0.02f);
+    ha[constrain(ba, 0, 63)]++; hb[constrain(bb, 0, 63)]++;
+  }
+  Serial.print("diag: "); Serial.print(N); Serial.print(" samples, ");
+  Serial.print((micros() - t0) / (2.0f * N), 2); Serial.println(" us per read");
+  for (int ch = 0; ch < 2; ch++) {
+    Serial.print(ch ? "ib " : "ia ");
+    Serial.println("(bin = 20 mV from the zero-current offset; count)");
+    uint16_t* h = ch ? hb : ha;
+    for (int i = 0; i < 64; i++) if (h[i]) { Serial.print(i - 32); Serial.print(":"); Serial.print(h[i]); Serial.print(" "); }
+    Serial.println();
+  }
+}
 static void cmdBootloader(char*) {
   motor.disable();
   Serial.println("rebooting into DFU bootloader");
@@ -215,7 +264,7 @@ void setup() {
 
   driver.voltage_power_supply = 12;  // replaced with the measured VM on E1
   driver.voltage_limit = MAX_VOLTAGE;
-  driver.pwm_frequency = 25000;
+  driver.pwm_frequency = PWM_HZ;
   if (!driver.init()) { Serial.println("driver init failed"); }
   motor.linkDriver(&driver);
 
@@ -232,6 +281,7 @@ void setup() {
   command.add('P', cmdPoles, "pole pairs");
   command.add('T', cmdTelemetry, "telemetry ms");
   command.add('S', cmdStatus, "status");
+  command.add('D', cmdDiag, "ADC histogram");
   command.add('B', cmdBootloader, "reboot to DFU");
   command.add('L', cmdAlign, "align ms");
   command.add('N', cmdPulses, "VR pulses/rev");
@@ -283,6 +333,16 @@ void loop() {
   // Protection.
   float ia = fabsf(volts(PIN_IA) - ia_off) / PHASE_V_PER_A;
   float ib = fabsf(volts(PIN_IB) - ib_off) / PHASE_V_PER_A;
+  if (running) {
+    // Signed phase currents, same convention as printStatus().
+    float sia = (ia_off - volts(PIN_IA)) / PHASE_V_PER_A;
+    float sib = (volts(PIN_IB) - ib_off) / PHASE_V_PER_A;
+    float ang = motor.shaft_angle * motor.pole_pairs;
+    float c = cosf(ang), sn = sinf(ang);
+    float ialpha = sia, ibeta = (sia + 2.0f * sib) * 0.57735027f;
+    float id = ialpha * c + ibeta * sn, iq = -ialpha * sn + ibeta * c;
+    cs.n++; cs.id += id; cs.iq += iq; cs.iq2 += iq * iq;
+  }
   ia_peak = max(ia_peak, ia);
   ib_peak = max(ib_peak, ib);
   ibus_f += 0.01f * ((volts(PIN_IBUS) / BUS_V_PER_A - ibus_off) - ibus_f);
