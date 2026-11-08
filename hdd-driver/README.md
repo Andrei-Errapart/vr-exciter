@@ -190,6 +190,36 @@ J1 12V IN ─ D1 SS54 ─┬─ +12V ── JP1.1 ┐
 - **More pin facts:** `../datasheets/weact_stm32G474/README.md` (WeAct board)
   and `../datasheets/drv8313/README.md` (SimpleFOC Mini).
 
+## Firmware
+
+`firmware/` is a PlatformIO project (Arduino-STM32 core + SimpleFOC 2.3.4;
+2.4.0 does not compile against the installed core).
+
+```sh
+cd firmware
+pio run                # build
+pio run -t upload      # flash over USB DFU
+```
+
+- **Console:** USB-C CDC serial, 115200. Commands are listed at the top of
+  `src/main.cpp` (`E1` enable, `R<rpm>`, `V<volts>`, `A`, `P`, `S`, `T`, `L`,
+  `N`, `Q`, `C`, `H`, `K`, `B`). The driver is off after reset.
+- **Flashing:** the first time, hold BOOT0 and tap NRST. Afterwards the `B`
+  command reboots into the ROM DFU bootloader.
+- **Spinning:** open-loop velocity, with a rotor alignment hold (`L`, 600 ms)
+  and a ramp. Trips on phase/bus overcurrent (2.5 A), nFAULT and VM outside
+  8.5-30 V.
+- **Bring-up result (HDD motor, VM 11.5 V):** locks and runs steadily at
+  `V0.9 A10 R60` with about 0.12 A bus current and 2 A phase peaks. Below
+  about 30 rpm the rotor swings (open-loop stepping at a very low electrical
+  frequency); do not crawl.
+- **Pole pairs** (`POLE_PAIRS`, 6) are unverified, so rpm figures are
+  commanded, not measured, until the VR coil is connected.
+- **VR pickup:** `PA1` -> COMP1 (threshold DAC3 CH1, internal) -> TIM2
+  input capture 1; `vrpm` = pulse rate / 60 pulses per revolution. The
+  comparator and capture path were checked with a swept threshold, but not
+  with a real coil.
+
 ## Checking the fit
 
 ```sh
