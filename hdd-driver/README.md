@@ -214,10 +214,19 @@ pio run -t upload      # flash over USB DFU
   `analogWrite` driver (1 kHz, 8 bit) and never links the STM32 one. The first
   bring-up runs were on that 1 kHz PWM; their conclusions (rotor swinging at low
   speed, 2 A current "peaks") were artifacts and are void. `S` prints `pwm_hz`.
-- **Measured (HDD motor, VM 11.5 V, 0.9 V limit):** about 0.5 A phase current,
-  0.06 A bus current, `rph` about 1.75 Ω (DMM: 3.8 Ω between phases). `idm`, `iqm`
-  and `iqs` in the telemetry are the currents in the rotor frame at the open-loop
-  field angle; `iqs` is their noise.
+- **Control loop:** the field angle (alignment, ramp, open-loop move) runs in a
+  20 kHz TIM3 interrupt (12 us). `fast_adc.cpp` reads the ADCs by register in
+  1.6 us (Arduino `analogRead` took 150 us); do not mix it with `analogRead`.
+  `I<amps>` regulates the torque current Iq by adjusting the voltage (Vcap is the
+  limit), `J<amps>` adds a start boost tapering to `I` at 60 rpm, `A`/`F` set the
+  ramp below/above 60 rpm. `fieldrpm` (interrupt-counted field revolutions)
+  checks the ramp; `vmmin` is the lowest VM during the run.
+- **Measured (HDD motor, VM 11.5 V):** phase resistance about 1.75 Ω (DMM: 3.8 Ω
+  between phases), inductance about 0.5 mH. The rotor needs about 1.0 A (not 0.5 A)
+  to hold 60 rpm, and does not pull in from standstill with a fast ramp: `I1.0 J1.25
+  A5 F10` starts reliably and reaches 400 rpm cleanly. Reaching 800 rpm worked
+  electrically; the rotor pulsated a little. Wait until the disk has stopped
+  before `E1` (a start against a coasting rotor tripped nFAULT once).
 - **Pole pairs** (`POLE_PAIRS`, 6) are unverified, so rpm figures are
   commanded, not measured, until the VR coil is connected.
 - **VR pickup:** `PA1` -> COMP1 (threshold DAC3 CH1, internal) -> TIM2

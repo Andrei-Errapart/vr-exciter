@@ -6,8 +6,15 @@
 //
 //   E1 / E0     enable / disable the driver
 //   R<rpm>      target speed in rpm (mechanical), e.g. R300. Negative reverses.
-//   A<rpm/s>    acceleration, e.g. A60
-//   V<volts>    open-loop phase voltage limit (max MAX_VOLTAGE)
+//   A<rpm/s>    acceleration (from standstill up to ACCEL_BREAK_RPM), e.g. A5
+//   F<rpm/s>    acceleration above ACCEL_BREAK_RPM (0 = same as A). The rotor pulls in
+//               slowly from standstill but tolerates faster ramps once it is locked.
+//   V<volts>    phase voltage limit / cap (max MAX_VOLTAGE)
+//   I<amps>     current regulation: the voltage is adjusted (up to the V cap) to hold
+//               this torque current while speed, and with it the back-EMF, rises.
+//               I0 = off (fixed voltage V).
+//   J<amps>     start boost: this current from standstill, tapering linearly to I at
+//               ACCEL_BREAK_RPM. Helps the rotor pull in. 0 = off.
 //   P<n>        motor pole pairs (default POLE_PAIRS)
 //   T<ms>       telemetry period, 0 = off
 //   S           print status
@@ -31,6 +38,7 @@
 #include <Arduino.h>
 #include <SimpleFOC.h>
 #include "vr_capture.h"
+#include "fast_adc.h"
 
 // ---- Pins (hdd-driver/README.md, "Electronics") ----------------------------
 static constexpr int PIN_IN1 = PA8, PIN_IN2 = PA9, PIN_IN3 = PA10;  // TIM1 CH1-3
@@ -53,9 +61,10 @@ static constexpr float BUS_V_PER_A = 1.0f;    // 20 mohm * 50 V/V
 #define PWM_HZ 25000  // DRV8313 allows up to 250 kHz
 #endif
 static constexpr float POLE_PAIRS = 6;          // unverified: typical 12-pole 3.5" spindle
-static constexpr float MAX_VOLTAGE = 3.0f;      // hard cap for V command
+static constexpr float MAX_VOLTAGE = 6.0f;      // hard cap for V command (also limited to VM / 2)
 static constexpr float DEFAULT_VOLTAGE = 1.0f;  // start gently; raise with V
 static constexpr float DEFAULT_ACCEL_RPM_S = 30;
+static constexpr float ACCEL_BREAK_RPM = 60;
 static constexpr float PHASE_TRIP_A = 2.5f;     // DRV8313 OCP is 3 A min
 static constexpr float BUS_TRIP_A = 2.5f;       // filtered
 static constexpr float VM_MIN = 8.5f;           // DRV8313 UVLO is about 8 V
@@ -65,6 +74,11 @@ static constexpr float VR_PULSES_PER_REV = 60;  // README: 60 pulses/rev
 static constexpr float VR_THRESHOLD_MV = 1650;  // VR_BIAS
 static constexpr int VR_HYST = 4;               // 40 mV
 static constexpr uint32_t STALL_GRACE_MS = 1500;  // after the ramp ends
+static constexpr uint32_t CONTROL_HZ = 20000;     // field-angle update rate (timer interrupt)
+static constexpr float R_PHASE_EST = 1.8f;        // start value for the current regulator
+static constexpr float I_REG_KI = 20.0f;          // V per A per s
+static constexpr float I_REG_MIN_V = 0.05f;
+static constexpr uint32_t SAT_MS = 1500;          // regulator pinned at the cap this long -> stop
 
 // ---- Reboot into the ROM bootloader ------------------------------------------
 // B stores a magic word in a no-init RAM cell and resets. initVariant() runs
@@ -93,11 +107,20 @@ BLDCMotor motor(POLE_PAIRS);
 BLDCDriver3PWM driver(PIN_IN1, PIN_IN2, PIN_IN3, PIN_EN);
 Commander command(Serial);
 
-static bool running = false, aligning = false, stall_guard = false;
-static float target_rpm = 0, accel_rpm_s = DEFAULT_ACCEL_RPM_S, ramp_rpm = 0;
-static uint32_t telemetry_ms = 500, last_telemetry = 0, last_ramp_us = 0;
+// Shared with the control interrupt.
+static volatile bool running = false, aligning = false;
+static volatile float target_rpm = 0, accel_rpm_s = DEFAULT_ACCEL_RPM_S, accel_hi_rpm_s = 0, ramp_rpm = 0;
+static volatile uint32_t last_ramp_us = 0, align_start = 0, align_ms = ALIGN_MS;
+static volatile uint32_t isr_n = 0, isr_max_cyc = 0, field_revs = 0;
+static bool stall_guard = false;
+static uint32_t run_id = 0;  // counts E1 starts, so runs can be referred to by number
+static uint32_t telemetry_ms = 500, last_telemetry = 0;
+static float v_cap = DEFAULT_VOLTAGE, i_set = 0, i_boost = 0, v_cur = 0;  // current regulator
+static uint32_t sat_since = 0, last_reg_ms = 0, last_vm_ms = 0;
+static float vm_min = 99;
+static float reg_iq_sum = 0; static uint32_t reg_n = 0;
 static float ia_off = 1.65f, ib_off = 1.65f;  // zero-current voltage, calibrated at boot
-static uint32_t align_ms = ALIGN_MS, align_start = 0, steady_since = 0, last_vr_ms = 0;
+static uint32_t steady_since = 0, last_vr_ms = 0;
 static float vr_pulses_per_rev = VR_PULSES_PER_REV, vr_hz = 0, vr_rpm = 0;
 // Window statistics of the currents in the rotor frame (Clarke + Park at the
 // open-loop field angle). With the voltage on the q axis, Iq is the torque
@@ -109,23 +132,31 @@ struct CurStats {
 } cs;
 static float ibus_f = 0, ibus_off = 0, ia_peak = 0, ib_peak = 0;
 
-static float volts(int pin) { return analogRead(pin) * ADC_VREF / ADC_MAX; }
+static float volts(int pin) {
+  int ch = pin == PIN_VM ? 1 : pin == PIN_VR ? 2 : pin == PIN_IA ? 3 : pin == PIN_IBUS ? 4 : 0;
+  uint16_t v = ch ? fast_adc::read1(ch) : 0;
+  if (pin == PIN_IB) { uint16_t a; fast_adc::readPair(3, a, v); }
+  return v * ADC_VREF / ADC_MAX;
+}
 static float avgVolts(int pin, int n = 32) {
   float s = 0;
   for (int i = 0; i < n; i++) s += volts(pin);
   return s / n;
 }
-static float readVM() { return avgVolts(PIN_VM, 16) * VM_DIV; }
+static float readVM() { return avgVolts(PIN_VM, 64) * VM_DIV; }
 static float rpmToRad(float rpm) { return rpm * _2PI / 60.0f; }
 
 static void stopMotor(const char* why) {
-  motor.disable();
-  running = false;
+  running = false;  // the control interrupt stops moving the field
   aligning = false;
+  noInterrupts();
+  motor.disable();
+  interrupts();
   ramp_rpm = 0;
   target_rpm = 0;
   Serial.print("DISABLED: ");
-  Serial.println(why);
+  Serial.print(why);
+  Serial.print(" (vmmin="); Serial.print(vm_min, 2); Serial.println(")");
 }
 
 static bool startMotor() {
@@ -136,16 +167,25 @@ static bool startMotor() {
     return false;
   }
   driver.voltage_power_supply = vm;  // PWM scaling follows the real rail
-  motor.voltage_limit = min(motor.voltage_limit, vm * 0.5f);
+  float cap = min(v_cap, vm * 0.5f);
+  v_cur = i_set > 0 ? min(0.5f, cap) : cap;  // soft start: the regulator integrates up from here
+  vm_min = 99;
+  motor.voltage_limit = v_cur;
+  sat_since = 0;
+  reg_iq_sum = 0; reg_n = 0; last_reg_ms = millis();
   ramp_rpm = 0;
   motor.shaft_angle = 0;  // open-loop angle restarts at 0 = where we align
   motor.enable();
-  running = true;
   steady_since = 0;
-  aligning = align_ms > 0;
   align_start = millis();
   last_ramp_us = micros();
-  Serial.println(aligning ? "enabled, aligning" : "enabled");
+  aligning = align_ms > 0;
+  running = true;  // last: starts the control interrupt
+  run_id++;
+  Serial.print("enabled, run "); Serial.print(run_id);
+  Serial.print(" (I="); Serial.print(i_set, 2); Serial.print(" J="); Serial.print(i_boost, 2); Serial.print(" Vcap="); Serial.print(v_cap, 1);
+  Serial.print(" A="); Serial.print(accel_rpm_s, 0); Serial.print(" F="); Serial.print(accel_hi_rpm_s, 0);
+  Serial.print(" R="); Serial.print(target_rpm, 0); Serial.println(")");
   return true;
 }
 
@@ -157,6 +197,9 @@ static void printStatus() {
   Serial.print(" rpm="); Serial.print(ramp_rpm, 1);
   Serial.print("/"); Serial.print(target_rpm, 1);
   Serial.print(" Vlim="); Serial.print(motor.voltage_limit, 2);
+  Serial.print(" vmmin="); Serial.print(vm_min, 2);
+  Serial.print(" cap="); Serial.print(v_cap, 1);
+  Serial.print(" Iset="); Serial.print(i_set, 2);
   Serial.print(" pp="); Serial.print(motor.pole_pairs);
   Serial.print(" ibus="); Serial.print(ibus_f, 3);
   Serial.print(" ia="); Serial.print(ia, 3);
@@ -182,6 +225,12 @@ static void printStatus() {
   Serial.print(" pwm_hz=");
   Serial.print((float)HAL_RCC_GetPCLK2Freq() * ((RCC->CFGR & RCC_CFGR_PPRE2) >= RCC_CFGR_PPRE2_2 ? 2 : 1) /
                (((TIM1->CR1 & TIM_CR1_CMS) ? 2.0f : 1.0f) * (TIM1->ARR + 1) * (TIM1->PSC + 1)), 0);
+  { static uint32_t last_n = 0, last_ms = 0, last_revs = 0; uint32_t n = isr_n, ms = millis(), rv = field_revs;
+    Serial.print(" fieldrpm="); Serial.print(ms > last_ms ? (rv - last_revs) * 60000.0f / (ms - last_ms) : 0, 1);
+    last_revs = rv;
+    Serial.print(" isr_hz="); Serial.print(ms > last_ms ? (n - last_n) * 1000.0f / (ms - last_ms) : 0, 0);
+    Serial.print(" isr_us="); Serial.print(isr_max_cyc / (SystemCoreClock / 1e6f), 1);
+    last_n = n; last_ms = ms; isr_max_cyc = 0; }
   Serial.print(" nFT="); Serial.println(digitalRead(PIN_NFAULT));
   ia_peak = ib_peak = 0;
 }
@@ -191,10 +240,17 @@ static void cmdEnable(char* c) {
 }
 static void cmdRpm(char* c) { target_rpm = atof(c); Serial.print("target rpm "); Serial.println(target_rpm); }
 static void cmdAccel(char* c) { accel_rpm_s = max(1.0f, fabsf((float)atof(c))); }
+static void cmdAccelHi(char* c) { accel_hi_rpm_s = max(0.0f, fabsf((float)atof(c))); }
 static void cmdVolt(char* c) {
-  float v = constrain((float)atof(c), 0.0f, MAX_VOLTAGE);
-  motor.voltage_limit = v;
-  Serial.print("Vlim "); Serial.println(v, 2);
+  v_cap = constrain((float)atof(c), 0.0f, MAX_VOLTAGE);
+  if (i_set <= 0) motor.voltage_limit = v_cap;
+  Serial.print("Vcap "); Serial.println(v_cap, 2);
+}
+static void cmdBoost(char* c) { i_boost = constrain((float)atof(c), 0.0f, 2.0f); Serial.print("Jboost "); Serial.println(i_boost, 2); }
+static void cmdCurrent(char* c) {
+  i_set = constrain((float)atof(c), 0.0f, 1.5f);
+  if (i_set <= 0) motor.voltage_limit = v_cap;
+  Serial.print("Iset "); Serial.println(i_set, 2);
 }
 static void cmdPoles(char* c) {
   int n = atoi(c);
@@ -210,7 +266,8 @@ static void cmdDiag(char*) {
   const int N = 3000;
   uint32_t t0 = micros();
   for (int i = 0; i < N; i++) {
-    int ra = analogRead(PIN_IA), rb = analogRead(PIN_IB);
+    uint16_t ra, rb;
+    fast_adc::readPair(3, ra, rb);
     // bin = (V - offset) / 20 mV, centered at 32
     int ba = 32 + (int)floorf(((ra * ADC_VREF / ADC_MAX) - ia_off) / 0.02f);
     int bb = 32 + (int)floorf(((rb * ADC_VREF / ADC_MAX) - ib_off) / 0.02f);
@@ -246,6 +303,45 @@ static void cmdCalibrate(char*) {
   Serial.print("threshold = "); Serial.print(mv, 0); Serial.println(" mV");
 }
 
+static HardwareTimer* control_timer = nullptr;
+static void controlStep2();
+
+// Runs at CONTROL_HZ in an interrupt: holds the field at angle 0 during the
+// alignment, then ramps the speed and advances the open-loop field.
+static void controlStep() {
+  uint32_t t0 = DWT->CYCCNT;
+  isr_n = isr_n + 1;
+  static float last_angle = 0;
+  controlStep2();
+  if (running) {
+    float a = motor.shaft_angle;
+    if (a < last_angle - 3.0f) field_revs = field_revs + 1;  // wrapped past 2*pi
+    last_angle = a;
+  }
+  uint32_t d = DWT->CYCCNT - t0;
+  if (d > isr_max_cyc) isr_max_cyc = d;
+}
+static void controlStep2() {
+  if (!running) return;
+  if (aligning) {
+    motor.move(0);
+    if (millis() - align_start >= align_ms) {
+      aligning = false;
+      last_ramp_us = micros();
+    }
+    return;
+  }
+  uint32_t now = micros();
+  float dt = (now - last_ramp_us) * 1e-6f;
+  last_ramp_us = now;
+  float r = ramp_rpm;
+  float acc = (fabsf(r) >= ACCEL_BREAK_RPM && accel_hi_rpm_s > 0) ? accel_hi_rpm_s : accel_rpm_s;
+  float step = acc * dt;
+  r += constrain(target_rpm - r, -step, step);
+  ramp_rpm = r;
+  motor.move(rpmToRad(r));
+}
+
 void setup() {
   Serial.begin(115200);
 
@@ -255,7 +351,9 @@ void setup() {
   pinMode(PIN_NSLEEP, OUTPUT); digitalWrite(PIN_NSLEEP, HIGH);
   pinMode(PIN_NRESET, OUTPUT); digitalWrite(PIN_NRESET, HIGH);
 
-  analogReadResolution(12);
+  pinMode(PIN_VM, INPUT_ANALOG); pinMode(PIN_VR, INPUT_ANALOG); pinMode(PIN_IA, INPUT_ANALOG);
+  pinMode(PIN_IBUS, INPUT_ANALOG); pinMode(PIN_IB, INPUT_ANALOG);
+  fast_adc::begin();
   delay(50);
   // Zero-current offsets, driver disabled so no phase current flows.
   ia_off = avgVolts(PIN_IA, 256);
@@ -277,7 +375,10 @@ void setup() {
   command.add('E', cmdEnable, "enable 0/1");
   command.add('R', cmdRpm, "target rpm");
   command.add('A', cmdAccel, "accel rpm/s");
-  command.add('V', cmdVolt, "voltage limit");
+  command.add('F', cmdAccelHi, "accel above break rpm/s");
+  command.add('V', cmdVolt, "voltage cap");
+  command.add('J', cmdBoost, "start boost current A");
+  command.add('I', cmdCurrent, "current regulation A");
   command.add('P', cmdPoles, "pole pairs");
   command.add('T', cmdTelemetry, "telemetry ms");
   command.add('S', cmdStatus, "status");
@@ -290,6 +391,16 @@ void setup() {
   command.add('C', cmdCalibrate, "VR threshold = measured");
   command.add('K', cmdStall, "stall guard 0/1");
 
+  // Field-angle update (alignment, ramp, open-loop move) at a fixed rate in an
+  // interrupt, independent of how long the main loop takes.
+  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+  control_timer = new HardwareTimer(TIM3);
+  control_timer->setOverflow(CONTROL_HZ, HERTZ_FORMAT);
+  control_timer->setInterruptPriority(1, 0);
+  control_timer->attachInterrupt(controlStep);
+  control_timer->resume();
+
   vr::begin(VR_THRESHOLD_MV, VR_HYST);
   vr::pulseHz();  // prime the snapshot
 
@@ -298,22 +409,6 @@ void setup() {
 }
 
 void loop() {
-  // Open-loop speed with a software ramp (the platters have inertia).
-  if (running && aligning) {
-    motor.move(0);  // field fixed at electrical angle 0
-    if (millis() - align_start >= align_ms) {
-      aligning = false;
-      last_ramp_us = micros();
-    }
-  } else if (running) {
-    uint32_t now = micros();
-    float dt = (now - last_ramp_us) * 1e-6f;
-    last_ramp_us = now;
-    float step = accel_rpm_s * dt;
-    ramp_rpm += constrain(target_rpm - ramp_rpm, -step, step);
-    motor.move(rpmToRad(ramp_rpm));
-  }
-
   // VR speed, every 100 ms.
   if (millis() - last_vr_ms >= 100) {
     last_vr_ms = millis();
@@ -330,26 +425,59 @@ void loop() {
     }
   }
 
-  // Protection.
-  float ia = fabsf(volts(PIN_IA) - ia_off) / PHASE_V_PER_A;
-  float ib = fabsf(volts(PIN_IB) - ib_off) / PHASE_V_PER_A;
-  if (running) {
-    // Signed phase currents, same convention as printStatus().
-    float sia = (ia_off - volts(PIN_IA)) / PHASE_V_PER_A;
-    float sib = (volts(PIN_IB) - ib_off) / PHASE_V_PER_A;
-    float ang = motor.shaft_angle * motor.pole_pairs;
-    float c = cosf(ang), sn = sinf(ang);
-    float ialpha = sia, ibeta = (sia + 2.0f * sib) * 0.57735027f;
-    float id = ialpha * c + ibeta * sn, iq = -ialpha * sn + ibeta * c;
-    cs.n++; cs.id += id; cs.iq += iq; cs.iq2 += iq * iq;
+  // Protection and rotor-frame current statistics. One simultaneous ia/ib pair per pass.
+  {
+    uint16_t ra, rb;
+    fast_adc::readPair(3, ra, rb);
+    float sa = ra * ADC_VREF / ADC_MAX, sb = rb * ADC_VREF / ADC_MAX;
+    float sia = (ia_off - sa) / PHASE_V_PER_A;  // sign convention as in printStatus()
+    float sib = (sb - ib_off) / PHASE_V_PER_A;
+    float ia = fabsf(sia), ib = fabsf(sib);
+    if (running) {
+      float ang = motor.shaft_angle * motor.pole_pairs;
+      float c = cosf(ang), sn = sinf(ang);
+      float ialpha = sia, ibeta = (sia + 2.0f * sib) * 0.57735027f;
+      float id = ialpha * c + ibeta * sn, iq = -ialpha * sn + ibeta * c;
+      cs.n++; cs.id += id; cs.iq += iq; cs.iq2 += iq * iq;
+      reg_iq_sum += iq; reg_n++;
+    }
+    ia_peak = max(ia_peak, ia);
+    ib_peak = max(ib_peak, ib);
+    ibus_f += 0.01f * ((volts(PIN_IBUS) / BUS_V_PER_A - ibus_off) - ibus_f);
+    if (running) {
+      if (ia > PHASE_TRIP_A || ib > PHASE_TRIP_A) stopMotor("phase overcurrent");
+      else if (ibus_f > BUS_TRIP_A) stopMotor("bus overcurrent");
+      else if (digitalRead(PIN_NFAULT) == LOW) stopMotor("DRV8313 nFAULT (OCP/OTP/UVLO)");
+    }
   }
-  ia_peak = max(ia_peak, ia);
-  ib_peak = max(ib_peak, ib);
-  ibus_f += 0.01f * ((volts(PIN_IBUS) / BUS_V_PER_A - ibus_off) - ibus_f);
-  if (running) {
-    if (ia > PHASE_TRIP_A || ib > PHASE_TRIP_A) stopMotor("phase overcurrent");
-    else if (ibus_f > BUS_TRIP_A) stopMotor("bus overcurrent");
-    else if (digitalRead(PIN_NFAULT) == LOW) stopMotor("DRV8313 nFAULT (OCP/OTP/UVLO)");
+
+  // Lowest supply voltage seen during the run, sampled every ms.
+  if (running && millis() != last_vm_ms) {
+    last_vm_ms = millis();
+    float vm = volts(PIN_VM) * VM_DIV;
+    if (vm < vm_min) vm_min = vm;
+    if (vm < VM_MIN - 0.5f) stopMotor("VM sagged below the driver's UVLO");
+  }
+
+  // Current regulator, every 2 ms: integrate the torque-current error into the voltage.
+  if (running && i_set > 0 && millis() - last_reg_ms >= 2 && reg_n) {
+    float dt = (millis() - last_reg_ms) * 1e-3f;
+    last_reg_ms = millis();
+    float iq = reg_iq_sum / reg_n;
+    reg_iq_sum = 0; reg_n = 0;
+    float cap = min(v_cap, driver.voltage_power_supply * 0.5f);
+    float target = i_set;
+    if (i_boost > i_set) {  // taper from i_boost at standstill to i_set at ACCEL_BREAK_RPM
+      float f = constrain(fabsf(ramp_rpm) / ACCEL_BREAK_RPM, 0.0f, 1.0f);
+      target = i_boost + (i_set - i_boost) * f;
+    }
+    v_cur = constrain(v_cur + I_REG_KI * (target - iq) * dt, I_REG_MIN_V, cap);
+    motor.voltage_limit = v_cur;
+    // Pinned at the cap without reaching the current: the rotor cannot be held.
+    if (v_cur >= cap - 0.01f && iq < 0.8f * target && !aligning) {
+      if (!sat_since) sat_since = millis();
+      else if (millis() - sat_since > SAT_MS) stopMotor("voltage cap reached, current not held (lost sync or cap too low)");
+    } else sat_since = 0;
   }
 
   command.run();
