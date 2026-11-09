@@ -1,7 +1,7 @@
 import math
 
 import pytest
-from build123d import Box, Compound, Cylinder, Pos, Vector, extrude
+from build123d import Align, Box, Compound, Cylinder, Pos, Rot, Vector, extrude
 
 from housing import joint
 from housing import params as P
@@ -38,10 +38,10 @@ def test_seat_is_top_of_wall(base):
 
 
 def test_lip_zone_is_free(base):
-    """Nothing of the base where the cover's lip comes down outside r 115, flat included."""
+    """Nothing of the base where the cover's lip comes down, nor in its radial clearance, flat included."""
     h = P.SEAT_Z - P.BASE_OUTER_TOP_Z - 0.05
     outer = extrude(P.drum_outline(P.DRUM_R_IN + P.DRUM_WALL + 0.5, P.FLAT_Y_IN - P.DRUM_WALL - 0.5), h)
-    inner = extrude(P.drum_outline(P.DRUM_R_MID, P.FLAT_Y_IN - P.DRUM_WALL / 2), h)
+    inner = extrude(P.drum_outline(P.BASE_JOINT_R, P.FLAT_Y_IN - P.DRUM_WALL / 2 + P.JOINT_RADIAL_CLEAR), h)
     zone = Pos(0, 0, P.BASE_OUTER_TOP_Z + 0.05) * (outer - inner)
     assert overlap_volume(base, zone) == pytest.approx(0, abs=1e-3)
 
@@ -77,9 +77,9 @@ def test_insert_bosses_and_holes(base):
             return Vector(*P.pol(r, phi), z)
 
         assert not base.is_inside(at(P.DRUM_R_MID + 1.0, P.SCREW_Z))                      # recess
-        assert not base.is_inside(at(P.DRUM_R_MID - 0.5, P.SCREW_Z))                      # hole mouth
-        assert not base.is_inside(at(P.DRUM_R_MID - P.M4_INSERT_HOLE_DEPTH + 0.3, P.SCREW_Z))
-        assert base.is_inside(at(P.DRUM_R_MID - P.M4_INSERT_HOLE_DEPTH - 0.3, P.SCREW_Z))  # blind
+        assert not base.is_inside(at(P.BASE_JOINT_R - 0.5, P.SCREW_Z))                    # hole mouth
+        assert not base.is_inside(at(P.BASE_JOINT_R - P.M4_INSERT_HOLE_DEPTH + 0.3, P.SCREW_Z))
+        assert base.is_inside(at(P.BASE_JOINT_R - P.M4_INSERT_HOLE_DEPTH - 0.3, P.SCREW_Z))  # blind
         assert base.is_inside(at(P.INSERT_BOSS_R_IN + 1, P.SCREW_Z + P.M4_INSERT_HOLE_D / 2 + 1))
 
 
@@ -90,6 +90,34 @@ def test_key_notch(base):
     for side in (-1, 1):
         x, y = P.pol(P.DRUM_R_IN + 1, P.KEY_ANGLE, side * (P.KEY_WIDTH / 2 + 0.5))
         assert base.is_inside(Vector(x, y, P.SEAT_Z - 1.0))
+
+
+def _half_turn(shape):
+    return Pos(*P.SPINDLE) * Rot(0, 0, 180) * Pos(-P.SPINDLE[0], -P.SPINDLE[1]) * shape
+
+
+def test_key_stops_a_cover_turned_half_round(base):
+    """The tab angles map onto themselves under a half turn; only the key may stop it."""
+    assert overlap_volume(base, joint.key_tab()) == pytest.approx(0, abs=1e-3)
+    assert overlap_volume(base, _half_turn(joint.key_tab())) > 0
+
+
+def test_base_clear_of_the_cover_tabs(base):
+    for phi in P.TAB_ANGLES:
+        assert min_clearance(base, joint.tab_solid(phi)) >= P.JOINT_RADIAL_CLEAR - 1e-3
+
+
+def test_no_base_material_just_inside_the_lip(base):
+    ring = Pos(*P.SPINDLE, -3.05) * (Cylinder(P.DRUM_R_MID, 0.1, align=(Align.CENTER, Align.CENTER, Align.MIN))
+                                     - Cylinder(P.DRUM_R_MID - 0.2, 0.1,
+                                                align=(Align.CENTER, Align.CENTER, Align.MIN)))
+    assert overlap_volume(base, ring) == pytest.approx(0, abs=1e-6)
+
+
+def test_insert_bosses_have_gussets(base):
+    for phi in P.TAB_ANGLES:
+        x, y = P.pol(109.0, phi)
+        assert base.is_inside(Vector(x, y, -13.5))           # right under the boss bottom (Z -12.2)
 
 
 def test_feet_insert_holes(base):
@@ -115,9 +143,21 @@ def test_usb_tunnel_sealed_top_and_bottom(base):
 
 
 def test_psu_slot_width(base):
-    assert not base.is_inside(Vector(P.PSU_SLOT_X, -12, P.J1_WIRE_Z))
-    assert base.is_inside(Vector(P.PSU_SLOT_X - 3.6, -12, P.J1_WIRE_Z))
-    assert base.is_inside(Vector(P.PSU_SLOT_X + 3.6, -12, P.J1_WIRE_Z))
+    # Brief's probe was at Y -12, the face where the flat's inner half ended (above Z -5.5);
+    # with JOINT_RADIAL_CLEAR that face is at -11.75, so probe inside the inner half.
+    y = P.FLAT_Y_IN - 1.0
+    assert not base.is_inside(Vector(P.PSU_SLOT_X, y, P.J1_WIRE_Z))
+    assert base.is_inside(Vector(P.PSU_SLOT_X - 3.6, y, P.J1_WIRE_Z))
+    assert base.is_inside(Vector(P.PSU_SLOT_X + 3.6, y, P.J1_WIRE_Z))
+
+
+def test_psu_slot_takes_a_6mm_cable_under_the_lip(base):
+    """The cover's lip closes the flat's outer half from LIP_BOTTOM_Z up; a Ø5.8 cable passes below it."""
+    z = P.LIP_BOTTOM_Z - 3.0
+    cable = Pos(P.PSU_SLOT_X, P.FLAT_Y_IN - P.DRUM_WALL / 2, z) * Rot(90, 0, 0) * Cylinder(5.8 / 2, P.DRUM_WALL + 2.0)
+    assert overlap_volume(base, cable) == pytest.approx(0, abs=1e-6)
+    for side in (-1, 1):
+        assert base.is_inside(Vector(P.PSU_SLOT_X + side * 3.6, P.FLAT_Y_IN - P.DRUM_WALL / 2, z))
 
 
 def test_psu_and_j1_slot_depths(base):

@@ -30,12 +30,16 @@ def _post(x: float, y: float, d: float, z0: float, z1: float) -> Part:
 
 
 def _drum() -> Part:
-    """Floor over the whole drum outline, wall r 113–117 to BASE_OUTER_TOP_Z, inner half to the seat."""
+    """Floor over the whole drum outline, wall r 113–117 to BASE_OUTER_TOP_Z, inner half to the seat.
+
+    The inner half ends at BASE_JOINT_R (at the flat, JOINT_RADIAL_CLEAR short of the
+    flat's mid-line), clear of the cover's lip.
+    """
     def prism(r: float, flat_y: float, z0: float, z1: float) -> Part:
         return Pos(0, 0, z0) * extrude(P.drum_outline(r, flat_y), z1 - z0)
 
     return (prism(_R_OUT, _FLAT_Y_OUT, P.FLOOR_UNDER_Z, P.BASE_OUTER_TOP_Z)
-            + prism(P.DRUM_R_MID, _FLAT_Y_MID, P.FLOOR_UNDER_Z, P.SEAT_Z)
+            + prism(P.BASE_JOINT_R, _FLAT_Y_MID + P.JOINT_RADIAL_CLEAR, P.FLOOR_UNDER_Z, P.SEAT_Z)
             - prism(P.DRUM_R_IN, P.FLAT_Y_IN, P.FLOOR_TOP_Z, P.SEAT_Z + _OVER))
 
 
@@ -150,6 +154,18 @@ def _cable_hooks() -> list[Part]:
     return [Pos(0, y, 0) * hook for y in P.CABLE_HOOK_Y]
 
 
+def _insert_boss_gussets() -> list[Part]:
+    """A 45° gusset under each insert boss, so that its underside prints without support.
+
+    It runs from the boss's inner bottom edge (r INSERT_BOSS_R_IN) down and out to the
+    wall's inner face, and on into the wall to fuse with it.
+    """
+    r0, z0 = P.INSERT_BOSS_R_IN, P.INSERT_BOSS_Z[0]
+    r1 = P.DRUM_R_IN + _OVER
+    gusset = joint.radial_profile([(r0, z0), (r1, z0), (r1, z0 - (r1 - r0))], P.INSERT_BOSS_W)
+    return [joint.at_phi(gusset, phi) for phi in P.TAB_ANGLES]
+
+
 def _fuse(parts: list[Part]) -> Part:
     return parts[0].fuse(*parts[1:])
 
@@ -166,9 +182,9 @@ def build_base() -> Part:
         *_wire_slots(),
         *_floor_holes(),
     )
-    # The insert bosses share the wall's r DRUM_R_MID face, as do the recesses; cutting a
-    # recess after fusing the bosses leaves an invalid solid, so the bosses go on last
-    # and their holes are cut again through the wall they were fused to.
-    body = body.fuse(*(joint.insert_boss(phi) for phi in P.TAB_ANGLES))
+    # The insert bosses share the wall's r BASE_JOINT_R face, as do the recesses; cutting a
+    # recess after fusing the bosses leaves an invalid solid, so the bosses (and their
+    # gussets) go on last and their holes are cut again through the wall they were fused to.
+    body = body.fuse(*(joint.insert_boss(phi) for phi in P.TAB_ANGLES), *_insert_boss_gussets())
     body = body.cut(*(joint.insert_hole(phi) for phi in P.TAB_ANGLES))
     return Part([body.clean()])

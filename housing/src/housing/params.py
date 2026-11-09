@@ -82,11 +82,18 @@ TAB_R_OUT = 119.0
 TAB_THICK_TOP_Z = -1.0  # top of the tab's outward thickening, before its 45° chamfer
 RECESS_BOTTOM_Z = -12.5
 SCREW_Z = -7.0
-KEY_ANGLE = 270
+# Not 270: turned 180° the key must land on the base's round wall, not over the flat
+# (the tab angles are symmetric under a half turn, so only the key stops it).
+KEY_ANGLE = 240
 KEY_WIDTH = 8.0
 KEY_DEPTH = 3.0
-JOINT_SIDE_CLEAR = 0.2  # each side of the cover's tabs and key in the base's recesses and notch
+KEY_SIDE_CLEAR = 0.2  # each side of the cover's key in the base's notch
 JOINT_END_CLEAR = 0.5  # under the cover's key, and beyond the tab's thickening in its recess
+# The cover's lip and tabs have their inner faces at DRUM_R_MID; the base's inner half ends
+# this far inside it (at the flat, this much in Y), so the cover touches only the seat.
+JOINT_RADIAL_CLEAR = 0.25
+BASE_JOINT_R = DRUM_R_MID - JOINT_RADIAL_CLEAR  # 114.75; the insert holes start here
+RECESS_SIDE_CLEAR = 0.25  # each side of a tab in its recess; >= JOINT_RADIAL_CLEAR
 INSERT_BOSS_R_IN = 105.0
 INSERT_BOSS_W = 12.0
 INSERT_BOSS_Z = (-12.2, -1.8)
@@ -97,7 +104,9 @@ USB_TUNNEL_WALL = 2.0
 J1_SLOT_BOTTOM_Z = J1_WIRE_Z - 4.0
 PSU_SLOT_X = -23.0
 PSU_SLOT_W = 6.0
-PSU_SLOT_BOTTOM_Z = J1_WIRE_Z - 3.5
+# The cover's lip closes the flat's outer half from LIP_BOTTOM_Z up, so the slot reaches a
+# slot width below it: a cable up to PSU_SLOT_W passes clear through the flat.
+PSU_SLOT_BOTTOM_Z = LIP_BOTTOM_Z - PSU_SLOT_W
 # B's cable enters the tray through the right side wall (+X) and reaches J3's +Y-facing
 # entries from behind, below the carrier's SMD parts (their lowest point near the path:
 # -2.8). Checked by tests/test_base.py::test_j3_cable_path_is_clear.
