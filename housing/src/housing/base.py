@@ -1,4 +1,5 @@
-"""The base: tray round the electronics, drum floor and lower wall, joint, feet, openings.
+"""The base: tray round the electronics, drum floor and lower wall, joint, feet, openings,
+and the lower tower of sensor B's mount.
 
 Modelled in the drive frame in its position of use (floor down at FLOOR_UNDER_Z).
 """
@@ -6,6 +7,7 @@ from build123d import Align, Box, Cylinder, Part, Plane, Polygon, Pos, Rectangle
 
 from housing import joint
 from housing import params as P
+from housing.b_head import b_block, b_post, rail_spans
 
 _MIN = (Align.CENTER, Align.CENTER, Align.MIN)
 _OVER = 1.0                              # cutting tools run on past the faces they open
@@ -166,13 +168,51 @@ def _insert_boss_gussets() -> list[Part]:
     return [joint.at_phi(gusset, phi) for phi in P.TAB_ANGLES]
 
 
+def _b_tower_holes() -> list[Part]:
+    """The screw holes of B's lower tower, from below the floor up through the tower's top.
+
+    Pull: an M4 clearance bore, counterbored from below for the socket head. Push: an
+    insert hole B_PUSH_RECESS up a counterbore, with a clearance bore on up for the set screw.
+    """
+    below, above = P.FLOOR_UNDER_Z - _OVER, P.B_LOWER_TOP_Z + _OVER
+    insert_z = P.FLOOR_UNDER_Z + P.B_PUSH_RECESS
+    cuts = []
+    for side in (-1, 1):
+        pull, push = side * P.B_PULL_T, side * P.B_PUSH_T
+        cuts += [
+            b_post(P.B_SCREW_R, pull, P.M4_CLEAR_D, below, above),
+            b_post(P.B_SCREW_R, pull, P.B_CBORE_D, below, P.FLOOR_UNDER_Z + P.B_PULL_CBORE_DEPTH),
+            b_post(P.B_SCREW_R, push, P.B_CBORE_D, below, insert_z),
+            b_post(P.B_SCREW_R, push, P.M4_INSERT_HOLE_D, below, insert_z + P.M4_INSERT_HOLE_DEPTH),
+            b_post(P.B_SCREW_R, push, P.M4_CLEAR_D, below, above),
+        ]
+    return cuts
+
+
+def lower_tower() -> Part:
+    """B's lower tower, on the floor from FLOOR_TOP_Z up to B_LOWER_TOP_Z, under the head.
+
+    The head's footprint (wall r B_FACE_R - B_WALL_T…B_FACE_R, ±B_HALF_T), with bosses
+    r B_BOSS_R_IN…B_FACE_R at t ±B_PULL_T and ±B_PUSH_T round the screws (_b_tower_holes),
+    and on top the tongue that runs in the head's groove (b_head.rail_spans).
+    """
+    z0, z1 = P.FLOOR_TOP_Z, P.B_LOWER_TOP_Z
+    wall = b_block(P.B_FACE_R - P.B_WALL_T, P.B_FACE_R, -P.B_HALF_T, P.B_HALF_T, z0, z1)
+    bosses = [b_block(P.B_BOSS_R_IN, P.B_FACE_R, t - P.B_BOSS_W / 2, t + P.B_BOSS_W / 2, z0, z1)
+              for t in (-P.B_PUSH_T, -P.B_PULL_T, P.B_PULL_T, P.B_PUSH_T)]
+    r0, r1 = P.B_GROOVE_R[0] + P.B_TONGUE_CLEAR, P.B_GROOVE_R[1] - P.B_TONGUE_CLEAR
+    tongue = [b_block(r0, r1, t0, t1, z1, z1 + P.B_TONGUE_H) for t0, t1 in rail_spans(P.B_TONGUE_CLEAR)]
+    return Part([_fuse([wall, *bosses, *tongue]).cut(*_b_tower_holes()).clean()])
+
+
 def _fuse(parts: list[Part]) -> Part:
     return parts[0].fuse(*parts[1:])
 
 
 def build_base() -> Part:
     """The base in its position of use."""
-    body = _fuse([_drum(), _tray(), _screw_bosses(), *_feet_pads(), _usb_tube(), *_cable_hooks()])
+    body = _fuse([_drum(), _tray(), _screw_bosses(), *_feet_pads(), _usb_tube(), *_cable_hooks(),
+                  lower_tower()])
     body = body.cut(
         *_screw_bores(),
         *_feet_holes(),
@@ -181,6 +221,7 @@ def build_base() -> Part:
         *_usb_opening(),
         *_wire_slots(),
         *_floor_holes(),
+        *_b_tower_holes(),
     )
     # The insert bosses share the wall's r BASE_JOINT_R face, as do the recesses; cutting a
     # recess after fusing the bosses leaves an invalid solid, so the bosses (and their

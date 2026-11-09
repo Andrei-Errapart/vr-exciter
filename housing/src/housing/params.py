@@ -156,10 +156,45 @@ B_BAR_TOP_RANGE = (21.5, 24.5)
 B_BODY = (23.0, 20.5, 19.4)  # depth from the wall, width, height
 B_BAR = (46.0, 1.2, 12.0)  # steel bar: length along the face, thickness, height
 B_HEAD_H = 23.4  # head bottom to bar top
+B_HEAD_TOP_BELOW_BAR = 0.5  # the head's top is this far below the bar top
 B_LOWER_TOP_Z = -2.4
 B_PULL_T = 8.0
 B_PUSH_T = 16.0
 B_DRIVE_CLEARANCE = 7.5
+# Screw bosses behind the wall, r B_BOSS_R_IN…B_FACE_R and B_BOSS_W wide: on the head round the
+# pull inserts, on the lower tower round the pull bores and the push inserts. An M4 insert hole
+# centred in one has 1.95 of plastic all round; the bar-insert bosses are Ø B_BOSS_W.
+B_BOSS_R_IN = 70.0
+B_BOSS_W = 9.5
+B_SCREW_R = (B_BOSS_R_IN + B_FACE_R) / 2  # 74.75: axes of the pull and push screws
+# The lower tower's tongue runs in the head's bottom groove, B_TONGUE_CLEAR inside it all round
+# (tongue r 74.2–77.8, ±23.8). Both stop over the bosses (t B_PULL_T - B_BOSS_W/2 …
+# B_PUSH_T + B_BOSS_W/2), where the screws pass the tongue's line: the pull inserts sit in solid
+# plastic from the head's bottom, and the push screws bear on its flat underside.
+B_GROOVE_R = (74.0, 78.0)
+B_GROOVE_HALF_T = 24.0
+B_GROOVE_DEPTH = 6.0
+B_TONGUE_CLEAR = 0.2
+B_TONGUE_H = 5.0
+# Relief pocket in the head's face behind the coil body, for the wire exit (spec, "Wall").
+B_POCKET_DEPTH = 1.5
+B_POCKET_HALF_T = 11.0
+B_POCKET_TOP_BELOW = 1.0  # its top, below the bar top
+B_POCKET_H = 12.0
+# Push-pull screws, from below. Gap range: head bottom -1.9…1.1 for bar top 21.5…24.5.
+# Pull, ISO 4762 M4 socket head, in a Ø8 counterbore as deep as the head is tall (bearing face at
+# FLOOR_UNDER_Z + 4 = -23.5): an M4 × 30 ends at Z 6.5, so 6.5 - 1.1 = 5.4 engaged at the largest
+# gap and 6.5 - -1.9 = 8.4 ≤ M4_INSERT_HOLE_DEPTH 9.1 at the smallest (an M4 × 35 would bottom).
+# Push, M4 set screw, in an insert B_PUSH_RECESS up a Ø8 counterbore (insert Z -26.5…-18.4):
+# an M4 × 25 with its tip at the head (Z 1.1) ends at -23.9, engaged -18.4 - -23.9 = 5.5; turned
+# back flush with the floor underside its tip is at -2.5, below the tower top. Flush in the floor,
+# the insert would leave only 4.5 engaged at the largest gap.
+B_CBORE_D = 8.0
+B_PULL_CBORE_DEPTH = 4.0  # = the M4 socket head's height, so it sits flush with the floor
+B_PUSH_RECESS = 1.0
+B_PULL_SCREW_LEN = 30.0
+B_PUSH_SCREW_LEN = 25.0
+B_MIN_ENGAGEMENT = 5.0  # thread engaged in an insert, at least
 
 # --- sensor C ---
 C_PHI = 180.0
