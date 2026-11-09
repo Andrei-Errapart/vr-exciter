@@ -6,6 +6,10 @@ from housing import params as P
 from housing.analysis import (convex_hull, loose_disc_envelope, ridge_cantilever, screw_shear_n,
                               support_margin, support_reactions)
 
+C_GAP_KEPT = 0.25    # spec: C at its smallest gap keeps at least this much from a loose disc
+B_GAP_KEPT = 0.39    # spec: B at its nominal gap keeps at least this much
+
+
 def stops(gap=P.STOP_GAP):
     return [(P.STOP_R, a, gap) for a in P.STOP_ANGLES]
 
@@ -14,8 +18,11 @@ def test_stops_are_first_contact():
     e = loose_disc_envelope(stops())
     assert e["hub_lift"] <= P.STOP_GAP + 1e-6
     assert e["rim_rise"] <= 1.05                            # spec: 1.0
-    assert e["z_at_c"] <= 0.75                              # spec: 0.73, C at 1.0 keeps >= 0.25
-    assert e["drop_at_b"] <= 0.61                           # spec: 0.59, B at 1.0 keeps >= 0.39
+    # The sensor margins follow the gaps in params: narrowing a gap or widening the stops'
+    # gap fails here, not only in the README.
+    assert P.C_GAP_RANGE[0] - e["z_at_c"] >= C_GAP_KEPT
+    b_gap = P.DISC_UNDER_Z[0] - P.B_BAR_TOP_NOM
+    assert b_gap - e["drop_at_b"] >= B_GAP_KEPT
 
 
 def test_single_thumb_is_not_enough():
