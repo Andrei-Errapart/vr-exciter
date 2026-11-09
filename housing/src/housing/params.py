@@ -237,7 +237,9 @@ STOP_BOSS_BOTTOM_Z = 39.0
 VENT_D = 4.0
 INLET_PITCH = 7.0
 INLET_R_MAX = 25.0
-OUTLET_R = (105.0, 108.5)
+# 108, not the spec's 108.5 (Ruling 18): a Ø4 hole there would come 2.5 from the wall's
+# inner face, under VENT_EDGE_CLEAR.
+OUTLET_R = (105.0, 108.0)
 OUTLET_STEP_DEG = 15.0
 OUTLET_START_DEG = 7.5
 VENT_MIN_SPACING = 7.0

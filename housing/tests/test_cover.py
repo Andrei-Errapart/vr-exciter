@@ -1,10 +1,14 @@
+import itertools
+import math
+
 import pytest
 from build123d import Align, Cylinder, Pos, Rot, Vector
 
 from housing import params as P
 from housing import reference
-from housing.checks import min_clearance, overlap_volume
+from housing.checks import circle_fraction, min_clearance, overlap_volume
 from housing.coupon import build_thread_coupon
+from housing.cover import vent_hole_centres
 from housing.threads import M16X1_5
 
 
@@ -89,3 +93,69 @@ def test_cover_thread_matches_coupon(cover):
     probe = lambda part, cx, cy, z: [part.is_inside(Vector(cx + r, cy, z)) for r in (7.4, 7.9, 8.2)]
     for dz in (5.0 + k * M16X1_5.pitch / 4 for k in range(4)):
         assert probe(cover, x, y, P.C_BOSS_UNDER_Z + dz) == probe(coupon, -14.0, 0.0, dz)
+
+
+def test_vent_pattern_rules():
+    inlet, outlet = vent_hole_centres()
+    assert len(inlet) == 43 and 18 <= len(outlet) <= 22
+    pts = inlet + outlet
+    assert min(math.dist(a, b) for a, b in itertools.combinations(pts, 2)) >= P.VENT_MIN_SPACING - 1e-6
+    for r in [x / 10 for x in range(int(P.RING_R[1] * 10), int(P.DRUM_R_IN * 10))]:
+        assert circle_fraction(outlet, P.VENT_D, r) <= P.VENT_CIRCLE_MAX + 1e-9
+    c = P.pol(P.MAGNET_R, P.C_PHI)
+    assert all(math.dist(o, c) >= P.C_BOSS_D / 2 + P.VENT_EDGE_CLEAR + P.VENT_D / 2 for o in outlet)
+    assert all(y >= P.FLAT_Y_IN + P.VENT_EDGE_CLEAR + P.VENT_D / 2 for _, y in outlet)
+
+
+def _dist_to_segment(p, a, b):
+    (px, py), (ax, ay), (bx, by) = p, a, b
+    dx, dy = bx - ax, by - ay
+    t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)))
+    return math.dist(p, (ax + t * dx, ay + t * dy))
+
+
+def test_vent_edges_clear_wall_ridges_ring_and_stops():
+    """Every hole's edge is >= VENT_EDGE_CLEAR from the wall's inner face (r DRUM_R_IN), the
+    flat's (FLAT_Y_IN), each ridge, the central ring and each stop boss (Ruling 18).
+
+    A ridge is taken as its centre line from the ring's outer face to the wall's inner face,
+    RIDGE_T / 2 to either side; that band holds every point of the ridge's exposed part.
+    """
+    inlet, outlet = vent_hole_centres()
+    reach = P.VENT_D / 2 + P.VENT_EDGE_CLEAR         # from a hole's centre to the nearest face
+    for x, y in inlet + outlet:
+        rho = math.dist((x, y), P.SPINDLE)
+        assert rho <= P.DRUM_R_IN - reach + 1e-6
+        assert y >= P.FLAT_Y_IN + reach - 1e-6
+        assert rho <= P.RING_R[0] - reach + 1e-6 or rho >= P.RING_R[1] + reach - 1e-6
+        for k in range(P.RIDGE_N):
+            phi = k * 360 / P.RIDGE_N
+            ridge = P.pol(P.RING_R[1], phi), P.pol(P.DRUM_R_IN, phi)
+            assert _dist_to_segment((x, y), *ridge) >= P.RIDGE_T / 2 + reach - 1e-6
+        for a in P.STOP_ANGLES:
+            assert math.dist((x, y), P.pol(P.STOP_R, a)) >= P.STOP_BOSS_D / 2 + reach - 1e-6
+
+
+def test_vents_are_holes(cover):
+    inlet, outlet = vent_hole_centres()
+    for x, y in inlet[:3] + outlet[:3]:
+        assert not cover.is_inside(Vector(x, y, 53.0))
+
+
+def test_stop_bosses(cover):
+    insert_top = P.STOP_BOSS_BOTTOM_Z + P.M4_INSERT_HOLE_DEPTH
+    for a in P.STOP_ANGLES:
+        x, y = P.pol(P.STOP_R, a)
+        assert not cover.is_inside(Vector(x, y, 45.0))                    # screw path open
+        assert cover.is_inside(Vector(x + 4.5, y, 45.0))                  # boss material
+        # Nothing under the boss bottom. Ø10, not Ø12 (Ruling 3): the φ 180 boss merges with
+        # C's boss, whose edge lies 0.5 mm inside a Ø12 probe.
+        below = Pos(x, y, P.STOP_BOSS_BOTTOM_Z - 0.6) * Cylinder(5, 1.0)
+        assert overlap_volume(cover, below) == pytest.approx(0, abs=1e-3)
+        # The insert hole is M4_INSERT_HOLE_DEPTH deep: probed between the two holes' radii.
+        r_probe = P.M4_INSERT_HOLE_D / 2 - 0.2
+        assert not cover.is_inside(Vector(x + r_probe, y, insert_top - 0.2))
+        assert cover.is_inside(Vector(x + r_probe, y, insert_top + 0.2))
+        # The clearance hole runs on through the plate, and no wider.
+        assert not cover.is_inside(Vector(x, y, P.PLATE_Z[1] - 0.1))
+        assert cover.is_inside(Vector(x + P.M4_CLEAR_D / 2 + 0.2, y, sum(P.PLATE_Z) / 2))
