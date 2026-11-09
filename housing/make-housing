@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+if [ ! -d .venv ]; then
+  uv venv --python 3.12 .venv
+fi
+uv pip install --python .venv -q -r requirements.txt
+case "${1:-}" in
+  test) shift; exec .venv/bin/python -m pytest "$@" ;;
+  build) shift; PYTHONPATH=src exec .venv/bin/python -m housing.build "$@" ;;
+  *) echo "usage: make-housing test|build" >&2; exit 2 ;;
+esac

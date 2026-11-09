@@ -1,1 +1,6 @@
 .DS_Store
+.superpowers/
+housing/.venv/
+housing/build/
+__pycache__/
+.pytest_cache/
