@@ -2,6 +2,12 @@
 import pytest
 
 from housing import reference
+from housing.base import build_base
+
+
+@pytest.fixture(scope="session")
+def base():
+    return build_base()
 
 
 @pytest.fixture(scope="session")
