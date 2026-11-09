@@ -8,5 +8,5 @@ uv pip install --python .venv -q -r requirements.txt
 case "${1:-}" in
   test) shift; exec .venv/bin/python -m pytest "$@" ;;
   build) shift; PYTHONPATH=src exec .venv/bin/python -m housing.build "$@" ;;
-  *) echo "usage: make-housing test|build" >&2; exit 2 ;;
+  *) echo "usage: make-housing test [PYTEST ARGS] | build [OUT_DIR] [--c-thread NAME]" >&2; exit 2 ;;
 esac

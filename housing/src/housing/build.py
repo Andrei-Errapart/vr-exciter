@@ -1,4 +1,10 @@
-"""Build every printed part: STEP, Bambu Studio 3MF and the (git-ignored) assembly STEP."""
+"""Build every printed part: STEP, Bambu Studio 3MF and the (git-ignored) assembly STEP.
+
+    make-housing build [OUT_DIR] [--c-thread NAME]
+
+--c-thread picks the thread in C's boss by its threads.py name (default params.C_THREAD).
+"""
+import argparse
 import sys
 import time
 from pathlib import Path
@@ -12,6 +18,7 @@ from .base import build_base
 from .coupon import build_thread_coupon
 from .cover import build_cover
 from .reference import coil_b, disc_envelope, drive_box, load_board, sensor_c
+from .threads import thread_names, thread_spec
 
 HOUSING_DIR = Path(__file__).resolve().parents[2]
 
@@ -29,13 +36,15 @@ def _summary(name: str, mesh: Mesh) -> str:
     return f"{name}: {size} mm, {len(mesh.triangles)} triangles, watertight {ok}"
 
 
-def main(out_dir: Path = HOUSING_DIR) -> None:
+def main(out_dir: Path = HOUSING_DIR, c_thread: str = P.C_THREAD) -> None:
     out_dir = Path(out_dir)
     (out_dir / "step").mkdir(parents=True, exist_ok=True)
     (out_dir / "build").mkdir(parents=True, exist_ok=True)
     t0 = time.time()
 
-    base, cover = build_base(), build_cover()
+    thread = thread_spec(c_thread)
+    print(f"cover: C thread {thread.name}")
+    base, cover = build_base(), build_cover(thread)
     head, coupon = build_b_head(P.B_BAR_TOP_NOM), build_thread_coupon()
     parts = [
         ("base", "housing_base_P1S.3mf", "01 base (PETG)", base, base, _COMMON),
@@ -52,11 +61,22 @@ def main(out_dir: Path = HOUSING_DIR) -> None:
 
     assembly = Compound(children=[
         base, cover, head, drive_box(), disc_envelope(),
-        coil_b(P.B_BAR_TOP_NOM), sensor_c(1.0), load_board(),
+        coil_b(P.B_BAR_TOP_NOM), sensor_c(P.C_GAP_RANGE[0]), load_board(),
     ])
     export_step(assembly, str(out_dir / "build" / "assembly.step"))
     print(f"assembly.step written; total {time.time() - t0:.1f} s")
 
 
+def cli(argv: list[str]) -> None:
+    """`make-housing build`'s command line: an optional output folder and --c-thread."""
+    parser = argparse.ArgumentParser(prog="make-housing build", description=__doc__.splitlines()[0])
+    parser.add_argument("out_dir", nargs="?", type=Path, default=HOUSING_DIR,
+                        help="where step/, the 3MFs and build/ go (default: housing/)")
+    parser.add_argument("--c-thread", choices=thread_names(), default=P.C_THREAD,
+                        help=f"thread in C's boss (default {P.C_THREAD}, from params.C_THREAD)")
+    args = parser.parse_args(argv)
+    main(args.out_dir, args.c_thread)
+
+
 if __name__ == "__main__":
-    main(Path(sys.argv[1]) if len(sys.argv) > 1 else HOUSING_DIR)
+    cli(sys.argv[1:])

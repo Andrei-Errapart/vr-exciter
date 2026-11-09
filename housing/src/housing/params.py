@@ -237,6 +237,10 @@ C_SENSOR_D = 15.85
 C_SENSOR_LEN = 60.0
 C_NUT_AF = 24.0
 C_NUT_H = 13.0
+# The thread in C's boss: the name of a ThreadSpec in threads.py. The spec says M16x1.5; if the
+# sensor fits the thread coupon's 5/8"-18 UNF hole instead, use "UNF_5_8_18" (here, or
+# `make-housing build --c-thread UNF_5_8_18`) and rebuild before printing the cover.
+C_THREAD = "M16X1_5"
 
 # --- cover ---
 PLATE_Z = (51.4, 54.4)

@@ -3,8 +3,10 @@ import zipfile
 
 import pytest
 
+from housing import build
 from housing.bambu3mf import Mesh, is_watertight
 from housing.build import main
+from housing.threads import UNF_5_8_18
 
 
 def read_mesh(path) -> Mesh:
@@ -30,3 +32,23 @@ def test_build_writes_everything(tmp_path):
         xs = [v[0] for v in mesh.vertices]
         ys = [v[1] for v in mesh.vertices]
         assert max(xs) - min(xs) <= 252 and max(ys) - min(ys) <= 252
+
+
+def test_build_cli_chooses_the_c_thread(tmp_path, monkeypatch):
+    """make-housing build --c-thread NAME builds the cover with that ThreadSpec; a wrong name
+    stops with the valid ones. The builders are stubbed: only the hand-over is checked."""
+    class Built(Exception):
+        pass
+
+    def fake_cover(thread=None):
+        seen.append(thread)
+        raise Built
+
+    seen = []
+    monkeypatch.setattr(build, "build_base", lambda: None)
+    monkeypatch.setattr(build, "build_cover", fake_cover)
+    with pytest.raises(Built):
+        build.cli(["--c-thread", "UNF_5_8_18", str(tmp_path)])
+    assert seen == [UNF_5_8_18]
+    with pytest.raises(SystemExit):
+        build.cli(["--c-thread", "M17", str(tmp_path)])

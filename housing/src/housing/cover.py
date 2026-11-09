@@ -12,7 +12,7 @@ from build123d import Align, Box, Cylinder, Part, Pos, extrude
 
 from housing import joint
 from housing import params as P
-from housing.threads import M16X1_5, ThreadSpec, thread_negative
+from housing.threads import ThreadSpec, thread_negative, thread_spec
 
 _MIN = (Align.CENTER, Align.CENTER, Align.MIN)
 _OVER = 1.0                              # cutting tools run on past the faces they open
@@ -113,8 +113,9 @@ def _vent_holes() -> list[Part]:
             for x, y in inlet + outlet]
 
 
-def build_cover(thread: ThreadSpec = M16X1_5) -> Part:
-    """The cover in its position of use, with `thread` through C's boss and the plate.
+def build_cover(thread: ThreadSpec | None = None) -> Part:
+    """The cover in its position of use, with `thread` (by default C_THREAD's) through C's boss
+    and the plate.
 
     The tabs' screw holes reach above the lip's bottom, so they are cut again after the tabs
     are fused to the lip. The thread negative is placed by pure translation with its start at
@@ -124,7 +125,7 @@ def build_cover(thread: ThreadSpec = M16X1_5) -> Part:
     body = _shell().fuse(_under_plate(), *(joint.tab_solid(phi) for phi in P.TAB_ANGLES),
                          joint.key_tab())
     c_thread = Pos(*P.pol(P.MAGNET_R, P.C_PHI), P.C_BOSS_UNDER_Z) * thread_negative(
-        thread, P.PLATE_Z[1] - P.C_BOSS_UNDER_Z)
+        thread or thread_spec(P.C_THREAD), P.PLATE_Z[1] - P.C_BOSS_UNDER_Z)
     stop_holes = [h for a in P.STOP_ANGLES for h in _stop_holes(a)]
     body = body.cut(*(joint.tab_hole(phi) for phi in P.TAB_ANGLES), c_thread, *stop_holes,
                     *_vent_holes())

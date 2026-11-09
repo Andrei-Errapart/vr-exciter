@@ -7,9 +7,11 @@ from build123d import Align, Cylinder, Pos, Rot, Vector
 from housing import params as P
 from housing import reference
 from housing.checks import circle_fraction, min_clearance, overlap_volume
-from housing.coupon import build_thread_coupon
-from housing.cover import vent_hole_centres
-from housing.threads import M16X1_5
+from housing.coupon import HOLE_X, build_thread_coupon
+from housing.cover import build_cover, vent_hole_centres
+from housing.threads import M16X1_5, UNF_5_8_18, thread_spec
+
+_COUPON_HOLE_X = {M16X1_5: -HOLE_X, UNF_5_8_18: HOLE_X}       # where coupon.py puts each thread
 
 
 def test_cover_extent(cover):
@@ -81,18 +83,38 @@ def test_c_thread(cover):
         assert not cover.is_inside(Vector(x, y, z))
 
 
-def test_cover_thread_matches_coupon(cover):
-    """Both holes come from thread_negative, placed by translation with the start at their bottom.
+def _thread_probe(part, cx, cy, z):
+    return [part.is_inside(Vector(cx + r, cy, z)) for r in (7.4, 7.9, 8.2)]
 
+
+def _matches_coupon_hole(cover, spec, coupon_spec):
+    """The cover's C thread against one of the coupon's holes.
+
+    Both holes come from thread_negative, placed by translation with the start at their bottom.
     Probed at the same heights above each start (C_BOSS_UNDER_Z in the cover, z 0 in the coupon),
     so the two helices are compared at the same phase. Four heights a quarter pitch apart: at
     5.0 alone, clearances of 0, 0.2 and 0.3 give the same answer.
     """
     x, y = P.pol(P.MAGNET_R, P.C_PHI)
     coupon = build_thread_coupon()
-    probe = lambda part, cx, cy, z: [part.is_inside(Vector(cx + r, cy, z)) for r in (7.4, 7.9, 8.2)]
-    for dz in (5.0 + k * M16X1_5.pitch / 4 for k in range(4)):
-        assert probe(cover, x, y, P.C_BOSS_UNDER_Z + dz) == probe(coupon, -14.0, 0.0, dz)
+    return all(_thread_probe(cover, x, y, P.C_BOSS_UNDER_Z + dz)
+               == _thread_probe(coupon, _COUPON_HOLE_X[coupon_spec], 0.0, dz)
+               for dz in (5.0 + k * spec.pitch / 4 for k in range(4)))
+
+
+def test_cover_thread_matches_coupon(cover):
+    """The cover is built with the thread named by C_THREAD, the same as the coupon's hole."""
+    spec = thread_spec(P.C_THREAD)
+    assert _matches_coupon_hole(cover, spec, spec)
+
+
+def test_cover_takes_the_unf_thread():
+    """The 5/8"-18 UNF option (C_THREAD, or make-housing build --c-thread) gives a valid cover
+    whose thread is the coupon's UNF hole, not its M16 one."""
+    unf = build_cover(UNF_5_8_18)
+    assert unf.is_valid and len(unf.solids()) == 1
+    assert _matches_coupon_hole(unf, UNF_5_8_18, UNF_5_8_18)
+    assert not _matches_coupon_hole(unf, UNF_5_8_18, M16X1_5)
 
 
 def test_vent_pattern_rules():

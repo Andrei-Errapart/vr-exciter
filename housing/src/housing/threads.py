@@ -20,6 +20,18 @@ M16X1_5 = ThreadSpec("M16x1.5", 16.0, 1.5)
 UNF_5_8_18 = ThreadSpec("5/8-18 UNF", 15.875, 25.4 / 18)
 
 
+def thread_names() -> list[str]:
+    """The names of the ThreadSpecs above, as params.C_THREAD and `build --c-thread` take them."""
+    return sorted(k for k, v in globals().items() if isinstance(v, ThreadSpec))
+
+
+def thread_spec(name: str) -> ThreadSpec:
+    """The ThreadSpec called `name` in this module, e.g. "M16X1_5"."""
+    if name not in thread_names():
+        raise ValueError(f"unknown thread {name!r}; use one of {', '.join(thread_names())}")
+    return globals()[name]
+
+
 def thread_negative(spec: ThreadSpec, length: float,
                     clearance: float = THREAD_CLEARANCE) -> Part:
     """Solid to subtract: axis +Z, z = 0..length, helix unrotated (deterministic)."""
