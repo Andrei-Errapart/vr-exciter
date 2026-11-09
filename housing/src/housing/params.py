@@ -272,3 +272,9 @@ def drum_outline(r: float, flat_y: float) -> Face:
         2 * r + 2.0, SPINDLE[1] + r + 1.0 - flat_y
     )
     return (disc & keep).face()
+
+
+# --- analysis ---
+HUB_FOOT_R = 16.0  # the disc's Ø32 hub foot, resting on the platter flange
+PETG_E_MPA = 2000.0  # PETG modulus used for the cover's ridge checks
+RIDGE_FLANGE_W = 30.0  # effective width of the cover plate acting as a ridge's flange
