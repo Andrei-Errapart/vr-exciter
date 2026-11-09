@@ -590,10 +590,14 @@ thread that fits.
   not be blocked). 0.25 mm radial clearance at the lip and tabs and 0.25 mm
   per side at the tab recesses. 45° gussets under the six insert bosses so
   the base prints without supports.
-- **Sensor B mount:** push-pull from below. The push screws sit on a 6 mm
-  ledge at r 83 (8.25 mm outside the pull screws at r 74.75, t ±12) so the
-  head has a real support base against rocking. Drive clearance is 7.6 mm at
-  the bar-insert bosses (spec: at least 8, for the wall).
+- **Sensor B mount:** push-pull from below, with the inserts on a carrier
+  (the head) that rides on a lower tower. Three M4 set screws hold the head
+  up at (r 69, t ±10), behind the wall, and (r 88, t 0), under a 6 mm ledge
+  below the coil body. One M4 pull screw at (r 74.5, t 0) holds it down from
+  5.5 mm inside their triangle, so its preload presses the head onto all
+  three. (A first layout put the pushes and pulls on two parallel lines;
+  tightening the pulls tilted the head.) Drive clearance is 7.55 mm at the
+  bar-insert bosses (spec: at least 8, for the wall).
 - **Vents:** outlet radii 105/108 (spec 105/108.5), to keep 3 mm from the
   wall.
 - **Loose-disc margin (fine grid):** B about 0.39 mm (spec 0.41).
