@@ -115,7 +115,7 @@ on the flat faces.
 1. Flip the disc so that the numbered face is up. Slide the hub tube over the
    spindle until its foot rests on the platter flange.
 2. Put the original clamp ring into the counterbore and tighten the six M2
-   screws.
+   screws. Use medium-strength threadlocker on them.
 3. Try to move the disc up and down by hand. Any axial play or rattle means
    the disc is too loose (see "Why the seat is at 8.5 mm" above).
 4. Spin it up slowly before going to 3000 rpm. Wobble or radial runout shows

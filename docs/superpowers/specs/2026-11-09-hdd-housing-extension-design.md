@@ -1,6 +1,6 @@
 # HDD housing extension: closed drum with sensor mounts
 
-Date: 2026-11-09. Status: approved by the user on 2026-11-09, not yet built. Reworked as a closed drum
+Date: 2026-11-09. Status: approved by the user on 2026-11-09, built 2026-11-09/10 (changes listed at the end). Reworked as a closed drum
 after a review on 2026-11-09.
 
 ## Why
@@ -569,3 +569,31 @@ thread that fits.
   flare; the 12 V slot shape. All of these within the clearances, opening
   limits and stiffness targets above.
 - Cable hook design.
+
+## Changes made during the build (2026-11-09/10)
+
+- **Tray depth:** floor top Z −24.5, underside −27.5 (spec −21.0/−24.0). The
+  real board reaches Z −21.93 (SimpleFOC capacitor C3); the spec's −17.6
+  counted only the WeAct. Keeps at least 2 mm clearance.
+- **Tray end wall:** inner face at Y −2.5 (spec: 0.3 mm gap). The board edge
+  was 0.30 mm and the WeAct 1.70 mm from it.
+- **Board features** measured from the KiCad export: WeAct buttons, MT3608
+  trimmer screw axis, J1 wire height Z −5.4, USB receptacle mouth Z −15.87,
+  J3 wire height Z −3.9.
+- **Wiring (user, 2026-11-09):** J1 faces outwards, so the 12 V wires leave
+  through the end-wall slot and a 6 mm slot in the drum flat (down to Z −11,
+  so a Ø6 cable passes under the cover lip). J3 faces inwards, so there is no
+  J3 slot in the end wall; B's cable enters through a 6 mm slot in the tray's
+  right wall at Y 15 and plugs into J3 from inside, with two cable hooks on
+  that wall.
+- **Joint:** key at φ 240° (spec: one key; at 270° a cover turned 180° would
+  not be blocked). 0.25 mm radial clearance at the lip and tabs and 0.25 mm
+  per side at the tab recesses. 45° gussets under the six insert bosses so
+  the base prints without supports.
+- **Sensor B mount:** push-pull from below. The push screws sit on a 6 mm
+  ledge at r 83 (8.25 mm outside the pull screws at r 74.75, t ±12) so the
+  head has a real support base against rocking. Drive clearance is 7.6 mm at
+  the bar-insert bosses (spec: at least 8, for the wall).
+- **Vents:** outlet radii 105/108 (spec 105/108.5), to keep 3 mm from the
+  wall.
+- **Loose-disc margin (fine grid):** B about 0.39 mm (spec 0.41).
