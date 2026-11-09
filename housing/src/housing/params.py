@@ -35,8 +35,26 @@ BOSS_BORE_D = 8.0
 J1_SLOT_X = (-30.0, -15.5)
 J3_SLOT_X = (21.0, 31.0)
 USB_WINDOW = (14.0, 9.0)
-USB_CENTRE_XZ = (-2.4, -15.8)
-MODULE_LOW_Z = -17.6
+USB_PLUG = (13.6, 8.6)  # plug overmold probe, X x Z
+USB_PLUG_Y = (-15.0, -2.7)  # probe from outside the flat to the tray wall's outer face
+MODULE_LOW_Z = -17.6  # spec value (WeAct, measured -17.47); SimpleFOC's C3 reaches -21.93
+
+# --- board features, measured 2026-11-09 on hdd-driver/build/test-model/test-assembly.step
+# (export-test-model of hdd-driver.kicad_pcb as of e944f72), posed by reference.load_board().
+# Labels from reference.named_bboxes(); re-measure when the board layout changes.
+# WeAct push-buttons SW1, SW2, SW3: bbox centres (= centres of their actuator faces).
+WEACT_BUTTONS = ((7.84, 4.69), (3.21, 34.46), (-11.94, 4.67))
+# MT3608 trimmer (label Potentiometer_Bourns_3296W_Vertical): axis of its adjusting
+# screw (r 1.1 circle on the free face). The bbox centre, (-22.51, 36.11), is 3.7 mm
+# off the screw, so a poke hole there would miss it.
+MT3608_TRIMMER = (-23.64, 39.61)
+# J1 (label TerminalBlock_Phoenix_MKDS-1,5-2-5_08_1x02_P5_08mm_Horizontal): centre of
+# the wire-clamp openings, Z -6.80…-3.95. Its bbox centre is -6.75 (bbox includes the
+# leads through the board). The openings face +Y, into the board, not the end wall.
+J1_WIRE_Z = -5.4
+# WeAct USB-C receptacle (label USB_TYPEC16-7R35x8R94): centre of its mouth, shell
+# X -6.52…2.42, Z -17.47…-14.27. Its bbox centre Z is -15.42 (bbox includes the pegs).
+USB_CENTRE_XZ = (-2.05, -15.87)
 
 # --- drum ---
 DRUM_R_IN = 113.0
@@ -86,6 +104,7 @@ B_HOLE_BELOW_TOP = 5.0
 B_BAR_TOP_NOM = 24.0
 B_BAR_TOP_RANGE = (21.5, 24.5)
 B_BODY = (23.0, 20.5, 19.4)  # depth from the wall, width, height
+B_BAR = (46.0, 1.2, 12.0)  # steel bar: length along the face, thickness, height
 B_HEAD_H = 23.4  # head bottom to bar top
 B_LOWER_TOP_Z = -2.4
 B_PULL_T = 8.0
@@ -98,6 +117,10 @@ C_BOSS_D = 30.0
 C_BOSS_UNDER_Z = 37.4
 C_GAP_RANGE = (1.0, 10.0)
 C_WEB_W = 20.0
+C_SENSOR_D = 15.85
+C_SENSOR_LEN = 60.0
+C_NUT_AF = 24.0
+C_NUT_H = 13.0
 
 # --- cover ---
 PLATE_Z = (51.4, 54.4)
