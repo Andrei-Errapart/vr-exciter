@@ -53,7 +53,7 @@ def tab_solid(phi: float) -> Part:
 
     The lip continues down (r DRUM_R_MID…117, LIP_BOTTOM_Z to TAB_BOTTOM_Z) and is
     thickened outwards to TAB_R_OUT from TAB_THICK_TOP_Z down, the thickening's top edge
-    chamfered at 45°; TAB_WIDTH wide, with an M4 clearance hole on SCREW_Z.
+    chamfered at 45°; TAB_WIDTH wide, with an M4 clearance hole on SCREW_Z (tab_hole).
     """
     chamfer = P.TAB_R_OUT - _R_OUT
     tab = radial_profile([
@@ -64,8 +64,16 @@ def tab_solid(phi: float) -> Part:
         (_R_OUT, P.TAB_THICK_TOP_Z),
         (_R_OUT, P.LIP_BOTTOM_Z),
     ], P.TAB_WIDTH)
-    tab -= _radial_hole(P.M4_CLEAR_D, P.DRUM_R_MID - _OVER, P.TAB_R_OUT + _OVER, P.SCREW_Z)
-    return at_phi(tab, phi)
+    return at_phi(tab, phi) - tab_hole(phi)
+
+
+def tab_hole(phi: float) -> Part:
+    """The M4 clearance hole through the tab at phi, on SCREW_Z, running on past both faces.
+
+    Its top reaches above LIP_BOTTOM_Z, so the cover cuts it again after fusing the lip,
+    which would otherwise close the top of it.
+    """
+    return at_phi(_radial_hole(P.M4_CLEAR_D, P.DRUM_R_MID - _OVER, P.TAB_R_OUT + _OVER, P.SCREW_Z), phi)
 
 
 def recess_cut(phi: float) -> Part:
@@ -102,6 +110,14 @@ def key_notch() -> Part:
 
 
 def key_tab() -> Part:
-    """The cover's key: the notch less KEY_SIDE_CLEAR each side and JOINT_END_CLEAR short."""
-    return at_phi(_sector(P.DRUM_R_IN, P.DRUM_R_MID, P.KEY_WIDTH - 2 * P.KEY_SIDE_CLEAR,
-                          P.SEAT_Z - P.KEY_DEPTH + P.JOINT_END_CLEAR, P.SEAT_Z), P.KEY_ANGLE)
+    """The cover's key: the notch less KEY_SIDE_CLEAR each side and JOINT_END_CLEAR short.
+
+    Made with radial_profile, like tab_solid, not _sector: a Cylinder's seam would run down the
+    middle of the key, and fused face to face with the cover's wall and lip it gives an
+    invalid solid.
+    """
+    z0 = P.SEAT_Z - P.KEY_DEPTH + P.JOINT_END_CLEAR
+    key = radial_profile([(P.DRUM_R_IN, z0), (P.DRUM_R_MID, z0),
+                          (P.DRUM_R_MID, P.SEAT_Z), (P.DRUM_R_IN, P.SEAT_Z)],
+                         P.KEY_WIDTH - 2 * P.KEY_SIDE_CLEAR)
+    return at_phi(key, P.KEY_ANGLE)

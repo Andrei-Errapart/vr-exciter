@@ -11,6 +11,13 @@ def base():
 
 
 @pytest.fixture(scope="session")
+def cover():
+    from housing.cover import build_cover   # imported here, so a broken cover fails only the tests that use it
+
+    return build_cover()
+
+
+@pytest.fixture(scope="session")
 def board():
     return reference.load_board()
 
