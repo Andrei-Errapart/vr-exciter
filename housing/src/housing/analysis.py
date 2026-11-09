@@ -1,5 +1,6 @@
-"""Hand calculations behind the spec, as checked code: the loose disc's envelope and the
-cover ridge's fault load path. Pure math; every number comes from params."""
+"""Hand calculations behind the spec, as checked code: the loose disc's envelope, the cover
+ridge's fault load path, and the statics of sensor B's push-pull mount. Pure math; every number
+comes from params."""
 import math
 
 from . import params as P
@@ -72,3 +73,66 @@ def ridge_cantilever(force_n: float, arm_mm: float) -> tuple[float, float]:
 def screw_shear_n(force_n: float) -> float:
     """Shear per joint screw, the load shared equally by all of them."""
     return force_n / len(P.TAB_ANGLES)
+
+
+def _cross(o: tuple[float, float], a: tuple[float, float], b: tuple[float, float]) -> float:
+    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+
+def convex_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """Corners of the convex hull of 2D points, anticlockwise; points on an edge are dropped.
+
+    Fewer than three corners means the points span no area.
+    """
+    pts = sorted(set(points))
+    if len(pts) < 3:
+        return pts
+
+    def chain(seq):
+        out: list[tuple[float, float]] = []
+        for p in seq:
+            while len(out) >= 2 and _cross(out[-2], out[-1], p) <= 0:
+                out.pop()
+            out.append(p)
+        return out
+
+    lower, upper = chain(pts), chain(reversed(pts))
+    return lower[:-1] + upper[:-1]
+
+
+def support_margin(supports: list[tuple[float, float]], point: tuple[float, float]) -> float:
+    """How far `point` lies inside the convex hull of `supports`: its distance to the nearest
+    hull edge, negative outside, -inf when the supports span no area (a line holds nothing).
+    """
+    hull = convex_hull(supports)
+    if len(hull) < 3:
+        return -math.inf
+    margins = []
+    for a, b in zip(hull, hull[1:] + hull[:1]):
+        margins.append(_cross(a, b, point) / math.dist(a, b))   # left of an anticlockwise edge: inside
+    return min(margins)
+
+
+def support_reactions(supports: list[tuple[float, float]],
+                      loads: list[tuple[float, float, float]]) -> list[float]:
+    """Forces at three supports (x, y) that hold a rigid plate against vertical loads (x, y, f).
+
+    The forces balance the loads' sum and their moments about both axes. All of them positive
+    means the loads press the plate onto every support; a negative one lifts off.
+    """
+    (x1, y1), (x2, y2), (x3, y3) = supports
+    f = sum(w for _, _, w in loads)
+    mx = sum(w * x for x, _, w in loads)
+    my = sum(w * y for _, y, w in loads)
+
+    def det(a, b, c):
+        return (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0])
+                + a[2] * (b[0] * c[1] - b[1] * c[0]))
+
+    rows = [(1.0, 1.0, 1.0), (x1, x2, x3), (y1, y2, y3)]
+    rhs = (f, mx, my)
+    d = det(*rows)
+    if abs(d) < 1e-12:
+        raise ValueError("the supports are collinear")
+    return [det(*[tuple(rhs[i] if j == k else rows[i][j] for j in range(3)) for i in range(3)]) / d
+            for k in range(3)]

@@ -3,11 +3,12 @@ and the lower tower of sensor B's mount.
 
 Modelled in the drive frame in its position of use (floor down at FLOOR_UNDER_Z).
 """
-from build123d import Align, Box, Cylinder, Part, Plane, Polygon, Pos, Rectangle, extrude, loft
+from build123d import (Align, Box, Cylinder, Kind, Part, Plane, Polygon, Pos, Rectangle, extrude, loft,
+                       offset)
 
 from housing import joint
 from housing import params as P
-from housing.b_head import b_block, b_post, rail_spans
+from housing.b_frame import b_block, b_post, b_prism, rail_spans
 
 _MIN = (Align.CENTER, Align.CENTER, Align.MIN)
 _OVER = 1.0                              # cutting tools run on past the faces they open
@@ -171,20 +172,23 @@ def _insert_boss_gussets() -> list[Part]:
 def _b_tower_holes() -> list[Part]:
     """The screw holes of B's lower tower, from below the floor up through the tower's top.
 
-    Pull: an M4 clearance bore, counterbored from below for the socket head. Push: an
-    insert hole B_PUSH_RECESS up a counterbore, with a clearance bore on up for the set screw.
+    Pull (B_PULL_POINTS): an M4 clearance bore, counterbored from below for the socket head.
+    Push (B_PUSH_POINTS): an insert hole B_PUSH_RECESS up a recess, with a clearance bore on up
+    for the set screw.
     """
     below, above = P.FLOOR_UNDER_Z - _OVER, P.B_LOWER_TOP_Z + _OVER
     insert_z = P.FLOOR_UNDER_Z + P.B_PUSH_RECESS
     cuts = []
-    for side in (-1, 1):
-        pull, push = side * P.B_PULL_T, side * P.B_PUSH_T
+    for r, t in P.B_PULL_POINTS:
         cuts += [
-            b_post(P.B_SCREW_R, pull, P.M4_CLEAR_D, below, above),
-            b_post(P.B_SCREW_R, pull, P.B_CBORE_D, below, P.FLOOR_UNDER_Z + P.B_PULL_CBORE_DEPTH),
-            b_post(P.B_PUSH_R, push, P.B_CBORE_D, below, insert_z),
-            b_post(P.B_PUSH_R, push, P.M4_INSERT_HOLE_D, below, insert_z + P.M4_INSERT_HOLE_DEPTH),
-            b_post(P.B_PUSH_R, push, P.M4_CLEAR_D, below, above),
+            b_post(r, t, P.M4_CLEAR_D, below, above),
+            b_post(r, t, P.B_PULL_CBORE_D, below, P.FLOOR_UNDER_Z + P.B_PULL_CBORE_DEPTH),
+        ]
+    for r, t in P.B_PUSH_POINTS:
+        cuts += [
+            b_post(r, t, P.B_PUSH_RECESS_D, below, insert_z),
+            b_post(r, t, P.M4_INSERT_HOLE_D, below, insert_z + P.M4_INSERT_HOLE_DEPTH),
+            b_post(r, t, P.M4_CLEAR_D, below, above),
         ]
     return cuts
 
@@ -192,21 +196,18 @@ def _b_tower_holes() -> list[Part]:
 def lower_tower() -> Part:
     """B's lower tower, on the floor from FLOOR_TOP_Z up to B_LOWER_TOP_Z, under the head.
 
-    The head's footprint (wall r B_FACE_R - B_WALL_T…B_FACE_R, ±B_HALF_T), with bosses round
-    the screws (_b_tower_holes): r B_BOSS_R_IN…B_FACE_R at t ±B_PULL_T for the pull bores, and
-    B_PUSH_BOSS_W square about (B_PUSH_R, ±B_PUSH_T), under the head's ledge, for the push
-    inserts. On top, the tongue that runs in the head's groove (b_head.rail_spans).
+    - The head's wall footprint (r B_FACE_R - B_WALL_T…B_FACE_R, ±B_HALF_T), which carries the
+      tongue that runs in the head's groove (b_frame.rail_spans).
+    - The plinth: the push triangle (B_PUSH_POINTS) grown by B_TOWER_PAD, one solid block round
+      all four screws (_b_tower_holes), so the screws' loads close through it and not through
+      the floor.
     """
     z0, z1 = P.FLOOR_TOP_Z, P.B_LOWER_TOP_Z
     wall = b_block(P.B_FACE_R - P.B_WALL_T, P.B_FACE_R, -P.B_HALF_T, P.B_HALF_T, z0, z1)
-    half = P.B_PUSH_BOSS_W / 2
-    bosses = [b_block(P.B_BOSS_R_IN, P.B_FACE_R, t - P.B_BOSS_W / 2, t + P.B_BOSS_W / 2, z0, z1)
-              for t in (-P.B_PULL_T, P.B_PULL_T)]
-    bosses += [b_block(P.B_PUSH_R - half, P.B_PUSH_R + half, t - half, t + half, z0, z1)
-               for t in (-P.B_PUSH_T, P.B_PUSH_T)]
+    plinth = b_prism(offset(Polygon(*P.B_PUSH_POINTS, align=None), P.B_TOWER_PAD, kind=Kind.ARC), z0, z1)
     r0, r1 = P.B_GROOVE_R[0] + P.B_TONGUE_CLEAR, P.B_GROOVE_R[1] - P.B_TONGUE_CLEAR
     tongue = [b_block(r0, r1, t0, t1, z1, z1 + P.B_TONGUE_H) for t0, t1 in rail_spans(P.B_TONGUE_CLEAR)]
-    return Part([_fuse([wall, *bosses, *tongue]).cut(*_b_tower_holes()).clean()])
+    return Part([_fuse([wall, plinth, *tongue]).cut(*_b_tower_holes()).clean()])
 
 
 def _fuse(parts: list[Part]) -> Part:

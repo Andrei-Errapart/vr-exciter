@@ -155,60 +155,77 @@ B_BAR_TOP_NOM = 24.0
 B_BAR_TOP_RANGE = (21.5, 24.5)
 B_BODY = (23.0, 20.5, 19.4)  # depth from the wall, width, height
 B_BAR = (46.0, 1.2, 12.0)  # steel bar: length along the face, thickness, height
-# Head bottom to bar top. 23.4 in the plan; 3 more for the push ledge (Ruling 17), with
+# Head bottom to bar top. 23.4 in the plan; 3 more for the ledge (Ruling 17), with
 # B_LOWER_TOP_Z 3 lower to match, so the gap (0.5…3.5) and the tongue's engagement stay.
 B_HEAD_H = 26.4
 B_HEAD_TOP_BELOW_BAR = 0.5  # the head's top is this far below the bar top
 B_LOWER_TOP_Z = -5.4
 B_DRIVE_CLEARANCE = 7.5
-# Push-pull mount. The pull screws, on the wall's line, clamp the head down; the push screws
-# hold it up from a ledge B_PUSH_R - B_SCREW_R further out, so together they hold it against
-# rocking about either line. Each pair spans 2 × its t, at least 24 (Ruling 17).
-B_PULL_T = 12.0
-B_PUSH_T = 16.0  # outside the coil body (|t| <= 10.25), under the ledge's ends
-# Pull bosses behind the wall, r B_BOSS_R_IN…B_FACE_R and B_BOSS_W wide, on the head round the
-# pull inserts and on the lower tower round the pull bores; an M4 insert hole centred in one has
-# 1.95 of plastic all round. The bar-insert bosses are Ø B_BOSS_W.
-B_BOSS_R_IN = 70.0
-B_BOSS_W = 9.5
-B_SCREW_R = (B_BOSS_R_IN + B_FACE_R) / 2  # 74.75: axes of the pull screws
-# Push screws under the head's ledge. The lower tower's push bosses, B_PUSH_BOSS_W square about
-# them, leave 2.2 of plastic round the Ø5.6 inserts; the ledge reaches as far.
-B_PUSH_R = 83.0
-B_PUSH_BOSS_W = 10.0
-# The ledge on the head's bottom, from the face out under the coil body to the push screws'
-# bosses. Its top is B_HEAD_H - B_LEDGE_T = 20.4 under the bar top, 1.0 under the coil body.
+# Plastic round every insert hole, screw bore, counterbore and recess of B's mount, and so the
+# web between two of them, at least (Ruling 21). The one exception is above the bar's inserts,
+# which the spec fixes (B_HOLE_BELOW_TOP, and nothing above Z 24 at the top of the range).
+B_MIN_PLASTIC = 2.0
+# The bosses round the bar's two inserts, behind the wall. The insert holes open at their back
+# ends; the boss at -t sets the head's clearance to the drive.
+B_BAR_BOSS_D = 9.8
+# Push-pull mount (Ruling 21, replacing Ruling 17's two parallel lines of screws, which formed
+# a couple that tilted the head onto its tongue). Three push set screws hold the head up at the
+# corners of a triangle; one pull screw holds it down from inside that triangle, so its preload
+# presses the head onto all three and the head's attitude is set by the three screws alone. All
+# four are worked from below the floor. Each point is (r, t) in B's local frame.
+# The pull, in the wall at t 0. Its insert must stay inside the wall: in front of the face the
+# coil body leaves no room for an insert hole. So it is as far out as B_MIN_PLASTIC in front of
+# its insert allows.
+B_PULL_R = 74.5
+# The back pushes, under pads behind the wall: as far back as B_DRIVE_CLEARANCE allows for the
+# pad at -t, and as far apart as keeps their recesses B_MIN_PLASTIC from the pull's counterbore.
+B_BACK_PUSH_R = 69.0
+B_BACK_PUSH_T = 10.0
+# The front push, under the ledge, below the coil body. Further out the ledge's lever grows.
+B_FRONT_PUSH_R = 88.0
+B_PULL_POINTS = ((B_PULL_R, 0.0),)
+B_PUSH_POINTS = ((B_BACK_PUSH_R, -B_BACK_PUSH_T), (B_BACK_PUSH_R, B_BACK_PUSH_T), (B_FRONT_PUSH_R, 0.0))
+B_SUPPORT_MARGIN = 3.0  # each pull point at least this far inside the push triangle (Ruling 21)
+B_PUSH_PAD_D = 6.0  # the head's underside round each push: the Ø4 screw end and 1 mm all round
+# The lower tower's plinth: the push triangle grown by this all round, so B_MIN_PLASTIC and a
+# little more round each push insert.
+B_TOWER_PAD = 5.0
+# The ledge on the head's bottom, from the face out under the coil body past the front push.
+# Its top is B_HEAD_H - B_LEDGE_T under the bar top, 1.0 under the coil body.
 B_LEDGE_T = 6.0
-# The lower tower's tongue runs in the head's bottom groove, B_TONGUE_CLEAR inside it all round
-# (tongue r 74.2–77.8, ±23.8). Both stop over the pull bosses (t B_PULL_T ± B_BOSS_W/2), where
-# the pull screws cross the tongue's line, so the pull inserts sit in solid plastic.
+B_LEDGE_HALF_T = 12.0  # just wider than the coil body
+# The lower tower's tongue runs in the head's bottom groove, B_TONGUE_CLEAR inside it all round.
+# Both stop B_PULL_LAND_HALF_T either side of the pull, whose screw crosses their line, so the
+# pull insert sits in solid plastic with B_MIN_PLASTIC beside it.
 B_GROOVE_R = (74.0, 78.0)
 B_GROOVE_HALF_T = 24.0
 B_GROOVE_DEPTH = 6.0
 B_TONGUE_CLEAR = 0.2
 B_TONGUE_H = 5.0
+B_PULL_LAND_HALF_T = 5.0
 # Relief pocket in the head's face behind the coil body, for the wire exit (spec, "Wall").
 B_POCKET_DEPTH = 1.5
 B_POCKET_HALF_T = 11.0
 B_POCKET_TOP_BELOW = 1.0  # its top, below the bar top
 B_POCKET_H = 12.0
-# Push-pull screws, from below. Gap range: head bottom -4.9…-1.9 for bar top 21.5…24.5.
-# Pull, ISO 4762 M4 × 30 socket head, in a Ø8 counterbore as deep as the head is tall (bearing
-# face at FLOOR_UNDER_Z + 4 = -23.5): it ends at Z 6.5, i.e. 8.4…11.4 above the head's bottom,
-# so the 8.1 insert is fully engaged at every gap. Above the insert hole (9.1) a Ø4.5 run-out
-# B_PULL_RUNOUT long takes the tip (11.4 <= 12.1). Without it, no standard length fits: the
-# window for the tip is 1.1 wide (Z 3.1…4.2), an M4 × 25 reaches only 1.5.
-# Push, ISO 4026 M4 × 20 set screw, in an insert B_PUSH_RECESS up a Ø8 counterbore (insert Z
-# -24.5…-16.4): with its tip at the head at the largest gap (Z -1.9) it ends at -21.9, engaged
-# -16.4 - -21.9 = 5.5; turned back flush with the floor underside its tip is at -7.5, below the
-# tower top (-5.4), still engaged 8.1.
-B_CBORE_D = 8.0
+# Screws, from below. tests/test_b_mount.py::test_screw_lengths_cover_the_gap_range checks
+# these lengths over the whole gap range.
+# Pull: an ISO 4762 socket head screw, its head flush in a counterbore from the floor
+# underside. Its thread is in the head's insert at every gap; above the insert hole a narrower
+# run-out takes its tip. Without the run-out no standard length both engages B_MIN_ENGAGEMENT
+# at the largest gap and stays out of the hole's bottom at the smallest.
+B_PULL_CBORE_D = 8.0  # the M4 socket head (Ø7) and clearance
 B_PULL_CBORE_DEPTH = 4.0  # = the M4 socket head's height, so it sits flush with the floor
-B_PULL_RUNOUT = 3.0
-B_PUSH_RECESS = 3.0
+B_PULL_RUNOUT = 4.0
 B_PULL_SCREW_LEN = 30.0
+# Push: an ISO 4026 flat-point set screw in an insert pressed in from below, B_PUSH_RECESS up a
+# recess, so that the screw reaches the head at the largest gap and, turned back until it is
+# flush with the floor underside, ends below the tower's top (the head can sit right down).
+B_PUSH_RECESS_D = 8.0  # passes the insert (Ø6.3) and the iron's tip
+B_PUSH_RECESS = 3.0
 B_PUSH_SCREW_LEN = 20.0
 B_MIN_ENGAGEMENT = 5.0  # thread engaged in an insert, at least
+B_SCREW_TIP_SPARE = 1.0  # a screw's tip stops at least this short of its hole's end
 
 # --- sensor C ---
 C_PHI = 180.0
