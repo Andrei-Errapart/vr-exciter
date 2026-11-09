@@ -4,8 +4,8 @@ Modelled in the drive frame in its position of use. B's parts are built in a loc
 r along +X (radial) and t along +Y (tangential), and turned to B_PHI like params.pol().
 
 The head stands on the base's lower tower (base.lower_tower). Two pull screws come up from
-below into inserts in its bottom; two push set screws in the lower tower bear on its
-underside; the lower tower's tongue runs in its bottom groove.
+below into inserts in its bottom; two push set screws in the lower tower bear on the underside
+of a ledge further out; the lower tower's tongue runs in its bottom groove.
 """
 from build123d import Box, Cylinder, Part, Pos, Rot
 
@@ -35,12 +35,12 @@ def b_post(r: float, t: float, d: float, z0: float, z1: float) -> Part:
 def rail_spans(inset: float) -> list[tuple[float, float]]:
     """Tangential spans of the groove (inset 0) or the tongue (inset B_TONGUE_CLEAR).
 
-    The groove runs ±B_GROOVE_HALF_T but stops over the screw bosses, each side from
-    B_PULL_T - B_BOSS_W/2 to B_PUSH_T + B_BOSS_W/2; the tongue keeps `inset` inside it.
+    The groove runs ±B_GROOVE_HALF_T but stops over the pull bosses (B_PULL_T ± B_BOSS_W/2);
+    the tongue keeps `inset` inside it.
     """
     end = P.B_GROOVE_HALF_T - inset
     near = P.B_PULL_T - P.B_BOSS_W / 2 - inset
-    far = P.B_PUSH_T + P.B_BOSS_W / 2 + inset
+    far = P.B_PULL_T + P.B_BOSS_W / 2 + inset
     return [(-end, -far), (-near, near), (far, end)]
 
 
@@ -57,8 +57,11 @@ def build_b_head(bar_top_z: float = P.B_BAR_TOP_NOM) -> Part:
       B_HOLE_BELOW_TOP under the bar top, M4_INSERT_HOLE_DEPTH deep, in Ø B_BOSS_W bosses
       that reach back just as far, so the holes open at the back (a closed end would bring
       the boss nearer the drive than B_DRIVE_CLEARANCE). The bosses stop at the head's top.
-    - The pull inserts: vertical holes from the bottom at (B_SCREW_R, ±B_PULL_T), in
-      full-height bosses r B_BOSS_R_IN…B_FACE_R that are also the ribs on the back.
+    - The pull inserts: vertical holes from the bottom at (B_SCREW_R, ±B_PULL_T), with a
+      B_PULL_RUNOUT clearance run-out above for the screw's tip, in full-height bosses
+      r B_BOSS_R_IN…B_FACE_R that are also the ribs on the back.
+    - The ledge: B_LEDGE_T thick on the bottom, from the face out under the coil body to past
+      the push screws (B_PUSH_R, ±B_PUSH_T), which bear on its underside.
     - The bottom groove (rail_spans), and the relief pocket in the face behind the coil body.
     """
     z0, z1 = head_bottom_z(bar_top_z), bar_top_z - P.B_HEAD_TOP_BELOW_BAR
@@ -73,16 +76,21 @@ def build_b_head(bar_top_z: float = P.B_BAR_TOP_NOM) -> Part:
     clip = b_block(bar_back_r - _OVER, P.B_FACE_R, -P.B_HALF_T, P.B_HALF_T, z0, z1)
     bar_bosses = [_radial_cylinder(P.B_BOSS_W, bar_back_r, P.B_FACE_R, t, bar_z) & clip
                   for t in bar_ts]
-    body = wall.fuse(*pull_bosses, *bar_bosses)
+    reach = P.B_PUSH_BOSS_W / 2
+    ledge = b_block(P.B_FACE_R - _OVER, P.B_PUSH_R + reach, -(P.B_PUSH_T + reach), P.B_PUSH_T + reach,
+                    z0, z0 + P.B_LEDGE_T)
+    body = wall.fuse(*pull_bosses, *bar_bosses, ledge)
 
     bar_holes = [_radial_cylinder(P.M4_INSERT_HOLE_D, bar_back_r - _OVER, P.B_FACE_R + _OVER, t, bar_z)
                  for t in bar_ts]
     pull_holes = [b_post(P.B_SCREW_R, t, P.M4_INSERT_HOLE_D, z0 - _OVER, z0 + P.M4_INSERT_HOLE_DEPTH)
                   for t in pull_ts]
+    runouts = [b_post(P.B_SCREW_R, t, P.M4_CLEAR_D, z0, z0 + P.M4_INSERT_HOLE_DEPTH + P.B_PULL_RUNOUT)
+               for t in pull_ts]
     groove = [b_block(*P.B_GROOVE_R, t0, t1, z0 - _OVER, z0 + P.B_GROOVE_DEPTH)
               for t0, t1 in rail_spans(0.0)]
     pocket_top = bar_top_z - P.B_POCKET_TOP_BELOW
     pocket = b_block(P.B_FACE_R - P.B_POCKET_DEPTH, P.B_FACE_R + _OVER,
                      -P.B_POCKET_HALF_T, P.B_POCKET_HALF_T, pocket_top - P.B_POCKET_H, pocket_top)
-    body = body.cut(*bar_holes, *pull_holes, *groove, pocket)
+    body = body.cut(*bar_holes, *pull_holes, *runouts, *groove, pocket)
     return Part([body.clean()])
