@@ -65,6 +65,7 @@ places them.
 | 5 | rubber foot with M3 screw | length to suit; the insert is 5.7 deep |
 | 4 | 6-32 UNC drive screw, at least 1/4" long | yours, from below into holes 4/5/9/10; the boss's ledge takes 3 mm of it |
 | 1 | medium-strength threadlocker | the disc's six M2 clamp-ring screws (`../disk/README.md`) |
+| 1 | low-strength threadlocker | the B pull screw, once B is set |
 
 Sensor C comes with its own 24 AF nut, which locks it on top of the cover.
 
@@ -132,21 +133,32 @@ Y 0). Z is height above the drive's underside, up towards the disc.
 
 To reach the screws, lift the drum on the coil's side and prop it, or stand
 it on its edge. Mind the cables still attached: 12 V, USB and B's. Under the
-coil you see four holes in a triangle: the three push set screws at its
-corners (one towards the rim, two towards the spindle; 2 mm hex key) and the
-pull screw, in the larger counterbore, between them (3 mm hex key).
+coil you see four holes, all the same size (Ø8): the three push set screws at
+the corners of a triangle (one towards the rim, two towards the spindle;
+2 mm hex key) and the pull screw inside it, on the line from the rim push to
+the spindle, a little nearer the two spindle pushes. The pull is the only
+socket head screw (3 mm hex key); its head sits flush with the floor.
 
-1. Loosen the pull screw by one turn.
-2. With the three push screws (M4: one turn is 0.7 mm), set the gap between
+1. Loosen the pull screw by at least as much as you plan to raise the head,
+   plus a turn (M4: one turn is 0.7 mm). The first time the head is fully
+   down and may have to rise up to 3 mm, so loosen it **6 turns**; its
+   thread stays more than 7 mm in the insert. If you loosen it too little,
+   the push screws jack against the pull screw's insert.
+2. With the three push screws, set the gap between
    the coil's top and the disc's underside to **1.0 mm**. The push screw
    towards the rim mainly moves the pole; the two towards the spindle tilt
    the head. Check with a 1.0 mm feeler gauge at the pole and at both ends of
    the bar. It should just drag at all three.
-3. Tighten the pull screw firmly. It presses the head onto all three push
-   screws.
+3. Tighten the pull screw **snug only**, until the head sits firmly on all
+   three push screws. Its insert is loaded in pull-out, and the push screws'
+   flat points bear on PETG; more torque only strains the plastic.
 4. **Check the gap again** at the same three points. If it moved, loosen the
    pull screw, correct, tighten and check again.
-5. Turn the disc a full turn by hand. Nothing may touch. Only then switch on.
+5. Once B is set for good, lock the pull screw, since nothing else does:
+   take it out, put a drop of low-strength threadlocker on its last few
+   threads, fit it again snug and check the gap once more. The push screws
+   keep the setting meanwhile.
+6. Turn the disc a full turn by hand. Nothing may touch. Only then switch on.
 
 To lower the head, loosen the pull screw and back the push screws off (at
 most until their lower ends are flush with the floor underside). Draw the
