@@ -7,17 +7,22 @@
 //
 // Channels used here: VM = ADC1_IN1 (PA0), VR = ADC1_IN2 (PA1),
 // I_A = ADC1_IN3 (PA2), I_BUS = ADC1_IN4 (PA3), I_B = ADC2_IN17 (PA4).
+// I_B is ADC2's injected group (software-triggered): ADC2's regular group samples
+// VR_IN continuously for vr_adc.
 #pragma once
 #include <Arduino.h>
 
 namespace fast_adc {
 
-void begin();  // clocks, calibration, enable; takes a few ms
+constexpr int IB_CH = 17;
+
+void begin();      // clocks, calibration, enable, configure(); takes a few ms
+void configure();  // the register setup above; with both ADCs idle (the W scope restores it)
 
 // Single conversion on ADC1 (channel 1..4). 12-bit result, 0..4095.
 uint16_t read1(int ch);
 
-// One conversion each on ADC1 (channel ch1) and ADC2 (channel 17), started
+// One conversion each on ADC1 (channel ch1, regular) and ADC2 (I_B, injected), started
 // together so the two samples are simultaneous.
 void readPair(int ch1, uint16_t& v1, uint16_t& v2);
 

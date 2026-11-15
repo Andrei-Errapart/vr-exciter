@@ -1,5 +1,6 @@
 #include "vr_scope.h"
 #include "fast_adc.h"
+#include "vr_adc.h"
 #include "vr_capture.h"
 
 namespace vr_scope {
@@ -38,10 +39,7 @@ static void restoreAdcs() {
     while (ADC2->CR & ADC_CR_ADSTP) {}
   }
   ADC12_COMMON->CCR &= ~(ADC_CCR_DUAL | ADC_CCR_MDMA | ADC_CCR_DMACFG);
-  ADC1->CFGR = 0;  // as fast_adc::begin(): 12 bit, software trigger, single conversion
-  ADC2->CFGR = 0;
-  fast_adc::setSampleTime(ADC1, VR_CH, fast_adc::SMP_640_5);
-  fast_adc::setSampleTime(ADC2, IB_CH, fast_adc::SMP_24_5);
+  fast_adc::configure();  // its CFGR, injected I_B and sample times; vr_adc::resume() follows
   ADC1->ISR = ADC_ISR_EOC | ADC_ISR_EOS | ADC_ISR_OVR | ADC_ISR_EOSMP;
   ADC2->ISR = ADC_ISR_EOC | ADC_ISR_EOS | ADC_ISR_OVR | ADC_ISR_EOSMP;
 }
@@ -53,6 +51,7 @@ Result capture(float interval_us, int n) {
   period = constrain(period, 2u, 65536u);
   const float actual_us = period * 1e6f / clk;
 
+  vr_adc::pause();  // its injected conversions on ADC2 would collide with dual mode
   __HAL_RCC_DMAMUX1_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
   __HAL_RCC_TIM6_CLK_ENABLE();
@@ -101,6 +100,7 @@ Result capture(float interval_us, int n) {
   DMAMUX1_Channel0->CCR = 0;
   DMAMUX1_Channel1->CCR = 0;
   restoreAdcs();
+  vr_adc::resume();
 
   count = done ? n : 0;
   return Result{count, actual_us, edges};

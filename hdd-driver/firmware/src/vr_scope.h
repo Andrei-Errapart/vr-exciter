@@ -10,8 +10,8 @@
 //     sample during the 1.1 us after the tick.
 // The capture blocks the main loop (protection checks, current regulator) until it and
 // its printout are done; the control interrupt keeps the field turning and the
-// DRV8313's own OCP stays active. Afterwards the ADCs return to the single-conversion,
-// software-triggered setup that fast_adc expects.
+// DRV8313's own OCP stays active. vr_adc is paused for the burst; afterwards the ADCs
+// return to fast_adc's setup (fast_adc::configure()) and vr_adc resumes.
 #pragma once
 #include <Arduino.h>
 

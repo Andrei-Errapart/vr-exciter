@@ -22,14 +22,21 @@
 //   B           reboot into the ROM DFU bootloader (for flashing without the BOOT0 button)
 //   L<ms>       rotor alignment hold before the ramp (default ALIGN_MS, 0 = skip)
 //
-// VR pickup (COMP1 + TIM2 capture, see vr_capture.h), reported as vrpm / vpps:
+// VR pickup B, two detectors running side by side, reported as vrpm / vpps (the selected
+// one), apps (ADC detector, vr_adc.h) and cpps (comparator, vr_capture.h):
 //   N<n>        VR pulses per revolution (default VR_PULSES_PER_REV)
+//   YS<0|1>     source for vrpm / vpps and the stall guard: 1 = ADC detector (default),
+//               0 = comparator
+//   YP<5..45>   ADC detector: hysteresis in % of the recent peak-to-peak (default 30)
+//   YM<mV>      ADC detector: smallest hysteresis (default 10)
+//   YA<0..5>    ADC detector: strongest low-pass, y += (x - y) / 2^n (default 3), used
+//               at low speed; it lightens with speed
 //   Q<mV>       comparator threshold in mV (default 1650 = VR_BIAS)
 //   C           set the threshold to the measured VR_IN level (coil connected, motor off)
 //   H<0..7>     comparator hysteresis, n * 10 mV
-//   YF<0..15>   TIM2 input filter on the comparator output (default 15, about 6 us; 0 = off)
-//   YL<0..90>   edge lockout in % of the last pulse period (default 50; 0 = 100 us only)
-//   Y           print both
+//   YF<0..15>   comparator: TIM2 input filter (default 15, about 6 us; 0 = off)
+//   YL<0..90>   comparator: edge lockout in % of the last pulse period (default 50)
+//   Y           print the Y settings
 //   K0 / K1     stall guard: stop when the VR speed is far below the commanded speed
 //   W<us>       VR scope: capture 4000 evenly spaced samples <us> apart (default 5, min 2)
 //               of VR_IN, I_B and the PWM pins, and print them ("vr ib pwm" per line)
@@ -46,6 +53,7 @@
 #include <SimpleFOC.h>
 #include "vr_capture.h"
 #include "vr_scope.h"
+#include "vr_adc.h"
 #include "fast_adc.h"
 
 // ---- Pins (hdd-driver/README.md, "Electronics") ----------------------------
@@ -132,6 +140,8 @@ static float reg_iq_sum = 0; static uint32_t reg_n = 0;
 static float ia_off = 1.65f, ib_off = 1.65f;  // zero-current voltage, calibrated at boot
 static uint32_t steady_since = 0, last_vr_ms = 0;
 static float vr_pulses_per_rev = VR_PULSES_PER_REV, vr_hz = 0, vr_rpm = 0;
+static float vr_hz_adc = 0, vr_hz_cmp = 0;
+static bool vr_use_adc = true;  // YS: which detector feeds vr_hz / vr_rpm
 // Window statistics of the currents in the rotor frame (Clarke + Park at the
 // open-loop field angle). With the voltage on the q axis, Iq is the torque
 // current and Id the part along the rotor axis; at standstill Iq = Uq / R_phase.
@@ -229,6 +239,18 @@ static void printStatus() {
   Serial.print(" vr="); Serial.print(volts(PIN_VR), 3);
   Serial.print(" vrpm="); Serial.print(vr_rpm, 1);
   Serial.print(" vpps="); Serial.print(vr_hz, 1);
+  Serial.print(" src="); Serial.print(vr_use_adc ? "adc" : "cmp");
+  Serial.print(" apps="); Serial.print(vr_hz_adc, 1);
+  Serial.print(" apulses="); Serial.print(vr_adc::pulseCount());
+  Serial.print(" app_mv="); Serial.print(vr_adc::ppMv(), 1);
+  Serial.print(" alp="); Serial.print(1 << vr_adc::lowPassShift());
+  Serial.print(" alevel_mv="); Serial.print(vr_adc::levelMv(), 1);
+  { static uint32_t last_s = 0, last_ms = 0; uint32_t s = vr_adc::sampleCount(), ms = millis();
+    Serial.print(" adc_hz="); Serial.print(ms > last_ms ? (s - last_s) * 1000.0f / (ms - last_ms) : 0, 0);
+    last_s = s; last_ms = ms; }
+  Serial.print(" adc_fs="); Serial.print(vr_adc::sampleHz(), 1);
+  Serial.print(" aovr="); Serial.print(vr_adc::overruns());
+  Serial.print(" cpps="); Serial.print(vr_hz_cmp, 1);
   Serial.print(" edges="); Serial.print(vr::edgeCount());
   Serial.print(" rej="); Serial.print(vr::rejectedCount());
   Serial.print(" cmp="); Serial.print(vr::comparatorHigh());
@@ -309,13 +331,23 @@ static void cmdPulses(char* c) { float n = atof(c); if (n >= 1 && n <= 1000) vr_
 static void cmdThreshold(char* c) { vr::setThreshold(atof(c)); }
 static void cmdHyst(char* c) { vr::setHysteresis(atoi(c)); }
 static void cmdStall(char* c) { stall_guard = atoi(c) != 0; }
-// One command letter for both edge-rejection settings: the Commander has only 20 slots.
-static void cmdVrReject(char* c) {
-  if (c && (*c == 'F' || *c == 'f')) vr::setFilter(atoi(c + 1));
-  else if (c && (*c == 'L' || *c == 'l')) vr::setLockout(atoi(c + 1));
-  Serial.print("VR input filter "); Serial.print(vr::filter());
+// One command letter for the VR detector settings: the Commander has only 20 slots.
+static void cmdVrSettings(char* c) {
+  const char sub = (c && *c) ? (char)toupper(*c) : 0;
+  const char* arg = (c && *c) ? c + 1 : "";
+  if (sub == 'F') vr::setFilter(atoi(arg));
+  else if (sub == 'L') vr::setLockout(atoi(arg));
+  else if (sub == 'S') vr_use_adc = atoi(arg) != 0;
+  else if (sub == 'P') vr_adc::setHystPercent(atoi(arg));
+  else if (sub == 'M') vr_adc::setFloorMv((float)atof(arg));
+  else if (sub == 'A') vr_adc::setLowPassMaxShift(atoi(arg));
+  Serial.print("VR source "); Serial.print(vr_use_adc ? "adc" : "cmp");
+  Serial.print("; adc hyst "); Serial.print(vr_adc::hystPercent());
+  Serial.print(" %, floor "); Serial.print(vr_adc::floorMv(), 1);
+  Serial.print(" mV, low-pass up to 1/"); Serial.print(1 << vr_adc::lowPassMaxShift());
+  Serial.print("; cmp filter "); Serial.print(vr::filter());
   Serial.print(" = "); Serial.print(vr::filterMicros(), 2); Serial.print(" us, lockout ");
-  Serial.print(vr::lockout()); Serial.println(" % of the last period");
+  Serial.print(vr::lockout()); Serial.println(" %");
 }
 static void cmdScope(char* c) {
   float us = (c && *c) ? (float)atof(c) : 5.0f;
@@ -428,7 +460,7 @@ void setup() {
   command.add('H', cmdHyst, "VR hysteresis 0..7");
   command.add('C', cmdCalibrate, "VR threshold = measured");
   command.add('K', cmdStall, "stall guard 0/1");
-  command.add('Y', cmdVrReject, "VR edge rejection: YF<filter> YL<lockout %>");
+  command.add('Y', cmdVrSettings, "VR detectors: YS YP YM YA YF YL");
   // SimpleFOC 2.3.4's Commander has fixed arrays of 20 commands and add() does not
   // check: a 21st overwrites memory (it broke E and R once). Y is the 20th: to add
   // another, fold it into an existing letter as Y does.
@@ -446,16 +478,22 @@ void setup() {
 
   vr::begin(VR_THRESHOLD_MV, VR_HYST);
   vr::pulseHz();  // prime the snapshot
+  vr_adc::begin();  // needs TIM1 running (driver.init)
+  vr_adc::pulseHz();
 
   Serial.println("hdd-driver ready; driver is OFF. Commands: E1 R<rpm> A V P T S");
   printStatus();
 }
 
 void loop() {
+  vr_adc::poll();  // the ADC detector's new VR samples (its buffer holds about 40 ms)
+
   // VR speed, every 100 ms.
   if (millis() - last_vr_ms >= 100) {
     last_vr_ms = millis();
-    vr_hz = vr::pulseHz();
+    vr_hz_cmp = vr::pulseHz();
+    vr_hz_adc = vr_adc::pulseHz();
+    vr_hz = vr_use_adc ? vr_hz_adc : vr_hz_cmp;
     vr_rpm = vr_hz * 60.0f / vr_pulses_per_rev;
     // Stall guard: once the ramp has reached the target for a while, the
     // measured speed must be near it. Off by default (needs the coil).

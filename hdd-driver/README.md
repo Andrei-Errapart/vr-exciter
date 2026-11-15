@@ -219,6 +219,8 @@ pio run -t upload      # flash over USB DFU
 - **Control loop:** the field angle (alignment, ramp, open-loop move) runs in a
   20 kHz TIM3 interrupt (12 us). `fast_adc.cpp` reads the ADCs by register in
   1.6 us (Arduino `analogRead` took 150 us); do not mix it with `analogRead`.
+  `I_B` is ADC2's software-triggered injected group: ADC2's regular group
+  belongs to the VR detector.
   `I<amps>` regulates the torque current Iq by adjusting the voltage (Vcap is the
   limit), `J<amps>` adds a start boost tapering to `I` at 60 rpm, `A`/`F` set the
   ramp below/above 60 rpm. `fieldrpm` (interrupt-counted field revolutions)
@@ -238,39 +240,62 @@ pio run -t upload      # flash over USB DFU
   `I0.5` with a 20 rpm/s ramp stalled after the alignment snap;
   `L1000 I1.2 J1.3 V5 A5 F15` starts and reaches 300 rpm. `J1.5` tripped
   nFAULT once during the alignment (VM dipped to 10 V).
-- **VR pickup:** `PA1` -> COMP1 (threshold DAC3 CH1, internal) -> TIM2
-  input capture 1; `vrpm` = pulse rate / 60 pulses per revolution. With the
-  real coil at 1 mm: about ±0.35 mV per rpm (±70-110 mV at 300 rpm, peaks
-  differ by about ±20 % between magnets), one clean cycle per magnet while
-  coasting. `C` sets the threshold to the idle level. Each comparator switch
-  steps `VR_IN` by about 30 mV in its own direction (τ ≈ 10 us, the
-  22 kΩ · 470 pF input), even with the driver off, which adds to the
-  hysteresis.
-- **VR noise while driven:** the PWM switching puts short spikes on `VR_IN`.
-  The ADC barely sees them (2-4 mV rms), but the comparator follows them:
-  6000-13000 false edges/s above about 55 rpm (a long untwisted coil lead also
-  gave them at standstill; keep the lead short and twisted). Two stages reject
-  them (`vr_capture.h`): TIM2's input filter (`YF`, default 15 = about 6 us)
-  and an edge lockout (`YL`, default 50 % of the last period, at least 100 us).
-  `S` reports the rejected edges as `rej=`. Measured while driven: within about
-  5 % from 130 rpm and about 2 % from 400 rpm (the 59/60 below); too few below
-  about 100 rpm, none below 55 rpm, where the pulses stay inside the
-  hysteresis band.
-- **One weak magnet position:** once per revolution, one pulse peaks about
-  90 mV lower than the others (at 340 rpm) and never reaches the comparator's
-  upper trip level, so B counts 59 per revolution (590 at 600 rpm). Seen in
-  every revolution of two `W60` bursts while coasting. Check that magnet
-  (missing, weak, sunk or tilted).
+- **VR pickup (B):** with the real coil at 1 mm, about ±85 mV at 340 rpm and
+  ±130 mV at 600 rpm (coasting), so it grows less than in proportion to the
+  speed; one cycle per magnet; `vrpm` = pulse rate / 60. While the motor is driven,
+  the PWM switching puts short spikes on `VR_IN` (keep the coil lead short and
+  twisted: a long untwisted one picked up far more). Two detectors run side by
+  side; `S` shows the selected one as `vrpm`/`vpps`, and both as `apps` (ADC)
+  and `cpps` (comparator). `YS1`/`YS0` selects (default ADC).
+- **ADC detector (default, `vr_adc.h`):** ADC2's regular group samples `PA1`
+  on TIM1's update, once per PWM period (25.007 kHz) at a turn of the
+  center-aligned counter, half a period from any switching; DMA fills a
+  circular buffer that the main loop works through, and a sample's time is
+  its index over the sample rate (no interrupt: ADC1/ADC2 share one, and
+  SimpleFOC's current-sense code owns its handler). Per sample: median of 3,
+  then a low-pass whose time constant is kept at most a tenth of the pulse
+  spacing (1/8 below about 300 rpm, 1/4 at 600, 1/2 at 900, none from about
+  1500; `YA` sets the strongest), then peaks and troughs with a hysteresis of
+  30 % of the recent peak-to-peak (`YP`), at least 10 mV (`YM`; the
+  standstill noise is 6-7 mV peak-to-peak after the 1/8 filter). One pulse per
+  magnet: the rising crossing of the midpoint between the last peak and
+  trough, interpolated between samples. Measured while driven: about 0-1
+  false pulses/s at standstill, within about ±1 % (1 s windows) from 45 rpm to
+  900 rpm, from about 30 rpm within a few %; 599-600 pulses/s at a 600 rpm
+  hold. A fixed 1/8 low-pass counted 590 at 600 rpm (it smoothed away the weak
+  magnet below), which is why it adapts. At 3000 rpm the 25 kHz rate gives
+  8.3 samples per pulse; if that proves too few, sampling at both counter
+  turns (TIM1 RCR = 0) would give 50 kHz.
+- **Comparator detector (fallback, `vr_capture.h`):** `PA1` -> COMP1
+  (threshold DAC3 CH1, `Q`, `C` = idle level, hysteresis `H`) -> TIM2 input
+  capture 1, then TIM2's input filter (`YF`, default 15 = about 6 us) and an
+  edge lockout (`YL`, 50 % of the shorter of the last two periods, at least
+  100 us); `rej=` counts the locked-out edges. Before the filter the PWM
+  spikes gave 6000-13000 false edges/s; with it, within about 5 % from
+  130 rpm, none below 55 rpm (the pulses stay inside the hysteresis band), and
+  it misses the weak magnet (59 per revolution). Each ADC sample kicks the
+  22 kΩ node, so with the ADC detector running it also counts a few hundred
+  false edges/s at standstill. Each comparator switch steps `VR_IN` by about
+  30 mV in its own direction (τ ≈ 10 us, the 22 kΩ · 470 pF input), even with
+  the driver off.
+- **Odd magnet positions:** in every revolution (two `W60` bursts while
+  coasting, before and after balancing the disc), one position gives no
+  midpoint crossing in the raw signal (its pulse peaks about 90 mV lower than
+  the others at 340 rpm), and the position 16 magnets earlier has a trough
+  about 140 mV deeper. The magnets are printed in, so it is probably two
+  magnets of different strength or depth. The ADC detector counts both; the
+  comparator misses one.
 - **VR scope (`W<us>`):** 4000 evenly spaced samples, `<us>` apart (default 5,
   at least 2), of `VR_IN`, `I_B` and the PWM pins PA8-PA10, printed as
   `vr ib pwm` lines between `scope begin ...` and `scope end`. TIM6 triggers
   ADC1 and ADC2 together; DMA stores them and copies `GPIOA->IDR` on the same
   tick, so the control interrupt cannot skew the timing. It works while the
   motor runs, but blocks the main loop (protection checks, current regulator)
-  for the burst and its printout. The fast sampling loads the 22 kΩ input:
-  `VR_IN` reads about 37 mV low at 5 us and 89 mV low at 2 us, and the
-  comparator sees the same shift, so the edge count during a burst is not
-  representative.
+  for the burst and its printout, and pauses the ADC detector (its first
+  `S` afterwards shows one overrun, `aovr`). The fast sampling loads the
+  22 kΩ input: `VR_IN` reads about 37 mV low at 5 us and 89 mV low at 2 us,
+  and the comparator sees the same shift, so the edge count during a burst is
+  not representative.
 
 ## Checking the fit
 
