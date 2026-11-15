@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "vrx",
+  "project_id": "500a92ad-b55e-4125-8c37-f97f4b5a352b"
+}
