@@ -2,9 +2,7 @@
 
 namespace fast_adc {
 
-static constexpr uint32_t SMP_24_5 = 3, SMP_640_5 = 7;
-
-static void setSampleTime(ADC_TypeDef* adc, int ch, uint32_t smp) {
+void setSampleTime(ADC_TypeDef* adc, int ch, uint32_t smp) {
   volatile uint32_t* reg = ch < 10 ? &adc->SMPR1 : &adc->SMPR2;
   int pos = 3 * (ch < 10 ? ch : ch - 10);
   *reg = (*reg & ~(7u << pos)) | (smp << pos);

@@ -203,7 +203,7 @@ pio run -t upload      # flash over USB DFU
 
 - **Console:** USB-C CDC serial, 115200. Commands are listed at the top of
   `src/main.cpp` (`E1` enable, `R<rpm>`, `V<volts>`, `A`, `P`, `S`, `T`, `L`,
-  `N`, `Q`, `C`, `H`, `K`, `B`). The driver is off after reset.
+  `N`, `Q`, `C`, `H`, `K`, `B`, `W`). The driver is off after reset.
 - **Flashing:** the first time, hold BOOT0 and tap NRST. Afterwards the `B`
   command reboots into the ROM DFU bootloader.
 - **Spinning:** open-loop velocity, with a rotor alignment hold (`L`, 600 ms)
@@ -233,6 +233,16 @@ pio run -t upload      # flash over USB DFU
   input capture 1; `vrpm` = pulse rate / 60 pulses per revolution. The
   comparator and capture path were checked with a swept threshold, but not
   with a real coil.
+- **VR scope (`W<us>`):** 4000 evenly spaced samples, `<us>` apart (default 5,
+  at least 2), of `VR_IN`, `I_B` and the PWM pins PA8-PA10, printed as
+  `vr ib pwm` lines between `scope begin ...` and `scope end`. TIM6 triggers
+  ADC1 and ADC2 together; DMA stores them and copies `GPIOA->IDR` on the same
+  tick, so the control interrupt cannot skew the timing. It works while the
+  motor runs, but blocks the main loop (protection checks, current regulator)
+  for the burst and its printout. The fast sampling loads the 22 kΩ input:
+  `VR_IN` reads about 37 mV low at 5 us and 89 mV low at 2 us, and the
+  comparator sees the same shift, so the edge count during a burst is not
+  representative.
 
 ## Checking the fit
 

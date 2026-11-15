@@ -21,4 +21,9 @@ uint16_t read1(int ch);
 // together so the two samples are simultaneous.
 void readPair(int ch1, uint16_t& v1, uint16_t& v2);
 
+// Sample time codes (SMPx field) and setter, for callers that change a
+// channel's sample time temporarily (the VR scope).
+constexpr uint32_t SMP_24_5 = 3, SMP_47_5 = 4, SMP_640_5 = 7;
+void setSampleTime(ADC_TypeDef* adc, int ch, uint32_t smp);
+
 }  // namespace fast_adc

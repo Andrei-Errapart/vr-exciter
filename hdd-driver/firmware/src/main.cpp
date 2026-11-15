@@ -28,6 +28,10 @@
 //   C           set the threshold to the measured VR_IN level (coil connected, motor off)
 //   H<0..7>     comparator hysteresis, n * 10 mV
 //   K0 / K1     stall guard: stop when the VR speed is far below the commanded speed
+//   W<us>       VR scope: capture 4000 evenly spaced samples <us> apart (default 5, min 2)
+//               of VR_IN, I_B and the PWM pins, and print them ("vr ib pwm" per line)
+//               between "scope begin ..." and "scope end" (see vr_scope.h). Works while
+//               running.
 //
 // Starting always aligns the rotor first: the field is held at electrical
 // angle 0 for L ms so every start begins from a known rotor position.
@@ -38,6 +42,7 @@
 #include <Arduino.h>
 #include <SimpleFOC.h>
 #include "vr_capture.h"
+#include "vr_scope.h"
 #include "fast_adc.h"
 
 // ---- Pins (hdd-driver/README.md, "Electronics") ----------------------------
@@ -296,6 +301,23 @@ static void cmdPulses(char* c) { float n = atof(c); if (n >= 1 && n <= 1000) vr_
 static void cmdThreshold(char* c) { vr::setThreshold(atof(c)); }
 static void cmdHyst(char* c) { vr::setHysteresis(atoi(c)); }
 static void cmdStall(char* c) { stall_guard = atoi(c) != 0; }
+static void cmdScope(char* c) {
+  float us = (c && *c) ? (float)atof(c) : 5.0f;
+  vr_scope::Result r = vr_scope::capture(us);
+  Serial.print("scope begin n="); Serial.print(r.n);
+  Serial.print(" interval_us="); Serial.print(r.interval_us, 4);
+  Serial.print(" edges="); Serial.print(r.edges);
+  Serial.print(" state="); Serial.print(!running ? "OFF" : aligning ? "ALIGN" : "RUN");
+  Serial.print(" rpm="); Serial.print(ramp_rpm, 1);
+  Serial.print(" pp="); Serial.print(motor.pole_pairs);
+  Serial.print(" Vlim="); Serial.print(motor.voltage_limit, 2);
+  Serial.print(" thr="); Serial.print(vr::threshold(), 0);
+  Serial.print(" hyst="); Serial.print(vr::hysteresis());
+  Serial.print(" ib_off="); Serial.print(ib_off, 4);
+  Serial.print(" vrpm="); Serial.println(vr_rpm, 1);
+  vr_scope::print(Serial);
+  Serial.println("scope end");
+}
 static void cmdCalibrate(char*) {
   if (running) { Serial.println("refused: stop the motor first"); return; }
   float mv = avgVolts(PIN_VR, 256) * 1000.0f;
@@ -390,6 +412,7 @@ void setup() {
   command.add('H', cmdHyst, "VR hysteresis 0..7");
   command.add('C', cmdCalibrate, "VR threshold = measured");
   command.add('K', cmdStall, "stall guard 0/1");
+  command.add('W', cmdScope, "VR scope: W<us between samples>");
 
   // Field-angle update (alignment, ramp, open-loop move) at a fixed rate in an
   // interrupt, independent of how long the main loop takes.
