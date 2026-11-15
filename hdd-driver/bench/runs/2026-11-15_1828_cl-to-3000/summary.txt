@@ -1,0 +1,183 @@
+    0.8  firmware 6be1958f; steps [["cmd", "L1000"], ["cmd", "I1.2"], ["cmd", "J1.3"], ["cmd", "V7"], ["cmd", "A5"], ["cmd", "T0"], ["cmd", "K1"], ["cmd", "CT0"], ["start"], ["ramp", 600, 15, 1.2, 3], ["cmd", "CL10"], ["wait", 3], ["cmd", "C1"], ["wait", 4], ["ramp", 1200, 20, 1.5, 3], ["ramp", 1800, 20, 1.5, 3], ["ramp", 2400, 15, 1.5, 5], ["ramp", 3000, 10, 1.5, 20], ["cmd", "C"]]
+    1.4  I1.2 -> Iset 1.20
+    1.7  J1.3 -> Jboost 1.30
+    2.0  V7 -> Vcap 7.00
+    3.2  CT0 -> closed loop: mode OL, tracker not learned, not locked (shift 0, correlation 0.00, margin 0.00, corrections 0), offset 0.0 deg (spread 0.0), trim 0.0 deg, lead 40 us, speed 0.0 rpm, uq 0.00 V, PI 0.0300 / 0.0200
+    3.7  E1
+    3.7  ramp: R600 F15 I1.2, hold 3 s
+    4.7  firmware: enabled, run 1 (I=1.20 J=1.30 Vcap=7.0 A=5 F=0 R=0)
+    4.7  firmware: Iset 1.20
+    4.7  firmware: target rpm 600.00
+    5.7  RUN   OL rpm    0.0 B    3.0        trk    0.0  V 2.29 iq  1.21 id -0.01  vm 11.57 ibus 0.38  lrn 0 lbl 17 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+    6.7  RUN   OL rpm    5.0 B    1.0        trk    0.0  V 2.29 iq  1.29 id -0.00  vm 11.58 ibus 0.38  lrn 0 lbl 18 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+    7.7  RUN   OL rpm   10.1 B    1.0        trk    0.0  V 2.28 iq  1.29 id -0.00  vm 11.59 ibus 0.37  lrn 0 lbl 19 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+    8.7  RUN   OL rpm   15.1 B    6.0        trk    0.0  V 2.26 iq  1.28 id  0.00  vm 11.59 ibus 0.36  lrn 0 lbl 25 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+    9.8  RUN   OL rpm   20.1 B   11.9        trk    0.0  V 2.27 iq  1.27 id  0.01  vm 11.59 ibus 0.36  lrn 0 lbl 37 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   10.8  RUN   OL rpm   25.1 B   15.9 -29.5% trk    0.0  V 2.28 iq  1.26 id  0.01  vm 11.59 ibus 0.36  lrn 0 lbl 53 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   11.8  RUN   OL rpm   30.1 B   23.9 -13.4% trk   30.5  V 2.26 iq  1.25 id  0.01  vm 11.59 ibus 0.36  lrn 0 lbl 17 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   12.8  RUN   OL rpm   35.2 B   30.9  -5.5% trk   39.0  V 2.25 iq  1.25 id  0.01  vm 11.59 ibus 0.35  lrn 0 lbl 48 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   13.8  RUN   OL rpm   40.2 B   36.8  -2.3% trk   44.5  V 2.23 iq  1.24 id  0.01  vm 11.60 ibus 0.34  lrn 0 lbl 25 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   14.8  RUN   OL rpm   45.3 B   41.8  -2.2% trk   49.5  V 2.22 iq  1.23 id  0.02  vm 11.60 ibus 0.34  lrn 0 lbl  7 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   15.8  RUN   OL rpm   50.3 B   47.8  +0.0% trk   54.4  V 2.20 iq  1.22 id  0.02  vm 11.60 ibus 0.34  lrn 0 lbl 55 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   16.8  RUN   OL rpm   55.4 B   52.8  -0.2% trk   59.5  V 2.20 iq  1.21 id  0.02  vm 11.60 ibus 0.34  lrn 0 lbl 48 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   17.8  RUN   OL rpm   61.4 B   57.8  -1.1% trk   64.3  V 2.19 iq  1.20 id  0.02  vm 11.60 ibus 0.34  lrn 0 lbl 47 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   18.8  RUN   OL rpm   76.4 B   69.7  +1.2% trk   80.5  V 2.18 iq  1.20 id  0.03  vm 11.60 ibus 0.33  lrn 0 lbl 56 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   19.8  RUN   OL rpm   91.4 B   83.6  -0.3% trk   95.1  V 2.18 iq  1.20 id  0.03  vm 11.60 ibus 0.33  lrn 0 lbl 20 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   20.8  RUN   OL rpm  106.4 B   98.6  -0.3% trk  110.5  V 2.19 iq  1.20 id  0.04  vm 11.60 ibus 0.33  lrn 0 lbl 59 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   21.8  RUN   OL rpm  121.5 B  114.5  +0.5% trk  126.0  V 2.19 iq  1.20 id  0.04  vm 11.59 ibus 0.34  lrn 0 lbl 54 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   22.8  RUN   OL rpm  136.5 B  128.5  -0.4% trk  142.0  V 2.20 iq  1.20 id  0.05  vm 11.59 ibus 0.35  lrn 0 lbl  3 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   23.8  RUN   OL rpm  151.5 B  144.4  +0.3% trk  157.3  V 2.21 iq  1.20 id  0.06  vm 11.60 ibus 0.33  lrn 0 lbl 28 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   24.8  RUN   OL rpm  166.5 B  158.3  -0.4% trk  174.0  V 2.21 iq  1.20 id  0.06  vm 11.60 ibus 0.34  lrn 0 lbl  8 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   25.8  RUN   OL rpm  181.5 B  174.3  +0.2% trk  188.3  V 2.22 iq  1.20 id  0.07  vm 11.59 ibus 0.34  lrn 0 lbl  2 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   26.8  RUN   OL rpm  196.5 B  189.2  +0.1% trk  203.1  V 2.23 iq  1.20 id  0.08  vm 11.60 ibus 0.36  lrn 0 lbl 12 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   27.8  RUN   OL rpm  211.6 B  204.1  +0.0% trk  220.9  V 2.24 iq  1.20 id  0.08  vm 11.60 ibus 0.34  lrn 0 lbl 37 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   28.8  RUN   OL rpm  226.6 B  219.1  -0.0% trk  234.8  V 2.25 iq  1.20 id  0.09  vm 11.60 ibus 0.35  lrn 0 lbl 17 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   29.8  RUN   OL rpm  241.6 B  234.0  -0.0% trk  249.1  V 2.26 iq  1.20 id  0.09  vm 11.60 ibus 0.35  lrn 0 lbl 12 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   30.8  RUN   OL rpm  256.6 B  248.9  -0.1% trk  266.4  V 2.27 iq  1.20 id  0.10  vm 11.60 ibus 0.36  lrn 0 lbl 22 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   31.8  RUN   OL rpm  272.0 B  263.9  -0.2% trk  281.8  V 2.28 iq  1.20 id  0.10  vm 11.59 ibus 0.36  lrn 0 lbl 47 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   32.8  RUN   OL rpm  287.3 B  279.9  +0.1% trk  296.0  V 2.29 iq  1.20 id  0.11  vm 11.59 ibus 0.35  lrn 0 lbl 28 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   33.9  RUN   OL rpm  302.6 B  294.7  -0.1% trk  313.7  V 2.30 iq  1.20 id  0.12  vm 11.59 ibus 0.35  lrn 0 lbl 24 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   34.9  RUN   OL rpm  317.9 B  309.7  -0.2% trk  330.9  V 2.32 iq  1.20 id  0.12  vm 11.59 ibus 0.36  lrn 0 lbl 35 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   35.9  RUN   OL rpm  333.2 B  325.6  +0.0% trk  342.0  V 2.33 iq  1.20 id  0.13  vm 11.59 ibus 0.37  lrn 0 lbl  2 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   36.9  RUN   OL rpm  348.6 B  340.5  -0.1% trk  359.9  V 2.35 iq  1.20 id  0.13  vm 11.59 ibus 0.37  lrn 0 lbl 45 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   37.9  RUN   OL rpm  363.9 B  356.5  +0.1% trk  372.0  V 2.36 iq  1.20 id  0.14  vm 11.59 ibus 0.38  lrn 0 lbl 42 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   38.9  RUN   OL rpm  379.2 B  371.4  -0.0% trk  389.6  V 2.37 iq  1.20 id  0.14  vm 11.59 ibus 0.37  lrn 0 lbl 55 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   39.9  RUN   OL rpm  394.5 B  386.4  -0.1% trk  400.9  V 2.39 iq  1.20 id  0.15  vm 11.58 ibus 0.38  lrn 0 lbl 23 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   40.9  RUN   OL rpm  409.9 B  402.3  +0.0% trk  419.5  V 2.40 iq  1.20 id  0.16  vm 11.59 ibus 0.37  lrn 0 lbl  7 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   41.9  RUN   OL rpm  425.2 B  417.2  -0.1% trk  434.5  V 2.41 iq  1.20 id  0.16  vm 11.58 ibus 0.38  lrn 0 lbl  7 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   42.9  RUN   OL rpm  440.5 B  433.2  +0.1% trk  453.2  V 2.43 iq  1.20 id  0.17  vm 11.59 ibus 0.38  lrn 0 lbl 21 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   43.9  RUN   OL rpm  455.8 B  448.1  -0.0% trk  466.8  V 2.45 iq  1.20 id  0.17  vm 11.59 ibus 0.38  lrn 0 lbl 51 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   44.9  RUN   OL rpm  471.1 B  463.1  -0.1% trk  473.8  V 2.46 iq  1.20 id  0.18  vm 11.59 ibus 0.39  lrn 0 lbl 36 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   45.9  RUN   OL rpm  486.5 B  478.9  +0.0% trk  497.3  V 2.47 iq  1.20 id  0.18  vm 11.59 ibus 0.38  lrn 0 lbl 37 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   46.9  RUN   OL rpm  501.8 B  494.0  -0.0% trk  509.9  V 2.49 iq  1.20 id  0.19  vm 11.59 ibus 0.39  lrn 0 lbl 53 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   47.9  RUN   OL rpm  516.9 B  508.8  -0.1% trk  525.6  V 2.50 iq  1.20 id  0.19  vm 11.58 ibus 0.39  lrn 0 lbl 24 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   48.9  RUN   OL rpm  531.6 B  523.9  -0.1% trk  537.5  V 2.51 iq  1.20 id  0.20  vm 11.58 ibus 0.39  lrn 0 lbl 11 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   49.9  RUN   OL rpm  546.3 B  538.7  -0.0% trk  548.1  V 2.53 iq  1.20 id  0.20  vm 11.59 ibus 0.38  lrn 0 lbl 12 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   50.9  RUN   OL rpm  561.0 B  553.6  -0.0% trk  563.5  V 2.54 iq  1.20 id  0.20  vm 11.58 ibus 0.39  lrn 0 lbl 28 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   51.9  RUN   OL rpm  575.8 B  568.6  +0.0% trk  575.4  V 2.54 iq  1.20 id  0.21  vm 11.58 ibus 0.39  lrn 0 lbl 58 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   52.9  RUN   OL rpm  590.5 B  583.5  +0.1% trk  591.3  V 2.55 iq  1.20 id  0.21  vm 11.59 ibus 0.39  lrn 0 lbl 44 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   53.9  RUN   OL rpm  600.0 B  596.5  +0.2% trk  601.9  V 2.52 iq  1.20 id  0.22  vm 11.59 ibus 0.37  lrn 0 lbl 44 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   54.9  RUN   OL rpm  600.0 B  600.5  +0.1% trk  594.9  V 2.52 iq  1.20 id  0.23  vm 11.59 ibus 0.38  lrn 0 lbl 46 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   55.9  RUN   OL rpm  600.0 B  600.4  +0.1% trk  603.4  V 2.52 iq  1.20 id  0.23  vm 11.59 ibus 0.38  lrn 0 lbl 49 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   56.9  RUN   OL rpm  600.0 B  599.4  -0.1% trk  601.7  V 2.52 iq  1.20 id  0.23  vm 11.58 ibus 0.38  lrn 0 lbl 51 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   57.2  CL10 -> learning
+   58.3  RUN   OL rpm  600.0 B  601.9  +0.3% trk  613.7  V 2.44 iq  1.20 id  0.22  vm 11.58 ibus 0.39  lrn 2 lbl 57 shift   0 marg 0.00 lcorr 0.00 corr 0 lag    0.0
+   59.3  RUN   OL rpm  600.0 B  599.4  -0.1% trk  613.4  V 2.45 iq  1.20 id  0.23  vm 11.58 ibus 0.40  lrn 1 lbl  0 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   -5.3
+   60.3  RUN   OL rpm  600.0 B  600.4  +0.1% trk  614.1  V 2.47 iq  1.20 id  0.23  vm 11.58 ibus 0.39  lrn 1 lbl  2 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   -1.2
+   60.6  C1 -> closed loop on
+   61.6  RUN   CL rpm  600.0 B  602.7  +0.5% trk  611.3  V 0.34 iq  0.92 id  0.16  vm 11.75 ibus 0.00  lrn 1 lbl  9 shift   0 marg 0.56 lcorr 1.00 corr 0 lag -153.4
+   62.6  RUN   CL rpm  600.0 B  606.4  +1.1% trk  602.4  V 0.45 iq  0.02 id -0.04  vm 11.75 ibus 0.00  lrn 1 lbl 18 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   -8.1
+   63.6  RUN   CL rpm  600.0 B  600.4  +0.1% trk  599.4  V 0.54 iq  0.08 id -0.04  vm 11.74 ibus 0.01  lrn 1 lbl 21 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  -87.9
+   64.6  RUN   CL rpm  600.0 B  599.5  -0.1% trk  598.8  V 0.58 iq  0.11 id -0.04  vm 11.74 ibus 0.01  lrn 1 lbl 23 shift   0 marg 0.55 lcorr 1.00 corr 0 lag -122.8
+   64.6  ramp: R1200 F20 I1.5, hold 3 s
+   65.6  firmware: Iset 1.50
+   65.6  firmware: target rpm 1200.00
+   65.6  RUN   CL rpm  600.0 B  599.0  -0.2% trk  598.9  V 0.58 iq  0.12 id -0.04  vm 11.73 ibus 0.01  lrn 1 lbl 25 shift   0 marg 0.56 lcorr 1.00 corr 0 lag -170.1
+   66.6  RUN   CL rpm  619.9 B  603.3  -1.1% trk  610.3  V 0.99 iq  0.25 id -0.03  vm 11.71 ibus 0.04  lrn 1 lbl 31 shift   0 marg 0.56 lcorr 1.00 corr 0 lag   42.8
+   67.6  RUN   CL rpm  639.8 B  621.4  -1.3% trk  632.4  V 1.10 iq  0.38 id -0.03  vm 11.70 ibus 0.05  lrn 1 lbl 55 shift   0 marg 0.56 lcorr 1.00 corr 0 lag -176.3
+   68.6  RUN   CL rpm  659.7 B  644.6  -0.8% trk  656.0  V 1.09 iq  0.40 id -0.02  vm 11.71 ibus 0.05  lrn 1 lbl 42 shift   0 marg 0.54 lcorr 1.00 corr 0 lag  131.1
+   69.6  RUN   CL rpm  679.5 B  667.2  -0.4% trk  677.8  V 1.08 iq  0.39 id -0.03  vm 11.71 ibus 0.05  lrn 1 lbl 52 shift   0 marg 0.55 lcorr 1.00 corr 0 lag -111.0
+   70.6  RUN   CL rpm  699.4 B  689.1  -0.1% trk  698.5  V 1.08 iq  0.38 id -0.03  vm 11.71 ibus 0.05  lrn 1 lbl 24 shift   0 marg 0.56 lcorr 1.00 corr 0 lag -149.0
+   71.6  RUN   CL rpm  719.3 B  708.0  -0.2% trk  718.6  V 1.09 iq  0.37 id -0.03  vm 11.71 ibus 0.05  lrn 1 lbl 16 shift   0 marg 0.56 lcorr 1.00 corr 0 lag   45.8
+   72.6  RUN   CL rpm  739.2 B  729.9  +0.1% trk  738.7  V 1.11 iq  0.38 id -0.03  vm 11.71 ibus 0.05  lrn 1 lbl 28 shift   0 marg 0.54 lcorr 1.00 corr 0 lag  117.3
+   73.6  RUN   CL rpm  759.1 B  747.8  -0.2% trk  758.4  V 1.12 iq  0.38 id -0.03  vm 11.71 ibus 0.05  lrn 1 lbl 59 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   78.5
+   74.6  RUN   CL rpm  778.9 B  768.8  -0.0% trk  777.9  V 1.15 iq  0.39 id -0.03  vm 11.70 ibus 0.06  lrn 1 lbl 51 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  -81.2
+   75.6  RUN   CL rpm  798.8 B  787.7  -0.1% trk  798.2  V 1.17 iq  0.39 id -0.03  vm 11.71 ibus 0.06  lrn 1 lbl  2 shift   0 marg 0.54 lcorr 1.00 corr 0 lag    3.6
+   76.6  RUN   CL rpm  818.7 B  808.4  -0.0% trk  818.0  V 1.20 iq  0.40 id -0.03  vm 11.71 ibus 0.06  lrn 1 lbl 34 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  -38.8
+   77.6  RUN   CL rpm  838.6 B  827.6  -0.1% trk  837.2  V 1.20 iq  0.40 id -0.03  vm 11.70 ibus 0.07  lrn 1 lbl 26 shift   0 marg 0.56 lcorr 1.00 corr 0 lag  168.5
+   78.6  RUN   CL rpm  858.5 B  848.4  -0.0% trk  857.3  V 1.23 iq  0.41 id -0.03  vm 11.70 ibus 0.06  lrn 1 lbl 37 shift   0 marg 0.55 lcorr 1.00 corr 0 lag -106.3
+   79.6  RUN   CL rpm  878.4 B  867.4  -0.1% trk  877.2  V 1.24 iq  0.41 id -0.03  vm 11.71 ibus 0.07  lrn 1 lbl  8 shift   0 marg 0.56 lcorr 1.00 corr 0 lag -134.6
+   80.6  RUN   CL rpm  898.3 B  887.2  -0.1% trk  896.8  V 1.25 iq  0.42 id -0.03  vm 11.70 ibus 0.07  lrn 1 lbl  0 shift   0 marg 0.56 lcorr 1.00 corr 0 lag   69.2
+   81.7  RUN   CL rpm  918.1 B  908.1  -0.0% trk  917.1  V 1.28 iq  0.42 id -0.03  vm 11.70 ibus 0.07  lrn 1 lbl 11 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  159.9
+   82.7  RUN   CL rpm  938.0 B  927.0  -0.1% trk  936.8  V 1.28 iq  0.43 id -0.03  vm 11.70 ibus 0.07  lrn 1 lbl 42 shift   0 marg 0.56 lcorr 1.00 corr 0 lag  126.8
+   83.7  RUN   CL rpm  957.9 B  947.0  -0.1% trk  957.5  V 1.34 iq  0.43 id -0.03  vm 11.69 ibus 0.07  lrn 1 lbl 33 shift   0 marg 0.56 lcorr 1.00 corr 0 lag  -22.9
+   84.7  RUN   CL rpm  977.8 B  966.9  -0.1% trk  977.2  V 1.33 iq  0.44 id -0.03  vm 11.70 ibus 0.07  lrn 1 lbl 45 shift   0 marg 0.56 lcorr 1.00 corr 0 lag   71.3
+   85.7  RUN   CL rpm  997.7 B  986.7  -0.1% trk  996.4  V 1.36 iq  0.44 id -0.03  vm 11.69 ibus 0.07  lrn 1 lbl 16 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   41.5
+   86.7  RUN   CL rpm 1017.6 B 1006.6  -0.1% trk 1016.2  V 1.39 iq  0.45 id -0.03  vm 11.70 ibus 0.08  lrn 1 lbl  7 shift   0 marg 0.55 lcorr 1.00 corr 0 lag -102.2
+   87.7  RUN   CL rpm 1037.3 B 1027.5  +0.0% trk 1036.5  V 1.38 iq  0.45 id -0.03  vm 11.70 ibus 0.08  lrn 1 lbl 18 shift   0 marg 0.54 lcorr 1.00 corr 0 lag  -16.7
+   88.7  RUN   CL rpm 1057.0 B 1046.5  -0.1% trk 1056.2  V 1.40 iq  0.46 id -0.03  vm 11.69 ibus 0.08  lrn 1 lbl 49 shift   0 marg 0.57 lcorr 1.00 corr 0 lag  -39.6
+   89.7  RUN   CL rpm 1076.7 B 1065.4  -0.1% trk 1076.4  V 1.44 iq  0.46 id -0.03  vm 11.69 ibus 0.08  lrn 1 lbl 40 shift   0 marg 0.55 lcorr 1.00 corr 0 lag -173.4
+   90.7  RUN   CL rpm 1096.4 B 1086.3  -0.0% trk 1095.7  V 1.45 iq  0.47 id -0.03  vm 11.69 ibus 0.09  lrn 1 lbl 50 shift   0 marg 0.56 lcorr 1.00 corr 0 lag  -66.2
+   91.7  RUN   CL rpm 1116.1 B 1105.3  -0.1% trk 1113.3  V 1.49 iq  0.47 id -0.03  vm 11.69 ibus 0.09  lrn 1 lbl 21 shift   0 marg 0.56 lcorr 1.00 corr 0 lag  -70.3
+   92.7  RUN   CL rpm 1135.8 B 1125.3  -0.1% trk 1134.7  V 1.51 iq  0.48 id -0.03  vm 11.68 ibus 0.10  lrn 1 lbl 10 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  175.9
+   93.7  RUN   CL rpm 1155.5 B 1145.0  -0.1% trk 1153.5  V 1.49 iq  0.48 id -0.03  vm 11.69 ibus 0.09  lrn 1 lbl 20 shift   0 marg 0.54 lcorr 1.00 corr 0 lag  -62.0
+   94.7  RUN   CL rpm 1175.2 B 1164.1  -0.1% trk 1174.2  V 1.53 iq  0.49 id -0.03  vm 11.68 ibus 0.10  lrn 1 lbl 50 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  -46.4
+   95.7  RUN   CL rpm 1194.9 B 1184.8  -0.0% trk 1194.0  V 1.58 iq  0.50 id -0.03  vm 11.68 ibus 0.10  lrn 1 lbl 39 shift   0 marg 0.56 lcorr 1.00 corr 0 lag -150.3
+   96.7  RUN   CL rpm 1200.0 B 1201.8  +0.4% trk 1206.7  V 1.25 iq  0.43 id -0.04  vm 11.71 ibus 0.05  lrn 1 lbl 46 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   29.1
+   97.7  RUN   CL rpm 1200.0 B 1206.9  +0.6% trk 1205.8  V 1.15 iq  0.28 id -0.06  vm 11.71 ibus 0.04  lrn 1 lbl 59 shift   0 marg 0.54 lcorr 1.00 corr 0 lag   84.1
+   98.7  RUN   CL rpm 1200.0 B 1205.7  +0.5% trk 1203.9  V 1.10 iq  0.24 id -0.07  vm 11.71 ibus 0.03  lrn 1 lbl  9 shift   0 marg 0.54 lcorr 1.00 corr 0 lag -157.4
+   99.7  RUN   CL rpm 1200.0 B 1202.0  +0.2% trk 1200.6  V 1.17 iq  0.25 id -0.06  vm 11.71 ibus 0.04  lrn 1 lbl 17 shift   0 marg 0.55 lcorr 1.00 corr 0 lag   23.4
+   99.7  ramp: R1800 F20 I1.5, hold 3 s
+  100.7  firmware: Iset 1.50
+  100.7  firmware: target rpm 1800.00
+  100.7  RUN   CL rpm 1200.0 B 1201.1  +0.1% trk 1200.2  V 1.17 iq  0.27 id -0.06  vm 11.71 ibus 0.04  lrn 1 lbl 23 shift   0 marg 0.55 lcorr 1.00 corr 0 lag -128.4
+  101.7  RUN   CL rpm 1219.7 B 1203.7  -0.5% trk 1211.4  V 1.56 iq  0.40 id -0.04  vm 11.68 ibus 0.10  lrn 1 lbl 32 shift   0 marg 0.55 lcorr 1.00 corr 0 lag    3.3
+  102.7  RUN   CL rpm 1239.4 B 1220.7  -0.7% trk 1232.4  V 1.69 iq  0.53 id -0.02  vm 11.67 ibus 0.12  lrn 1 lbl 59 shift   0 marg 0.54 lcorr 1.00 corr 0 lag   86.8
+  103.7  RUN   CL rpm 1259.2 B 1244.6  -0.4% trk 1254.8  V 1.66 iq  0.55 id -0.02  vm 11.68 ibus 0.12  lrn 1 lbl 48 shift   0 marg 0.56 lcorr 0.99 corr 0 lag  -17.5
+  104.8  RUN   CL rpm 1278.9 B 1266.5  -0.2% trk 1275.4  V 1.69 iq  0.55 id -0.02  vm 11.68 ibus 0.13  lrn 1 lbl  0 shift   0 marg 0.54 lcorr 0.99 corr 0 lag   57.3
+  105.8  RUN   CL rpm 1298.6 B 1287.5  -0.1% trk 1298.2  V 1.68 iq  0.54 id -0.02  vm 11.67 ibus 0.12  lrn 1 lbl 33 shift   0 marg 0.53 lcorr 0.99 corr 0 lag  -14.5
+  106.8  RUN   CL rpm 1318.3 B 1307.4  -0.1% trk 1317.1  V 1.72 iq  0.54 id -0.02  vm 11.68 ibus 0.12  lrn 1 lbl 26 shift   0 marg 0.55 lcorr 1.00 corr 0 lag  153.6
+  107.8  RUN   CL rpm 1338.0 B 1327.3  -0.1% trk 1337.0  V 1.75 iq  0.54 id -0.02  vm 11.67 ibus 0.12  lrn 1 lbl 39 shift   0 marg 0.56 lcorr 0.99 corr 0 lag -159.2
+  108.8  RUN   CL rpm 1357.7 B 1346.9  -0.1% trk 1356.7  V 1.76 iq  0.55 id -0.02  vm 11.67 ibus 0.13  lrn 1 lbl 11 shift   0 marg 0.57 lcorr 1.00 corr 0 lag  152.6
+  109.8  RUN   CL rpm 1377.4 B 1366.2  -0.1% trk 1375.4  V 1.75 iq  0.56 id -0.02  vm 11.67 ibus 0.12  lrn 1 lbl  3 shift   0 marg 0.54 lcorr 1.00 corr 0 lag  -19.4
+  110.8  RUN   CL rpm 1397.1 B 1387.0  -0.0% trk 1396.4  V 1.79 iq  0.56 id -0.01  vm 11.67 ibus 0.13  lrn 1 lbl 16 shift   0 marg 0.57 lcorr 1.00 corr 0 lag   35.2
+  111.8  RUN   CL rpm 1416.9 B 1405.9  -0.1% trk 1416.3  V 1.82 iq  0.57 id -0.01  vm 11.67 ibus 0.13  lrn 1 lbl 48 shift   0 marg 0.56 lcorr 1.00 corr 0 lag  -15.2
+  112.8  RUN   CL rpm 1436.6 B 1425.1  -0.1% trk 1436.0  V 1.86 iq  0.58 id -0.01  vm 11.67 ibus 0.14  lrn 1 lbl 40 shift   0 marg 0.55 lcorr 0.99 corr 0 lag -173.5
+  113.8  RUN   CL rpm 1456.3 B 1445.7  -0.1% trk 1455.6  V 1.88 iq  0.58 id -0.01  vm 11.67 ibus 0.15  lrn 1 lbl 51 shift   0 marg 0.56 lcorr 0.99 corr 0 lag  -93.3
+  114.8  RUN   CL rpm 1476.0 B 1465.4  -0.1% trk 1473.2  V 1.91 iq  0.59 id -0.01  vm 11.66 ibus 0.14  lrn 1 lbl 22 shift   0 marg 0.54 lcorr 0.99 corr 0 lag -113.1
+  115.8  RUN   CL rpm 1495.8 B 1484.6  -0.1% trk 1496.6  V 1.92 iq  0.60 id -0.01  vm 11.66 ibus 0.15  lrn 1 lbl 13 shift   0 marg 0.53 lcorr 1.00 corr 0 lag  104.4
+  116.8  RUN   CL rpm 1515.5 B 1504.5  -0.1% trk 1515.3  V 1.95 iq  0.61 id -0.01  vm 11.66 ibus 0.15  lrn 1 lbl 24 shift   0 marg 0.55 lcorr 0.99 corr 0 lag -164.6
+  117.8  RUN   CL rpm 1535.2 B 1524.5  -0.1% trk 1533.3  V 1.97 iq  0.61 id -0.01  vm 11.66 ibus 0.15  lrn 1 lbl 55 shift   0 marg 0.56 lcorr 0.99 corr 0 lag  176.7
+  118.8  RUN   CL rpm 1554.9 B 1543.4  -0.1% trk 1553.6  V 1.97 iq  0.62 id -0.00  vm 11.66 ibus 0.16  lrn 1 lbl 46 shift   0 marg 0.54 lcorr 0.98 corr 0 lag   41.2
+  119.8  RUN   CL rpm 1574.7 B 1564.5  -0.0% trk 1574.2  V 2.04 iq  0.63 id -0.00  vm 11.65 ibus 0.17  lrn 1 lbl 56 shift   0 marg 0.55 lcorr 0.99 corr 0 lag  148.1
+  120.8  RUN   CL rpm 1594.4 B 1583.4  -0.1% trk 1592.6  V 2.07 iq  0.63 id  0.00  vm 11.65 ibus 0.17  lrn 1 lbl 26 shift   0 marg 0.56 lcorr 0.99 corr 0 lag  148.7
+  121.8  RUN   CL rpm 1614.1 B 1602.4  -0.1% trk 1612.0  V 2.09 iq  0.64 id  0.00  vm 11.65 ibus 0.18  lrn 1 lbl 16 shift   0 marg 0.53 lcorr 1.00 corr 0 lag   39.1
+  122.8  RUN   CL rpm 1633.9 B 1623.1  -0.1% trk 1631.5  V 2.09 iq  0.65 id  0.01  vm 11.65 ibus 0.18  lrn 1 lbl 26 shift   0 marg 0.55 lcorr 0.99 corr 0 lag  166.4
+  123.8  RUN   CL rpm 1653.6 B 1642.9  -0.1% trk 1652.0  V 2.12 iq  0.66 id  0.01  vm 11.65 ibus 0.18  lrn 1 lbl 55 shift   0 marg 0.53 lcorr 0.99 corr 0 lag  172.9
+  124.8  RUN   CL rpm 1673.3 B 1661.9  -0.1% trk 1672.8  V 2.12 iq  0.67 id  0.01  vm 11.66 ibus 0.18  lrn 1 lbl 45 shift   0 marg 0.53 lcorr 0.99 corr 0 lag   66.2
+  125.8  RUN   CL rpm 1693.1 B 1682.3  -0.1% trk 1691.4  V 2.20 iq  0.67 id  0.01  vm 11.65 ibus 0.19  lrn 1 lbl 53 shift   0 marg 0.55 lcorr 0.99 corr 0 lag -140.9
+  126.8  RUN   CL rpm 1712.8 B 1701.8  -0.1% trk 1710.4  V 2.20 iq  0.68 id  0.01  vm 11.65 ibus 0.19  lrn 1 lbl 22 shift   0 marg 0.54 lcorr 0.99 corr 0 lag -117.7
+  127.8  RUN   CL rpm 1732.6 B 1720.7  -0.1% trk 1731.2  V 2.28 iq  0.69 id  0.02  vm 11.65 ibus 0.20  lrn 1 lbl 11 shift   0 marg 0.56 lcorr 0.99 corr 0 lag  157.3
+  128.9  RUN   CL rpm 1752.3 B 1742.0  -0.0% trk 1749.2  V 2.30 iq  0.70 id  0.02  vm 11.64 ibus 0.21  lrn 1 lbl 19 shift   0 marg 0.56 lcorr 0.98 corr 0 lag  -51.6
+  129.9  RUN   CL rpm 1772.0 B 1760.6  -0.1% trk 1770.0  V 2.27 iq  0.71 id  0.02  vm 11.64 ibus 0.22  lrn 1 lbl 48 shift   0 marg 0.55 lcorr 0.99 corr 0 lag   -2.1
+  130.9  RUN   CL rpm 1791.8 B 1779.4  -0.1% trk 1791.5  V 2.29 iq  0.72 id  0.05  vm 11.64 ibus 0.22  lrn 1 lbl 36 shift   0 marg 0.54 lcorr 0.99 corr 1 lag  -89.7
+  131.9  RUN   CL rpm 1800.0 B 1800.4  +0.2% trk 1806.5  V 1.97 iq  0.68 id  0.01  vm 11.67 ibus 0.14  lrn 1 lbl 44 shift   0 marg 0.56 lcorr 0.99 corr 1 lag   90.5
+  132.9  RUN   CL rpm 1800.0 B 1807.2  +0.4% trk 1807.2  V 1.82 iq  0.52 id -0.03  vm 11.68 ibus 0.11  lrn 1 lbl 59 shift   0 marg 0.54 lcorr 0.99 corr 1 lag   85.2
+  133.9  RUN   CL rpm 1800.0 B 1805.3  +0.3% trk 1804.1  V 1.86 iq  0.48 id -0.01  vm 11.68 ibus 0.12  lrn 1 lbl 13 shift   0 marg 0.56 lcorr 0.99 corr 2 lag  117.6
+  134.9  RUN   CL rpm 1800.0 B 1803.5  +0.2% trk 1801.5  V 1.86 iq  0.47 id -0.04  vm 11.68 ibus 0.12  lrn 1 lbl 23 shift   0 marg 0.56 lcorr 0.99 corr 2 lag -142.3
+  134.9  ramp: R2400 F15 I1.5, hold 5 s
+  135.9  firmware: Iset 1.50
+  135.9  firmware: target rpm 2400.00
+  135.9  RUN   CL rpm 1800.0 B 1800.4  +0.0% trk 1801.8  V 1.91 iq  0.50 id -0.01  vm 11.67 ibus 0.12  lrn 1 lbl 33 shift   0 marg 0.54 lcorr 1.00 corr 3 lag  -22.3
+  136.9  RUN   CL rpm 1815.0 B 1803.3  -0.2% trk 1808.6  V 2.04 iq  0.59 id -0.01  vm 11.66 ibus 0.17  lrn 1 lbl 44 shift   0 marg 0.53 lcorr 0.99 corr 3 lag   75.3
+  137.9  RUN   CL rpm 1829.9 B 1814.4  -0.4% trk 1823.4  V 2.29 iq  0.69 id  0.04  vm 11.64 ibus 0.20  lrn 1 lbl  8 shift   0 marg 0.54 lcorr 1.00 corr 4 lag -122.9
+  138.9  RUN   CL rpm 1844.8 B 1833.4  -0.2% trk 1841.6  V 2.33 iq  0.72 id  0.03  vm 11.64 ibus 0.21  lrn 1 lbl 48 shift   0 marg 0.51 lcorr 0.99 corr 4 lag  -21.4
+  139.9  RUN   CL rpm 1859.8 B 1847.3  -0.3% trk 1835.8  V 2.27 iq  0.72 id  0.07  vm 11.66 ibus 0.11  lrn 1 lbl 44 shift   2 marg 0.56 lcorr 0.99 corr 4 lag   87.2
+  140.9  RUN   CL rpm 1874.7 B 1865.2  -0.1% trk 1873.0  V 2.34 iq  0.74 id  0.04  vm 11.64 ibus 0.22  lrn 1 lbl 59 shift   0 marg 0.53 lcorr 0.98 corr 5 lag   84.2
+  141.9  RUN   CL rpm 1889.6 B 1882.2  +0.0% trk 1889.5  V 2.60 iq  0.72 id  0.03  vm 11.61 ibus 0.24  lrn 1 lbl 29 shift   0 marg 0.56 lcorr 0.99 corr 5 lag   93.6
+  142.9  RUN   CL rpm 1904.6 B 1896.8  -0.0% trk 1904.6  V 2.39 iq  0.71 id  0.03  vm 11.63 ibus 0.22  lrn 1 lbl 13 shift   0 marg 0.54 lcorr 0.99 corr 5 lag   94.9
+  143.9  RUN   CL rpm 1919.5 B 1911.6  -0.0% trk 1915.6  V 2.38 iq  0.72 id  0.03  vm 11.64 ibus 0.21  lrn 1 lbl 13 shift   0 marg 0.56 lcorr 0.99 corr 5 lag   94.6
+  144.9  RUN   CL rpm 1934.5 B 1925.8  -0.1% trk 1936.5  V 2.58 iq  0.73 id  0.03  vm 11.63 ibus 0.22  lrn 1 lbl 28 shift   0 marg 0.52 lcorr 0.97 corr 5 lag  113.1
+  145.9  RUN   CL rpm 1949.4 B 1939.7  -0.1% trk 1949.7  V 2.48 iq  0.74 id  0.06  vm 11.63 ibus 0.23  lrn 1 lbl 57 shift   0 marg 0.56 lcorr 0.98 corr 6 lag  124.8
+  146.9  RUN   CL rpm 1964.4 B 1956.5  -0.0% trk 1963.9  V 2.38 iq  0.74 id  0.04  vm 11.63 ibus 0.24  lrn 1 lbl 42 shift   0 marg 0.54 lcorr 0.99 corr 6 lag  133.6
+  147.9  RUN   CL rpm 1979.3 B 1970.7  -0.1% trk 1978.2  V 2.36 iq  0.75 id  0.04  vm 11.64 ibus 0.24  lrn 1 lbl 41 shift   0 marg 0.56 lcorr 0.98 corr 6 lag  148.5
+  148.9  RUN   CL rpm 1994.3 B 1985.5  -0.1% trk 1992.9  V 2.58 iq  0.76 id  0.06  vm 11.62 ibus 0.27  lrn 1 lbl 55 shift   1 marg 0.51 lcorr 0.98 corr 7 lag  165.9
+  149.9  RUN   CL rpm 2009.2 B 2000.4  -0.1% trk 2007.9  V 2.50 iq  0.78 id  0.07  vm 11.63 ibus 0.26  lrn 1 lbl 26 shift   0 marg 0.53 lcorr 0.99 corr 8 lag  162.4
+  150.9  RUN   CL rpm 2024.2 B 2014.7  -0.1% trk 2024.7  V 2.51 iq  0.77 id  0.05  vm 11.62 ibus 0.26  lrn 1 lbl  9 shift   0 marg 0.59 lcorr 0.98 corr 8 lag -162.4
+  152.0  RUN   CL rpm 2039.1 B 2031.4  -0.0% trk 2037.4  V 2.52 iq  0.78 id  0.05  vm 11.63 ibus 0.25  lrn 1 lbl  9 shift   0 marg 0.55 lcorr 0.99 corr 8 lag -153.3
+  153.0  RUN   CL rpm 2054.0 B 2046.3  -0.0% trk 2058.8  V 2.44 iq  0.79 id  0.05  vm 11.63 ibus 0.25  lrn 1 lbl 24 shift   0 marg 0.56 lcorr 0.98 corr 8 lag -150.0
+  154.0  RUN   CL rpm 2068.7 B 2057.3  -0.2% trk 2067.5  V 2.60 iq  0.82 id  0.13  vm 11.62 ibus 0.28  lrn 1 lbl 53 shift   0 marg 0.56 lcorr 0.99 corr 12 lag -146.3
+  155.0  firmware: DISABLED: phase overcurrent (vmmin=11.19)
+  155.0  RUN   CL rpm 2083.4 B 2070.2  -0.3% trk 2082.6  V 2.77 iq  0.84 id  0.18  vm 11.60 ibus 0.32  lrn 1 lbl 39 shift   1 marg 0.53 lcorr 0.98 corr 17 lag -149.2
+  155.0  ABORT: driver is off (firmware trip)
+  155.0  E0 sent
+  156.5  OFF   OL rpm    0.0 B 2041.8 +96.0% trk 2009.3  V 6.27 iq  1.01 id  0.42  vm 11.74 ibus -0.00  lrn 1 lbl  1 shift   0 marg 0.53 lcorr 0.99 corr 22 lag   32.3
+  157.5  OFF   OL rpm    0.0 B 1982.7        trk 1955.7  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 13 shift   0 marg 0.56 lcorr 0.98 corr 22 lag  119.1
+  158.5  OFF   OL rpm    0.0 B 1935.0        trk 1909.9  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 35 shift   0 marg 0.53 lcorr 0.99 corr 22 lag  -72.2
+  159.5  OFF   OL rpm    0.0 B 1888.2        trk 1865.1  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 12 shift   0 marg 0.59 lcorr 0.99 corr 22 lag  137.2
+  160.5  OFF   OL rpm    0.0 B 1843.2        trk 1822.1  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl  3 shift   0 marg 0.58 lcorr 0.99 corr 22 lag  -10.1
+  161.5  OFF   OL rpm    0.0 B 1801.4        trk 1779.8  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 11 shift   0 marg 0.56 lcorr 0.98 corr 22 lag  151.8
+  162.5  OFF   OL rpm    0.0 B 1758.8        trk 1740.0  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 38 shift   0 marg 0.57 lcorr 1.00 corr 22 lag -131.0
+  163.5  OFF   OL rpm    0.0 B 1720.9        trk 1701.7  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 25 shift   0 marg 0.56 lcorr 0.99 corr 22 lag  177.9
+  164.5  OFF   OL rpm    0.0 B 1681.9        trk 1664.2  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 34 shift   0 marg 0.55 lcorr 1.00 corr 22 lag  -35.4
+  165.5  OFF   OL rpm    0.0 B 1644.0        trk 1626.5  V 6.27 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl  6 shift   0 marg 0.55 lcorr 0.99 corr 22 lag  -79.6

@@ -18,6 +18,9 @@
 // Lock: once per revolution the last 60 intervals' signature is correlated with the
 // learned one at all 60 shifts. A shift other than 0 means a pulse was missed or added;
 // seen twice in a row, the labels are corrected.
+// Each pulse is checked against the expected interval to the next magnet: under half a
+// gap it is ignored as spurious, about two gaps late the labels move on by two (a pulse
+// was missed). The lock check is the backstop.
 // Angle: label angle + speed x time since the pulse, at most 1.5 gaps ahead (so a
 // stopping rotor does not run away), plus a lead for the PWM's actuation delay.
 // Times are in 1/256 of an ADC sample (vr_adc's time base).
@@ -50,6 +53,9 @@ int label();
 int lastShift();
 float lastMargin();
 float lastCorrelation();             // best correlation of the last lock check (1 = perfect)
+uint32_t missedPulses();             // pulses found missing (two gaps late) and skipped over
+uint32_t extraPulses();              // pulses ignored as spurious (under half a gap)
+int worstLabel(bool missed, uint32_t* count);  // the label with the most missed / extra
 uint32_t corrections();
 float offsetDeg();
 float offsetSpreadDeg();              // how consistent the per-label offsets were

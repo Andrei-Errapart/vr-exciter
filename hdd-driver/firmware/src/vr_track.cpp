@@ -38,6 +38,10 @@ static int pending_shift = 0, last_shift = 0;
 static float last_margin = 0, last_corr = 0;
 static bool last_ok = false;
 
+// ---- pulse check (onPulse) ----
+static volatile uint32_t n_missed = 0, n_extra = 0;
+static uint16_t missed_by_label[MAGNETS], extra_by_label[MAGNETS];
+
 static inline float wrap2pi(float a) {
   a = fmodf(a, TWO_PI_F);
   return a < 0 ? a + TWO_PI_F : a;
@@ -93,11 +97,35 @@ void onPulse(uint32_t t256, int32_t swing16, uint32_t now256) {
   // A pause longer than STALE_S restarts the speed history (not the labels).
   const int prev = k;
   if (prev >= 0 && (int32_t)(t256 - t[prev]) > (int32_t)(STALE_S * 4 * fs * 256)) run_cnt = 0;
-  const int kk = prev < 0 ? 0 : (prev + 1) % MAGNETS;
+  int kk = prev < 0 ? 0 : (prev + 1) % MAGNETS;
   const uint32_t iv256 = prev >= 0 ? t256 - t[prev] : 0;
+  bool skipped = false;
+  // Check the pulse against the expected interval to the next magnet (its learned gap
+  // at the current speed). At 1800-2050 rpm about one pulse in 3600 was missed or added,
+  // and the lock check fixed the labels only up to two revolutions later (bench run
+  // 2026-11-15_1828). Far too early: a spurious pulse, ignored. About two gaps late: one
+  // was missed, so the labels move on by two at once.
+  if (prev >= 0 && run_cnt > QUARTER && omega > 0) {
+    const float dt = (float)iv256 / 256.0f / fs;
+    const int k2 = (prev + 2) % MAGNETS;
+    const float e1 = gap[prev] / omega, e2 = e1 + gap[kk] / omega;
+    if (dt < 0.5f * e1) {
+      n_extra = n_extra + 1;
+      extra_by_label[kk]++;
+      return;
+    }
+    if (dt > 0.5f * (e1 + e2) && dt < e2 + 0.5f * gap[k2] / omega) {
+      n_missed = n_missed + 1;
+      missed_by_label[kk]++;
+      t[kk] = t[prev] + (uint32_t)(e1 * fs * 256.0f);  // where the missed one should have been
+      ivl[kk] = 0;  // unknown: the lock check waits for a full revolution again
+      kk = k2;
+      skipped = true;
+    }
+  }
   t[kk] = t256;
   amp[kk] = swing16;
-  ivl[kk] = run_cnt > 0 ? iv256 : 0;  // no interval across a pause
+  ivl[kk] = (run_cnt > 0 && !skipped) ? iv256 : 0;  // no interval across a pause or a skip
   k = kk;
   cnt = cnt + 1;
   run_cnt = run_cnt + 1;
@@ -269,6 +297,15 @@ int label() { return k; }
 int lastShift() { return last_shift; }
 float lastMargin() { return last_margin; }
 float lastCorrelation() { return last_corr; }
+uint32_t missedPulses() { return n_missed; }
+uint32_t extraPulses() { return n_extra; }
+int worstLabel(bool missed, uint32_t* count) {
+  const uint16_t* a = missed ? missed_by_label : extra_by_label;
+  int w = 0;
+  for (int i = 1; i < MAGNETS; i++) if (a[i] > a[w]) w = i;
+  if (count) *count = a[w];
+  return w;
+}
 uint32_t corrections() { return n_corrections; }
 float offsetDeg() { return offset_e * DEG; }
 float offsetSpreadDeg() { return offset_spread; }

@@ -125,7 +125,7 @@ def poll(check=True):
         out(f"{d['state']:5s} {d.get('mode', '?')} rpm {ramp:6.1f} B {rate:6.1f} {err} trk {f(d, 'trk_rpm'):6.1f}"
             f"  V {f(d, 'Vlim'):4.2f} iq {f(d, 'iqm'):5.2f} id {f(d, 'idm'):5.2f}  vm {f(d, 'vm'):5.2f} ibus {f(d, 'ibus'):4.2f}"
             f"  lrn {d.get('lrn')} lbl {d.get('lbl'):>2s} shift {d.get('shift'):>3s} marg {f(d, 'marg'):4.2f}"
-            f" lcorr {f(d, 'lcorr'):4.2f} corr {d.get('corr')} lag {f(d, 'lag'):6.1f}")
+            f" lcorr {f(d, 'lcorr'):4.2f} corr {d.get('corr')} miss {d.get('miss')} extra {d.get('extra')} lag {f(d, 'lag'):6.1f}")
         if d["state"] == "RUN" and avg > 100 and rate < 0.8 * avg:
             low_count += 1
         else:

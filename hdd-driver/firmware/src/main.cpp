@@ -303,6 +303,8 @@ static void printStatus() {
   Serial.print(" marg="); Serial.print(vr_track::lastMargin(), 2);
   Serial.print(" lcorr="); Serial.print(vr_track::lastCorrelation(), 2);
   Serial.print(" corr="); Serial.print(vr_track::corrections());
+  Serial.print(" miss="); Serial.print(vr_track::missedPulses());
+  Serial.print(" extra="); Serial.print(vr_track::extraPulses());
   Serial.print(" lag="); Serial.print(vr_track::fieldLagDeg(vr_adc::nowT256()), 1);
   Serial.print(" cpps="); Serial.print(vr_hz_cmp, 1);
   Serial.print(" edges="); Serial.print(vr::edgeCount());
@@ -439,6 +441,11 @@ static void printClosedLoop() {
   Serial.print(", correlation "); Serial.print(vr_track::lastCorrelation(), 2);
   Serial.print(", margin "); Serial.print(vr_track::lastMargin(), 2);
   Serial.print(", corrections "); Serial.print(vr_track::corrections());
+  { uint32_t nm = 0, ne = 0; const int lm = vr_track::worstLabel(true, &nm), le = vr_track::worstLabel(false, &ne);
+    Serial.print(", missed "); Serial.print(vr_track::missedPulses());
+    Serial.print(" (most at label "); Serial.print(lm); Serial.print(": "); Serial.print(nm);
+    Serial.print("), extra "); Serial.print(vr_track::extraPulses());
+    Serial.print(" (most at label "); Serial.print(le); Serial.print(": "); Serial.print(ne); Serial.print(")"); }
   Serial.print("), offset "); Serial.print(vr_track::offsetDeg(), 1);
   Serial.print(" deg (spread "); Serial.print(vr_track::offsetSpreadDeg(), 1);
   Serial.print("), trim "); Serial.print(vr_track::trimDeg(), 1);
