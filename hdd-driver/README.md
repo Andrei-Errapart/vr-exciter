@@ -203,7 +203,9 @@ pio run -t upload      # flash over USB DFU
 
 - **Console:** USB-C CDC serial, 115200. Commands are listed at the top of
   `src/main.cpp` (`E1` enable, `R<rpm>`, `V<volts>`, `A`, `P`, `S`, `T`, `L`,
-  `N`, `Q`, `C`, `H`, `K`, `B`, `W`). The driver is off after reset.
+  `N`, `Q`, `C`, `H`, `Y`, `K`, `B`, `W`). The driver is off after reset.
+  SimpleFOC's `Commander` holds at most 20 commands and does not check; all 20
+  are in use, so fold a new one into an existing letter (as `YF`/`YL`).
 - **Flashing:** the first time, hold BOOT0 and tap NRST. Afterwards the `B`
   command reboots into the ROM DFU bootloader.
 - **Spinning:** open-loop velocity, with a rotor alignment hold (`L`, 600 ms)
@@ -227,12 +229,38 @@ pio run -t upload      # flash over USB DFU
   A5 F10` starts reliably and reaches 400 rpm cleanly. Reaching 800 rpm worked
   electrically; the rotor pulsated a little. Wait until the disk has stopped
   before `E1` (a start against a coasting rotor tripped nFAULT once).
-- **Pole pairs** (`POLE_PAIRS`, 6) are unverified, so rpm figures are
-  commanded, not measured, until the VR coil is connected.
+- **Pole pairs:** 4 (`POLE_PAIRS`), measured with the VR coil on 2026-11-15:
+  with the earlier 6, B counted 1.5 times the commanded speed right after
+  switch-off (450 pulses/s at `R300`). The speeds in the bullet above were
+  commanded with 6, so the disc actually turned 1.5 times faster (600 and
+  1200 rpm).
+- **Start with the 60-magnet disc** (B's steel bar at 1 mm pulls the magnets):
+  `I0.5` with a 20 rpm/s ramp stalled after the alignment snap;
+  `L1000 I1.2 J1.3 V5 A5 F15` starts and reaches 300 rpm. `J1.5` tripped
+  nFAULT once during the alignment (VM dipped to 10 V).
 - **VR pickup:** `PA1` -> COMP1 (threshold DAC3 CH1, internal) -> TIM2
-  input capture 1; `vrpm` = pulse rate / 60 pulses per revolution. The
-  comparator and capture path were checked with a swept threshold, but not
-  with a real coil.
+  input capture 1; `vrpm` = pulse rate / 60 pulses per revolution. With the
+  real coil at 1 mm: about ±0.35 mV per rpm (±70-110 mV at 300 rpm, peaks
+  differ by about ±20 % between magnets), one clean cycle per magnet while
+  coasting. `C` sets the threshold to the idle level. Each comparator switch
+  steps `VR_IN` by about 30 mV in its own direction (τ ≈ 10 us, the
+  22 kΩ · 470 pF input), even with the driver off, which adds to the
+  hysteresis.
+- **VR noise while driven:** the PWM switching puts short spikes on `VR_IN`.
+  The ADC barely sees them (2-4 mV rms), but the comparator follows them:
+  6000-13000 false edges/s above about 55 rpm (a long untwisted coil lead also
+  gave them at standstill; keep the lead short and twisted). Two stages reject
+  them (`vr_capture.h`): TIM2's input filter (`YF`, default 15 = about 6 us)
+  and an edge lockout (`YL`, default 50 % of the last period, at least 100 us).
+  `S` reports the rejected edges as `rej=`. Measured while driven: within about
+  5 % from 130 rpm and about 2 % from 400 rpm (the 59/60 below); too few below
+  about 100 rpm, none below 55 rpm, where the pulses stay inside the
+  hysteresis band.
+- **One weak magnet position:** once per revolution, one pulse peaks about
+  90 mV lower than the others (at 340 rpm) and never reaches the comparator's
+  upper trip level, so B counts 59 per revolution (590 at 600 rpm). Seen in
+  every revolution of two `W60` bursts while coasting. Check that magnet
+  (missing, weak, sunk or tilted).
 - **VR scope (`W<us>`):** 4000 evenly spaced samples, `<us>` apart (default 5,
   at least 2), of `VR_IN`, `I_B` and the PWM pins PA8-PA10, printed as
   `vr ib pwm` lines between `scope begin ...` and `scope end`. TIM6 triggers

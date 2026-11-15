@@ -27,6 +27,9 @@
 //   Q<mV>       comparator threshold in mV (default 1650 = VR_BIAS)
 //   C           set the threshold to the measured VR_IN level (coil connected, motor off)
 //   H<0..7>     comparator hysteresis, n * 10 mV
+//   YF<0..15>   TIM2 input filter on the comparator output (default 15, about 6 us; 0 = off)
+//   YL<0..90>   edge lockout in % of the last pulse period (default 50; 0 = 100 us only)
+//   Y           print both
 //   K0 / K1     stall guard: stop when the VR speed is far below the commanded speed
 //   W<us>       VR scope: capture 4000 evenly spaced samples <us> apart (default 5, min 2)
 //               of VR_IN, I_B and the PWM pins, and print them ("vr ib pwm" per line)
@@ -65,7 +68,9 @@ static constexpr float BUS_V_PER_A = 1.0f;    // 20 mohm * 50 V/V
 #ifndef PWM_HZ
 #define PWM_HZ 25000  // DRV8313 allows up to 250 kHz
 #endif
-static constexpr float POLE_PAIRS = 6;          // unverified: typical 12-pole 3.5" spindle
+// Measured 2026-11-15 with the VR coil: with 6 the disc ran 1.5x the commanded speed
+// (B counted 450 pulses/s at R300); with 4 it matches.
+static constexpr float POLE_PAIRS = 4;
 static constexpr float MAX_VOLTAGE = 6.0f;      // hard cap for V command (also limited to VM / 2)
 static constexpr float DEFAULT_VOLTAGE = 1.0f;  // start gently; raise with V
 static constexpr float DEFAULT_ACCEL_RPM_S = 30;
@@ -225,8 +230,11 @@ static void printStatus() {
   Serial.print(" vrpm="); Serial.print(vr_rpm, 1);
   Serial.print(" vpps="); Serial.print(vr_hz, 1);
   Serial.print(" edges="); Serial.print(vr::edgeCount());
+  Serial.print(" rej="); Serial.print(vr::rejectedCount());
   Serial.print(" cmp="); Serial.print(vr::comparatorHigh());
   Serial.print(" thr="); Serial.print(vr::threshold(), 0);
+  Serial.print(" filt_us="); Serial.print(vr::filterMicros(), 2);
+  Serial.print(" lock="); Serial.print(vr::lockout());
   Serial.print(" pwm_hz=");
   Serial.print((float)HAL_RCC_GetPCLK2Freq() * ((RCC->CFGR & RCC_CFGR_PPRE2) >= RCC_CFGR_PPRE2_2 ? 2 : 1) /
                (((TIM1->CR1 & TIM_CR1_CMS) ? 2.0f : 1.0f) * (TIM1->ARR + 1) * (TIM1->PSC + 1)), 0);
@@ -301,6 +309,14 @@ static void cmdPulses(char* c) { float n = atof(c); if (n >= 1 && n <= 1000) vr_
 static void cmdThreshold(char* c) { vr::setThreshold(atof(c)); }
 static void cmdHyst(char* c) { vr::setHysteresis(atoi(c)); }
 static void cmdStall(char* c) { stall_guard = atoi(c) != 0; }
+// One command letter for both edge-rejection settings: the Commander has only 20 slots.
+static void cmdVrReject(char* c) {
+  if (c && (*c == 'F' || *c == 'f')) vr::setFilter(atoi(c + 1));
+  else if (c && (*c == 'L' || *c == 'l')) vr::setLockout(atoi(c + 1));
+  Serial.print("VR input filter "); Serial.print(vr::filter());
+  Serial.print(" = "); Serial.print(vr::filterMicros(), 2); Serial.print(" us, lockout ");
+  Serial.print(vr::lockout()); Serial.println(" % of the last period");
+}
 static void cmdScope(char* c) {
   float us = (c && *c) ? (float)atof(c) : 5.0f;
   vr_scope::Result r = vr_scope::capture(us);
@@ -412,6 +428,10 @@ void setup() {
   command.add('H', cmdHyst, "VR hysteresis 0..7");
   command.add('C', cmdCalibrate, "VR threshold = measured");
   command.add('K', cmdStall, "stall guard 0/1");
+  command.add('Y', cmdVrReject, "VR edge rejection: YF<filter> YL<lockout %>");
+  // SimpleFOC 2.3.4's Commander has fixed arrays of 20 commands and add() does not
+  // check: a 21st overwrites memory (it broke E and R once). Y is the 20th: to add
+  // another, fold it into an existing letter as Y does.
   command.add('W', cmdScope, "VR scope: W<us between samples>");
 
   // Field-angle update (alignment, ramp, open-loop move) at a fixed rate in an
