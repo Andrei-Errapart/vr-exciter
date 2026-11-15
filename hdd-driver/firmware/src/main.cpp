@@ -24,20 +24,34 @@
 //
 // VR pickup B, two detectors running side by side, reported as vrpm / vpps (the selected
 // one), apps (ADC detector, vr_adc.h) and cpps (comparator, vr_capture.h):
-//   N<n>        VR pulses per revolution (default VR_PULSES_PER_REV)
+//   YN<n>       VR pulses per revolution (default VR_PULSES_PER_REV)
 //   YS<0|1>     source for vrpm / vpps and the stall guard: 1 = ADC detector (default),
 //               0 = comparator
 //   YP<5..45>   ADC detector: hysteresis in % of the recent peak-to-peak (default 30)
 //   YM<mV>      ADC detector: smallest hysteresis (default 10)
 //   YA<0..5>    ADC detector: strongest low-pass, y += (x - y) / 2^n (default 3), used
 //               at low speed; it lightens with speed
-//   Q<mV>       comparator threshold in mV (default 1650 = VR_BIAS)
-//   C           set the threshold to the measured VR_IN level (coil connected, motor off)
-//   H<0..7>     comparator hysteresis, n * 10 mV
+//   YQ<mV>      comparator threshold in mV (default 1650 = VR_BIAS)
+//   YC          set the threshold to the measured VR_IN level (coil connected, motor off)
+//   YH<0..7>    comparator hysteresis, n * 10 mV
 //   YF<0..15>   comparator: TIM2 input filter (default 15, about 6 us; 0 = off)
 //   YL<0..90>   comparator: edge lockout in % of the last pulse period (default 50)
 //   Y           print the Y settings
 //   K0 / K1     stall guard: stop when the VR speed is far below the commanded speed
+//
+// Closed loop (vr_track.h: rotor angle from B's pulses and the magnets' signature):
+//   CL<revs>    learn, at a steady open-loop speed of at least 200 rpm: the magnets'
+//               signature, their angles and the electrical offset (default 10 revolutions)
+//   C1 / C0     close the loop (needs a learned, locked tracker and the rotor in step) /
+//               back to open loop at the current speed and voltage
+//   CT<deg>     angle trim, electrical degrees (closed loop: find the least current)
+//   CD<us>      actuation lead, us (default 40: the PWM applies a new vector later)
+//   CP<V/rpm>   speed regulator, proportional (default 0.03)
+//   CI<V/rpm/s> speed regulator, integral (default 0.02)
+//   C           print the closed-loop state
+//   In closed loop the voltage is applied 90 degrees ahead of the rotor (q axis); the
+//   speed regulator sets its size, 0..Vcap (no braking: D1 cannot return energy), and
+//   I<amps> becomes a current limit.
 //   W<us>       VR scope: capture 4000 evenly spaced samples <us> apart (default 5, min 2)
 //               of VR_IN, I_B and the PWM pins, and print them ("vr ib pwm" per line)
 //               between "scope begin ..." and "scope end" (see vr_scope.h). Works while
@@ -54,7 +68,16 @@
 #include "vr_capture.h"
 #include "vr_scope.h"
 #include "vr_adc.h"
+#include "vr_track.h"
 #include "fast_adc.h"
+
+// Set by fw_rev.py (git describe --dirty, build time); fallbacks for other build setups.
+#ifndef FW_REV
+#define FW_REV "unknown"
+#endif
+#ifndef FW_BUILT
+#define FW_BUILT "unknown"
+#endif
 
 // ---- Pins (hdd-driver/README.md, "Electronics") ----------------------------
 static constexpr int PIN_IN1 = PA8, PIN_IN2 = PA9, PIN_IN3 = PA10;  // TIM1 CH1-3
@@ -97,6 +120,9 @@ static constexpr float R_PHASE_EST = 1.8f;        // start value for the current
 static constexpr float I_REG_KI = 20.0f;          // V per A per s
 static constexpr float I_REG_MIN_V = 0.05f;
 static constexpr uint32_t SAT_MS = 1500;          // regulator pinned at the cap this long -> stop
+static constexpr float CL_MIN_RPM = 200;          // closed loop: learn / close only above this
+static constexpr float CL_I_LIMIT_KI = 5.0f;      // V per A per s: backs off the voltage above I
+static constexpr uint32_t CL_LOST_MS = 300;       // B stale or slow this long -> stop
 
 // ---- Reboot into the ROM bootloader ------------------------------------------
 // B stores a magic word in a no-init RAM cell and resets. initVariant() runs
@@ -130,6 +156,18 @@ static volatile bool running = false, aligning = false;
 static volatile float target_rpm = 0, accel_rpm_s = DEFAULT_ACCEL_RPM_S, accel_hi_rpm_s = 0, ramp_rpm = 0;
 static volatile uint32_t last_ramp_us = 0, align_start = 0, align_ms = ALIGN_MS;
 static volatile uint32_t isr_n = 0, isr_max_cyc = 0, field_revs = 0;
+// Open loop: the field's mechanical angle, integrated here (SimpleFOC's own open loop
+// keeps a private timestamp, which would jump after a stretch in closed loop).
+static volatile float field_mech = 0;
+// The electrical angle last applied, in either mode: the Park transform of the currents.
+static volatile float el_angle = 0;
+// Closed loop
+static volatile bool closed_loop = false;
+static volatile float uq_cmd = 0;
+// Speed regulator: about 30 rpm/s per volt at 600 rpm (measured), so 0.03 V/rpm gives a
+// time constant of about 1 s (0.005 swung slowly, +-2 % over several seconds).
+static float spd_kp = 0.03f, spd_ki = 0.02f, uq_int = 0;
+static uint32_t last_spd_ms = 0, cl_bad_since = 0;
 static bool stall_guard = false;
 static uint32_t run_id = 0;  // counts E1 starts, so runs can be referred to by number
 static uint32_t telemetry_ms = 500, last_telemetry = 0;
@@ -169,6 +207,7 @@ static float rpmToRad(float rpm) { return rpm * _2PI / 60.0f; }
 static void stopMotor(const char* why) {
   running = false;  // the control interrupt stops moving the field
   aligning = false;
+  closed_loop = false;
   noInterrupts();
   motor.disable();
   interrupts();
@@ -194,7 +233,9 @@ static bool startMotor() {
   sat_since = 0;
   reg_iq_sum = 0; reg_n = 0; last_reg_ms = millis();
   ramp_rpm = 0;
-  motor.shaft_angle = 0;  // open-loop angle restarts at 0 = where we align
+  field_mech = 0;  // open-loop angle restarts at 0 = where we align
+  closed_loop = false;
+  uq_int = 0;
   motor.enable();
   steady_since = 0;
   align_start = millis();
@@ -250,6 +291,15 @@ static void printStatus() {
     last_s = s; last_ms = ms; }
   Serial.print(" adc_fs="); Serial.print(vr_adc::sampleHz(), 1);
   Serial.print(" aovr="); Serial.print(vr_adc::overruns());
+  Serial.print(" mode="); Serial.print(closed_loop ? "CL" : "OL");
+  Serial.print(" uq="); Serial.print(uq_cmd, 2);
+  Serial.print(" trk_rpm="); Serial.print(vr_track::speedRpm(), 1);
+  Serial.print(" lrn="); Serial.print(vr_track::learning() ? 2 : vr_track::learned() ? 1 : 0);
+  Serial.print(" lbl="); Serial.print(vr_track::label());
+  Serial.print(" shift="); Serial.print(vr_track::lastShift());
+  Serial.print(" marg="); Serial.print(vr_track::lastMargin(), 2);
+  Serial.print(" corr="); Serial.print(vr_track::corrections());
+  Serial.print(" lag="); Serial.print(vr_track::fieldLagDeg(vr_adc::nowT256()), 1);
   Serial.print(" cpps="); Serial.print(vr_hz_cmp, 1);
   Serial.print(" edges="); Serial.print(vr::edgeCount());
   Serial.print(" rej="); Serial.print(vr::rejectedCount());
@@ -266,7 +316,8 @@ static void printStatus() {
     Serial.print(" isr_hz="); Serial.print(ms > last_ms ? (n - last_n) * 1000.0f / (ms - last_ms) : 0, 0);
     Serial.print(" isr_us="); Serial.print(isr_max_cyc / (SystemCoreClock / 1e6f), 1);
     last_n = n; last_ms = ms; isr_max_cyc = 0; }
-  Serial.print(" nFT="); Serial.println(digitalRead(PIN_NFAULT));
+  Serial.print(" nFT="); Serial.print(digitalRead(PIN_NFAULT));
+  Serial.print(" fw="); Serial.println(FW_REV);
   ia_peak = ib_peak = 0;
 }
 
@@ -289,7 +340,7 @@ static void cmdCurrent(char* c) {
 }
 static void cmdPoles(char* c) {
   int n = atoi(c);
-  if (n >= 1 && n <= 32) motor.pole_pairs = n;
+  if (n >= 1 && n <= 32) motor.pole_pairs = n, vr_track::setPolePairs(n);
 }
 static void cmdTelemetry(char* c) { telemetry_ms = max(0, atoi(c)); }
 static void cmdStatus(char*) { printStatus(); }
@@ -327,15 +378,22 @@ static void cmdBootloader(char*) {
   NVIC_SystemReset();
 }
 static void cmdAlign(char* c) { align_ms = constrain(atoi(c), 0, 5000); }
-static void cmdPulses(char* c) { float n = atof(c); if (n >= 1 && n <= 1000) vr_pulses_per_rev = n; }
-static void cmdThreshold(char* c) { vr::setThreshold(atof(c)); }
-static void cmdHyst(char* c) { vr::setHysteresis(atoi(c)); }
 static void cmdStall(char* c) { stall_guard = atoi(c) != 0; }
+static void calibrateThreshold() {
+  if (running) { Serial.println("refused: stop the motor first"); return; }
+  float mv = avgVolts(PIN_VR, 256) * 1000.0f;
+  vr::setThreshold(mv);
+  Serial.print("threshold = "); Serial.print(mv, 0); Serial.println(" mV");
+}
 // One command letter for the VR detector settings: the Commander has only 20 slots.
 static void cmdVrSettings(char* c) {
   const char sub = (c && *c) ? (char)toupper(*c) : 0;
   const char* arg = (c && *c) ? c + 1 : "";
-  if (sub == 'F') vr::setFilter(atoi(arg));
+  if (sub == 'N') { float n = atof(arg); if (n >= 1 && n <= 1000) vr_pulses_per_rev = n; }
+  else if (sub == 'Q') vr::setThreshold(atof(arg));
+  else if (sub == 'H') vr::setHysteresis(atoi(arg));
+  else if (sub == 'C') { calibrateThreshold(); return; }
+  else if (sub == 'F') vr::setFilter(atoi(arg));
   else if (sub == 'L') vr::setLockout(atoi(arg));
   else if (sub == 'S') vr_use_adc = atoi(arg) != 0;
   else if (sub == 'P') vr_adc::setHystPercent(atoi(arg));
@@ -345,7 +403,10 @@ static void cmdVrSettings(char* c) {
   Serial.print("; adc hyst "); Serial.print(vr_adc::hystPercent());
   Serial.print(" %, floor "); Serial.print(vr_adc::floorMv(), 1);
   Serial.print(" mV, low-pass up to 1/"); Serial.print(1 << vr_adc::lowPassMaxShift());
-  Serial.print("; cmp filter "); Serial.print(vr::filter());
+  Serial.print("; pulses/rev "); Serial.print(vr_pulses_per_rev, 0);
+  Serial.print("; cmp threshold "); Serial.print(vr::threshold(), 0);
+  Serial.print(" mV, hyst "); Serial.print(vr::hysteresis() * 10);
+  Serial.print(" mV, filter "); Serial.print(vr::filter());
   Serial.print(" = "); Serial.print(vr::filterMicros(), 2); Serial.print(" us, lockout ");
   Serial.print(vr::lockout()); Serial.println(" %");
 }
@@ -366,41 +427,90 @@ static void cmdScope(char* c) {
   vr_scope::print(Serial);
   Serial.println("scope end");
 }
-static void cmdCalibrate(char*) {
-  if (running) { Serial.println("refused: stop the motor first"); return; }
-  float mv = avgVolts(PIN_VR, 256) * 1000.0f;
-  vr::setThreshold(mv);
-  Serial.print("threshold = "); Serial.print(mv, 0); Serial.println(" mV");
+static void printClosedLoop() {
+  Serial.print("closed loop: mode "); Serial.print(closed_loop ? "CL" : "OL");
+  Serial.print(", tracker "); Serial.print(vr_track::learning() ? "learning" : vr_track::learned() ? "learned" : "not learned");
+  Serial.print(vr_track::locked() ? ", locked" : ", not locked");
+  Serial.print(" (shift "); Serial.print(vr_track::lastShift());
+  Serial.print(", margin "); Serial.print(vr_track::lastMargin(), 2);
+  Serial.print(", corrections "); Serial.print(vr_track::corrections());
+  Serial.print("), offset "); Serial.print(vr_track::offsetDeg(), 1);
+  Serial.print(" deg (spread "); Serial.print(vr_track::offsetSpreadDeg(), 1);
+  Serial.print("), trim "); Serial.print(vr_track::trimDeg(), 1);
+  Serial.print(" deg, lead "); Serial.print(vr_track::leadUs(), 0);
+  Serial.print(" us, speed "); Serial.print(vr_track::speedRpm(), 1);
+  Serial.print(" rpm, uq "); Serial.print(uq_cmd, 2);
+  Serial.print(" V, PI "); Serial.print(spd_kp, 4); Serial.print(" / "); Serial.println(spd_ki, 4);
+}
+// The closed-loop commands under one letter (the Commander has only 20 slots).
+static void cmdClosed(char* c) {
+  const char sub = (c && *c) ? (char)toupper(*c) : 0;
+  const char* arg = (c && *c) ? c + 1 : "";
+  const float meas = vr_track::speedRpm();
+  if (sub == 'L') {
+    if (!running || aligning || closed_loop) { Serial.println("refused: learn while running in open loop"); return; }
+    if (fabsf(ramp_rpm - target_rpm) > 0.01f || ramp_rpm < CL_MIN_RPM) { Serial.println("refused: learn at a steady speed of at least 200 rpm"); return; }
+    if (fabsf(meas - ramp_rpm) > 0.05f * ramp_rpm) { Serial.println("refused: the rotor is not in step (B speed differs)"); return; }
+    const int revs = *arg ? atoi(arg) : 10;
+    Serial.println(vr_track::startLearning(revs) ? "learning" : "refused: already learning");
+    return;
+  }
+  if (sub == '1') {
+    if (!running || aligning || closed_loop) { Serial.println("refused: close the loop while running in open loop"); return; }
+    if (!vr_track::learned() || !vr_track::locked()) { Serial.println("refused: the tracker is not learned and locked (CL, then wait a few revolutions)"); return; }
+    if (ramp_rpm < CL_MIN_RPM || fabsf(meas - ramp_rpm) > 0.05f * ramp_rpm) { Serial.println("refused: the rotor is not in step above 200 rpm"); return; }
+    // Closed loop needs far less voltage than open loop (0.3-0.9 V against 2.1-2.5 V at
+    // 600 rpm): starting from the open-loop voltage overshot to +12 %.
+    uq_int = 0.3f * motor.voltage_limit;
+    uq_cmd = uq_int;
+    reg_iq_sum = 0; reg_n = 0;
+    last_spd_ms = millis();
+    cl_bad_since = 0;
+    closed_loop = true;
+    Serial.println("closed loop on");
+    return;
+  }
+  if (sub == '0') {
+    if (!closed_loop) { Serial.println("already open loop"); return; }
+    noInterrupts();
+    // Carry on from the angle and voltage just applied.
+    field_mech = el_angle / motor.pole_pairs;
+    v_cur = uq_cmd;
+    motor.voltage_limit = uq_cmd;
+    closed_loop = false;
+    interrupts();
+    reg_iq_sum = 0; reg_n = 0; sat_since = 0; last_reg_ms = millis();
+    Serial.println("open loop");
+    return;
+  }
+  if (sub == 'T') vr_track::setTrimDeg(atof(arg));
+  else if (sub == 'D') vr_track::setLeadUs(atof(arg));
+  else if (sub == 'P') spd_kp = constrain((float)atof(arg), 0.0f, 0.1f);
+  else if (sub == 'I') spd_ki = constrain((float)atof(arg), 0.0f, 1.0f);
+  printClosedLoop();
 }
 
 static HardwareTimer* control_timer = nullptr;
 static void controlStep2();
 
 // Runs at CONTROL_HZ in an interrupt: holds the field at angle 0 during the
-// alignment, then ramps the speed and advances the open-loop field.
+// alignment, then ramps the speed and advances the open-loop field, or in closed loop
+// applies the voltage at the rotor angle from B. B's samples are processed here too.
 static void controlStep() {
   uint32_t t0 = DWT->CYCCNT;
   isr_n = isr_n + 1;
   static float last_angle = 0;
   controlStep2();
-  if (running) {
-    float a = motor.shaft_angle;
+  if (running && !closed_loop) {
+    float a = field_mech;
     if (a < last_angle - 3.0f) field_revs = field_revs + 1;  // wrapped past 2*pi
     last_angle = a;
   }
   uint32_t d = DWT->CYCCNT - t0;
   if (d > isr_max_cyc) isr_max_cyc = d;
 }
-static void controlStep2() {
-  if (!running) return;
-  if (aligning) {
-    motor.move(0);
-    if (millis() - align_start >= align_ms) {
-      aligning = false;
-      last_ramp_us = micros();
-    }
-    return;
-  }
+// The speed ramp (A below ACCEL_BREAK_RPM, F above); returns dt in s.
+static float rampStep() {
   uint32_t now = micros();
   float dt = (now - last_ramp_us) * 1e-6f;
   last_ramp_us = now;
@@ -409,7 +519,39 @@ static void controlStep2() {
   float step = acc * dt;
   r += constrain(target_rpm - r, -step, step);
   ramp_rpm = r;
-  motor.move(rpmToRad(r));
+  return dt;
+}
+static void controlStep2() {
+  const bool run = running;
+  if (run && !closed_loop) {
+    // Open loop: the field at field_mech, the voltage motor.voltage_limit (as SimpleFOC's
+    // velocity_openloop does, with our own angle and timing).
+    float w = 0;
+    if (aligning) {
+      field_mech = 0;
+      if (millis() - align_start >= align_ms) {
+        aligning = false;
+        last_ramp_us = micros();
+      }
+    } else {
+      const float dt = rampStep();
+      w = rpmToRad(ramp_rpm);
+      float a = field_mech + w * dt;
+      a = fmodf(a, _2PI);
+      field_mech = a < 0 ? a + _2PI : a;
+    }
+    const float th = field_mech * motor.pole_pairs;
+    motor.setPhaseVoltage(motor.voltage_limit, 0, th);
+    el_angle = th;
+    vr_track::setField(th, w * motor.pole_pairs);
+  }
+  vr_adc::isrPoll();  // B's new samples; pulses go to vr_track
+  if (run && closed_loop) {
+    rampStep();
+    const float th = vr_track::electricalAngle(vr_adc::nowT256());
+    motor.setPhaseVoltage(uq_cmd, 0, th);
+    el_angle = th;
+  }
 }
 
 void setup() {
@@ -455,16 +597,13 @@ void setup() {
   command.add('D', cmdDiag, "ADC histogram");
   command.add('B', cmdBootloader, "reboot to DFU");
   command.add('L', cmdAlign, "align ms");
-  command.add('N', cmdPulses, "VR pulses/rev");
-  command.add('Q', cmdThreshold, "VR threshold mV");
-  command.add('H', cmdHyst, "VR hysteresis 0..7");
-  command.add('C', cmdCalibrate, "VR threshold = measured");
   command.add('K', cmdStall, "stall guard 0/1");
-  command.add('Y', cmdVrSettings, "VR detectors: YS YP YM YA YF YL");
-  // SimpleFOC 2.3.4's Commander has fixed arrays of 20 commands and add() does not
-  // check: a 21st overwrites memory (it broke E and R once). Y is the 20th: to add
-  // another, fold it into an existing letter as Y does.
+  command.add('Y', cmdVrSettings, "VR detectors: YS YP YM YA YN YQ YH YC YF YL");
   command.add('W', cmdScope, "VR scope: W<us between samples>");
+  command.add('C', cmdClosed, "closed loop: CL C1 C0 CT CD CP CI");
+  // SimpleFOC 2.3.4's Commander has fixed arrays of 20 commands and add() does not
+  // check: a 21st overwrites memory (it broke E and R once). 17 are used; fold new
+  // ones into an existing letter, as Y and C do.
 
   // Field-angle update (alignment, ramp, open-loop move) at a fixed rate in an
   // interrupt, independent of how long the main loop takes.
@@ -480,13 +619,15 @@ void setup() {
   vr::pulseHz();  // prime the snapshot
   vr_adc::begin();  // needs TIM1 running (driver.init)
   vr_adc::pulseHz();
+  vr_track::begin(motor.pole_pairs, vr_adc::sampleHz());
 
-  Serial.println("hdd-driver ready; driver is OFF. Commands: E1 R<rpm> A V P T S");
+  Serial.print("hdd-driver ready; driver is OFF. fw "); Serial.print(FW_REV);
+  Serial.print(" built "); Serial.println(FW_BUILT);
   printStatus();
 }
 
 void loop() {
-  vr_adc::poll();  // the ADC detector's new VR samples (its buffer holds about 40 ms)
+  vr_track::poll();  // finishes learning, checks the lock once per revolution
 
   // VR speed, every 100 ms.
   if (millis() - last_vr_ms >= 100) {
@@ -515,7 +656,7 @@ void loop() {
     float sib = (sb - ib_off) / PHASE_V_PER_A;
     float ia = fabsf(sia), ib = fabsf(sib);
     if (running) {
-      float ang = motor.shaft_angle * motor.pole_pairs;
+      float ang = el_angle;  // the frame of the voltage just applied (field or rotor)
       float c = cosf(ang), sn = sinf(ang);
       float ialpha = sia, ibeta = (sia + 2.0f * sib) * 0.57735027f;
       float id = ialpha * c + ibeta * sn, iq = -ialpha * sn + ibeta * c;
@@ -540,8 +681,32 @@ void loop() {
     if (vm < VM_MIN - 0.5f) stopMotor("VM sagged below the driver's UVLO");
   }
 
-  // Current regulator, every 2 ms: integrate the torque-current error into the voltage.
-  if (running && i_set > 0 && millis() - last_reg_ms >= 2 && reg_n) {
+  // Closed loop, every 2 ms: speed regulator on B's speed -> q voltage, I as a current
+  // limit, and a stop when B goes stale or the rotor falls well behind the ramp.
+  if (running && closed_loop && millis() - last_spd_ms >= 2) {
+    const float dt = (millis() - last_spd_ms) * 1e-3f;
+    last_spd_ms = millis();
+    const float meas = vr_track::speedRpm();
+    const float err = ramp_rpm - meas;
+    const float cap = min(v_cap, driver.voltage_power_supply * 0.5f);
+    uq_int = constrain(uq_int + spd_ki * err * dt, 0.0f, cap);
+    if (i_set > 0 && reg_n) {
+      const float iq = reg_iq_sum / reg_n;
+      if (iq > i_set) uq_int = max(0.0f, uq_int - CL_I_LIMIT_KI * (iq - i_set) * dt);
+    }
+    reg_iq_sum = 0; reg_n = 0;
+    const float uq = constrain(spd_kp * err + uq_int, 0.0f, cap);
+    uq_cmd = uq;
+    motor.voltage_limit = uq;  // for the status line
+    const bool valid = vr_track::angleValid(vr_adc::nowT256());
+    if (!valid || meas < 0.7f * ramp_rpm) {
+      if (!cl_bad_since) cl_bad_since = millis();
+      else if (millis() - cl_bad_since > CL_LOST_MS) stopMotor("closed loop: B stale or rotor far behind the ramp");
+    } else cl_bad_since = 0;
+  }
+
+  // Current regulator (open loop), every 2 ms: integrate the torque-current error into the voltage.
+  if (running && !closed_loop && i_set > 0 && millis() - last_reg_ms >= 2 && reg_n) {
     float dt = (millis() - last_reg_ms) * 1e-3f;
     last_reg_ms = millis();
     float iq = reg_iq_sum / reg_n;

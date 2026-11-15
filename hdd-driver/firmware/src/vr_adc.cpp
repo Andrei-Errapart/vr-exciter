@@ -1,7 +1,13 @@
 #include "vr_adc.h"
 #include "fast_adc.h"
+#include "vr_track.h"
 
 namespace vr_adc {
+
+// Delay between a magnet's crossing at the coil and the detected crossing, in 1/256
+// sample: the median of 3 (1 sample), the low-pass (2^shift - 1 samples at low
+// frequencies) and the 22 kOhm / 470 pF input (10.3 us = 0.26 samples).
+static constexpr uint32_t RC_DELAY256 = 66;
 
 static constexpr int VR_CH = 2;  // ADC2_IN2 = PA1
 static constexpr uint32_t N = 1024;  // circular buffer: about 41 ms at 25 kHz
@@ -15,6 +21,7 @@ static float fs = 25000;          // sample rate
 static uint32_t rd = 0;           // next buffer index to process
 static uint32_t idx = 0;          // absolute index of the next sample
 static uint32_t last_poll_ms = 0, overrun_count = 0;
+static volatile uint32_t now_t256 = 0;  // time of the latest sample plus half a sample
 static uint32_t decay_samples = 1250;
 
 // Settings
@@ -54,6 +61,9 @@ static void resetDetector() {
 }
 
 static inline void pulse(uint32_t t256) {
+  // For the rotor angle: the crossing's true time (filter delays out) and the swing
+  // (last peak - this trough), which differs from magnet to magnet.
+  vr_track::onPulse(t256 - ((1u << cur_shift) << 8) - RC_DELAY256, peak16 - trough16, now_t256);
   if (pulses) {
     iv_prev = iv_last;
     iv_last = t256 - last_pulse_t256;
@@ -138,7 +148,9 @@ static float tim1UpdateHz() {
 
 static inline uint32_t writePos() { return (N - DMA1_Channel3->CNDTR) % N; }
 
-void poll() {
+uint32_t nowT256() { return now_t256; }
+
+void isrPoll() {
   if (!active) return;
   const uint32_t ms = millis();
   // The buffer lasts N / fs (41 ms at 25 kHz). Away longer, samples were overwritten.
@@ -152,6 +164,9 @@ void poll() {
   }
   last_poll_ms = ms;
   const uint32_t wr = writePos();
+  // The newest sample was triggered 1.4..41 us ago (the interrupt runs at 20 kHz,
+  // asynchronous to the 25 kHz samples): call "now" half a sample after it.
+  now_t256 = ((idx + (wr + N - rd) % N - 1) << 8) + 128;
   while (rd != wr) {
     onSample(buf[rd], idx);
     rd = (rd + 1) % N;
@@ -221,10 +236,13 @@ float ppMv() { return pp16 / (COUNTS_PER_MV * SCALE); }
 float levelMv() { return y16 / (COUNTS_PER_MV * SCALE); }
 
 float pulseHz(uint32_t timeout_ms) {
-  const uint32_t dp = pulses - snap_pulses, dt256 = last_pulse_t256 - snap_t256;
-  snap_pulses = pulses;
-  snap_t256 = last_pulse_t256;
-  if (millis() - last_pulse_ms > timeout_ms || dp == 0 || dt256 == 0) return 0;
+  noInterrupts();  // updated by the control interrupt
+  const uint32_t p = pulses, t = last_pulse_t256, ms = last_pulse_ms;
+  interrupts();
+  const uint32_t dp = p - snap_pulses, dt256 = t - snap_t256;
+  snap_pulses = p;
+  snap_t256 = t;
+  if (millis() - ms > timeout_ms || dp == 0 || dt256 == 0) return 0;
   // The first interval after a pause spans the gap; that is fine for a rate.
   return (float)dp * fs * 256.0f / (float)dt256;
 }

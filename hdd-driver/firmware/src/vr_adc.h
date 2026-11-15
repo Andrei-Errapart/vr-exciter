@@ -4,8 +4,9 @@
 // (TRGO). SimpleFOC runs TIM1 center-aligned with RCR = 1, so that is one sample per
 // PWM period (25 kHz), at a turn of the counter, half a period away from the output
 // switching that puts spikes on VR_IN. DMA1 channel 3 writes the samples into a circular
-// buffer; poll() (from the main loop) works through the new ones. The time of a sample is
-// its index divided by the sample rate, which comes from TIM1's registers. No interrupt:
+// buffer; isrPoll(), from the 20 kHz control interrupt, works through the new ones, so
+// pulses reach vr_track (the rotor angle) at once. The time of a sample is its index
+// divided by the sample rate, which comes from TIM1's registers. No ADC interrupt:
 // ADC1/ADC2 share one, and SimpleFOC's current-sense code already defines its handler.
 // fast_adc reads I_B on ADC2's injected group, which briefly delays a VR conversion.
 //
@@ -32,8 +33,11 @@ namespace vr_adc {
 
 // Call after fast_adc::begin() and the driver's init (TIM1 running).
 void begin();
-// Call from the main loop as often as possible; the buffer holds about 40 ms.
-void poll();
+// Call from the control interrupt (20 kHz); the buffer holds about 40 ms.
+void isrPoll();
+// The time base for vr_track: the newest sample's time plus half a sample, in 1/256
+// sample. Valid inside the control interrupt after isrPoll().
+uint32_t nowT256();
 // Stop and restart the sampling (the W scope reconfigures the ADCs).
 void pause();
 void resume();

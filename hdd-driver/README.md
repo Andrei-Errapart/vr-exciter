@@ -202,10 +202,14 @@ pio run -t upload      # flash over USB DFU
 ```
 
 - **Console:** USB-C CDC serial, 115200. Commands are listed at the top of
-  `src/main.cpp` (`E1` enable, `R<rpm>`, `V<volts>`, `A`, `P`, `S`, `T`, `L`,
-  `N`, `Q`, `C`, `H`, `Y`, `K`, `B`, `W`). The driver is off after reset.
-  SimpleFOC's `Commander` holds at most 20 commands and does not check; all 20
-  are in use, so fold a new one into an existing letter (as `YF`/`YL`).
+  `src/main.cpp` (`E1` enable, `R<rpm>`, `V<volts>`, `A`, `F`, `I`, `J`, `P`,
+  `S`, `T`, `L`, `D`, `K`, `B`, `W`, `Y` for the VR detectors, `C` for the closed
+  loop). The driver is off after reset. SimpleFOC's `Commander` holds at most 20
+  commands and does not check (a 21st broke `E` and `R` once); 17 are in use, so
+  fold new settings into an existing letter, as `Y` and `C` do.
+- **Version:** `fw_rev.py` stamps the build with `git describe --dirty` and the
+  build time; the boot banner and `S` (`fw=`) print it, so every bench log names
+  its firmware. Bench scripts and run records: `bench/` (index `bench/runs/runs.md`).
 - **Flashing:** the first time, hold BOOT0 and tap NRST. Afterwards the `B`
   command reboots into the ROM DFU bootloader.
 - **Spinning:** open-loop velocity, with a rotor alignment hold (`L`, 600 ms)
@@ -267,7 +271,7 @@ pio run -t upload      # flash over USB DFU
   8.3 samples per pulse; if that proves too few, sampling at both counter
   turns (TIM1 RCR = 0) would give 50 kHz.
 - **Comparator detector (fallback, `vr_capture.h`):** `PA1` -> COMP1
-  (threshold DAC3 CH1, `Q`, `C` = idle level, hysteresis `H`) -> TIM2 input
+  (threshold DAC3 CH1, `YQ`, `YC` = idle level, hysteresis `YH`) -> TIM2 input
   capture 1, then TIM2's input filter (`YF`, default 15 = about 6 us) and an
   edge lockout (`YL`, 50 % of the shorter of the last two periods, at least
   100 us); `rej=` counts the locked-out edges. Before the filter the PWM
@@ -291,11 +295,26 @@ pio run -t upload      # flash over USB DFU
   ADC1 and ADC2 together; DMA stores them and copies `GPIOA->IDR` on the same
   tick, so the control interrupt cannot skew the timing. It works while the
   motor runs, but blocks the main loop (protection checks, current regulator)
-  for the burst and its printout, and pauses the ADC detector (its first
-  `S` afterwards shows one overrun, `aovr`). The fast sampling loads the
-  22 kΩ input: `VR_IN` reads about 37 mV low at 5 us and 89 mV low at 2 us,
-  and the comparator sees the same shift, so the edge count during a burst is
-  not representative.
+  for the burst and its printout, and pauses the ADC detector (so do not use it
+  in closed loop). The fast sampling loads the 22 kΩ input: `VR_IN` reads about
+  37 mV low at 5 us and 89 mV low at 2 us, and the comparator sees the same
+  shift, so the edge count during a burst is not representative.
+- **Closed loop (`vr_track.h`, experimental):** the ADC detector runs in the
+  20 kHz control interrupt and hands each pulse (time corrected for the filter
+  delays, and its swing) to `vr_track`, which labels the magnets 0..59. `CL`
+  learns, at a steady open-loop speed: each magnet's angle (from the intervals),
+  a signature for the lock, and the electrical offset (the open-loop field + 90°:
+  SimpleFOC applies the voltage 90° ahead of the angle it is given). `C1`
+  applies the voltage on the q axis of the estimated rotor angle (last magnet's
+  angle + speed x time, plus a 40 us actuation lead); a speed regulator on B
+  sets it, 0..Vcap (no braking), with `I` as a current limit. `CT` trims the
+  angle, `C0` returns to open loop. Measured (bench run
+  `2026-11-15_1820_cl-step3_to-2430rpm`): at 600 rpm 0.3-0.9 V and up to 0.35 A
+  instead of 2.1-2.5 V and 1.2 A in open loop; 1800 rpm at about 1.9 V, 0.5 A,
+  1.4 W from the supply; within ±0.3 % to about 2100 rpm. The swing signature
+  learned at 600 rpm made false lock corrections above about 1800 rpm, and from
+  about 2250 rpm the voltage reached the VM/2 cap; the disc stalled near
+  2420 rpm.
 
 ## Checking the fit
 
