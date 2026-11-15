@@ -3,9 +3,11 @@
 //
 // vr_adc reports one pulse per magnet (the rising midpoint crossing, its time corrected
 // for the detector's filter delays) and the pulse's swing (last peak - this trough).
-// Each pulse gets a label 0..59. The magnets differ in strength, so the 60 swings form
-// a signature. Learning (at a steady open-loop speed, over a few revolutions) records:
-//   - the swing template, for the lock;
+// Each pulse gets a label 0..59. Learning (at a steady open-loop speed, over a few
+// revolutions) records:
+//   - the interval signature, for the lock: each interval relative to its neighbours,
+//     set by the magnets' spacing and so independent of speed (the pulse swings, used
+//     first, changed with the detector's filter and gave false corrections);
 //   - each label's mechanical angle, from the mean interval before it (the magnets are
 //     not evenly spaced to the last 0.1 mm);
 //   - the electrical offset: the open-loop field angle at each label's pulse, + 90
@@ -13,9 +15,9 @@
 //     and at light load the magnet lines up with the voltage), minus pole_pairs x the
 //     label's angle. The magnet lags the field by the load angle, so the offset includes
 //     that lag; the closed-loop trim takes it out.
-// Lock: once per revolution the last 60 swings are correlated with the template at all
-// 60 shifts. A shift other than 0 means a pulse was missed or added; seen twice in a
-// row, the labels are corrected.
+// Lock: once per revolution the last 60 intervals' signature is correlated with the
+// learned one at all 60 shifts. A shift other than 0 means a pulse was missed or added;
+// seen twice in a row, the labels are corrected.
 // Angle: label angle + speed x time since the pulse, at most 1.5 gaps ahead (so a
 // stopping rotor does not run away), plus a lead for the PWM's actuation delay.
 // Times are in 1/256 of an ADC sample (vr_adc's time base).
@@ -47,6 +49,7 @@ uint32_t pulseCount();
 int label();
 int lastShift();
 float lastMargin();
+float lastCorrelation();             // best correlation of the last lock check (1 = perfect)
 uint32_t corrections();
 float offsetDeg();
 float offsetSpreadDeg();              // how consistent the per-label offsets were

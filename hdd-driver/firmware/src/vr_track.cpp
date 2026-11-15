@@ -15,11 +15,12 @@ static float fs = 25000.0f;
 static volatile int k = -1;      // label of the last pulse, -1 = none since begin
 static uint32_t t[MAGNETS];      // time of the last pulse of each label (1/256 sample)
 static int32_t amp[MAGNETS];     // swing of the last pulse of each label (x16 counts)
+static uint32_t ivl[MAGNETS];    // the interval that ended at each label's last pulse (1/256)
 static volatile uint32_t cnt = 0, run_cnt = 0;  // pulses since boot / since the last reset
 static volatile float omega = 0;  // mechanical rad/s, updated at each pulse
 static float pos[MAGNETS];        // mechanical angle of each label, rad (pos[0] = 0)
 static float gap[MAGNETS];        // pos[k+1] - pos[k], rad
-static float tmpl[MAGNETS];       // swing template, zero mean, unit norm
+static float tmpl[MAGNETS];       // interval signature (see signature()), zero mean, unit norm
 static volatile bool is_learned = false;
 static volatile float offset_e = 0, trim_e = 0, lead_s = 40e-6f;
 static volatile float field_e = 0, field_w = 0;
@@ -34,7 +35,7 @@ static float offset_spread = 0;
 // ---- lock check ----
 static uint32_t last_check_cnt = 0, n_corrections = 0;
 static int pending_shift = 0, last_shift = 0;
-static float last_margin = 0;
+static float last_margin = 0, last_corr = 0;
 static bool last_ok = false;
 
 static inline float wrap2pi(float a) {
@@ -44,6 +45,28 @@ static inline float wrap2pi(float a) {
 static inline float wrapPi(float a) {
   a = wrap2pi(a);
   return a > PI ? a - TWO_PI_F : a;
+}
+
+// The lock's signature: each interval relative to the mean of its two neighbours, minus
+// 1, then zero mean and unit norm. The neighbour ratio cancels speed changes, so what is
+// left is the magnets' spacing (and per-magnet timing), which does not depend on speed
+// or on the detector's filter. (The first lock used the pulse swings, learned at
+// 600 rpm; above about 1800 rpm, unfiltered, they no longer matched and the lock made
+// hundreds of false corrections.) Returns false if the intervals are not usable.
+static bool signature(const float* iv, float* out) {
+  float mean = 0;
+  for (int i = 0; i < MAGNETS; i++) {
+    const float nb = 0.5f * (iv[(i + MAGNETS - 1) % MAGNETS] + iv[(i + 1) % MAGNETS]);
+    if (nb <= 0 || iv[i] <= 0) return false;
+    out[i] = iv[i] / nb - 1.0f;
+    mean += out[i] / MAGNETS;
+  }
+  float norm = 0;
+  for (int i = 0; i < MAGNETS; i++) out[i] -= mean, norm += out[i] * out[i];
+  norm = sqrtf(norm);
+  if (norm <= 0) return false;
+  for (int i = 0; i < MAGNETS; i++) out[i] /= norm;
+  return true;
 }
 
 static void uniformTables() {
@@ -74,6 +97,7 @@ void onPulse(uint32_t t256, int32_t swing16, uint32_t now256) {
   const uint32_t iv256 = prev >= 0 ? t256 - t[prev] : 0;
   t[kk] = t256;
   amp[kk] = swing16;
+  ivl[kk] = run_cnt > 0 ? iv256 : 0;  // no interval across a pause
   k = kk;
   cnt = cnt + 1;
   run_cnt = run_cnt + 1;
@@ -154,13 +178,8 @@ static void finishLearning() {
   p[0] = 0;
   for (int i = 1; i < MAGNETS; i++) p[i] = p[i - 1] + iv[i] / total * TWO_PI_F;
   for (int i = 0; i < MAGNETS; i++) g[i] = (i + 1 < MAGNETS ? p[i + 1] : TWO_PI_F) - p[i];
-  float norm = 0;
-  for (int i = 0; i < MAGNETS; i++) {
-    tm[i] = a[i] - amean;
-    norm += tm[i] * tm[i];
-  }
-  norm = sqrtf(norm);
-  for (int i = 0; i < MAGNETS; i++) tm[i] = norm > 0 ? tm[i] / norm : 0;
+  (void)amean;
+  if (!signature(iv, tm)) return;
   // electrical offset: circular mean over labels of (field angle - pp x label angle)
   float sc = 0, ss = 0;
   float x[MAGNETS];
@@ -192,24 +211,20 @@ static void lockCheck() {
   const uint32_t c = cnt;
   if (c - last_check_cnt < (uint32_t)MAGNETS) return;
   last_check_cnt = c;
-  float m[MAGNETS];
+  float iv[MAGNETS], m[MAGNETS];
   noInterrupts();
-  for (int i = 0; i < MAGNETS; i++) m[i] = amp[i];
+  for (int i = 0; i < MAGNETS; i++) iv[i] = ivl[i] / 256.0f;
   interrupts();
-  float mean = 0, norm = 0;
-  for (int i = 0; i < MAGNETS; i++) mean += m[i] / MAGNETS;
-  for (int i = 0; i < MAGNETS; i++) m[i] -= mean, norm += m[i] * m[i];
-  norm = sqrtf(norm);
-  if (norm <= 0) return;
+  if (!signature(iv, m)) return;  // an interval missing (after a pause): next revolution
   int best = 0;
   float c1 = -2, c2 = -2;
   for (int s = 0; s < MAGNETS; s++) {
     float cc = 0;
     for (int j = 0; j < MAGNETS; j++) cc += m[j] * tmpl[(j + s) % MAGNETS];
-    cc /= norm;
     if (cc > c1) c2 = c1, c1 = cc, best = s;
     else if (cc > c2) c2 = cc;
   }
+  last_corr = c1;
   last_margin = c1 - c2;
   last_shift = best > MAGNETS / 2 ? best - MAGNETS : best;
   last_ok = best == 0 && last_margin >= MIN_MARGIN;
@@ -223,10 +238,13 @@ static void lockCheck() {
   }
   // Seen twice: our label j is magnet j + best. Relabel.
   noInterrupts();
-  uint32_t t2[MAGNETS];
+  uint32_t t2[MAGNETS], i2[MAGNETS];
   int32_t a2[MAGNETS];
-  for (int j = 0; j < MAGNETS; j++) t2[(j + best) % MAGNETS] = t[j], a2[(j + best) % MAGNETS] = amp[j];
-  for (int j = 0; j < MAGNETS; j++) t[j] = t2[j], amp[j] = a2[j];
+  for (int j = 0; j < MAGNETS; j++) {
+    const int jj = (j + best) % MAGNETS;
+    t2[jj] = t[j], a2[jj] = amp[j], i2[jj] = ivl[j];
+  }
+  for (int j = 0; j < MAGNETS; j++) t[j] = t2[j], amp[j] = a2[j], ivl[j] = i2[j];
   k = (k + best) % MAGNETS;
   run_cnt = 0;  // the speed history spans the slip: restart it
   interrupts();
@@ -250,6 +268,7 @@ uint32_t pulseCount() { return cnt; }
 int label() { return k; }
 int lastShift() { return last_shift; }
 float lastMargin() { return last_margin; }
+float lastCorrelation() { return last_corr; }
 uint32_t corrections() { return n_corrections; }
 float offsetDeg() { return offset_e * DEG; }
 float offsetSpreadDeg() { return offset_spread; }

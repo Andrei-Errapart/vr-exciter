@@ -102,7 +102,10 @@ static constexpr float BUS_V_PER_A = 1.0f;    // 20 mohm * 50 V/V
 // Measured 2026-11-15 with the VR coil: with 6 the disc ran 1.5x the commanded speed
 // (B counted 450 pulses/s at R300); with 4 it matches.
 static constexpr float POLE_PAIRS = 4;
-static constexpr float MAX_VOLTAGE = 6.0f;      // hard cap for V command (also limited to VM / 2)
+// Space-vector modulation: the phase voltage can reach VM / sqrt(3) (6.8 V at 11.7 V), not
+// VM / 2 as with sine PWM; the closed loop reached the VM / 2 cap from about 2250 rpm.
+static constexpr float VM_TO_VMAX = 0.57735f;
+static constexpr float MAX_VOLTAGE = 7.0f;      // hard cap for V command (also limited to VM / sqrt(3))
 static constexpr float DEFAULT_VOLTAGE = 1.0f;  // start gently; raise with V
 static constexpr float DEFAULT_ACCEL_RPM_S = 30;
 static constexpr float ACCEL_BREAK_RPM = 60;
@@ -226,7 +229,7 @@ static bool startMotor() {
     return false;
   }
   driver.voltage_power_supply = vm;  // PWM scaling follows the real rail
-  float cap = min(v_cap, vm * 0.5f);
+  float cap = min(v_cap, vm * VM_TO_VMAX);
   v_cur = i_set > 0 ? min(0.5f, cap) : cap;  // soft start: the regulator integrates up from here
   vm_min = 99;
   motor.voltage_limit = v_cur;
@@ -298,6 +301,7 @@ static void printStatus() {
   Serial.print(" lbl="); Serial.print(vr_track::label());
   Serial.print(" shift="); Serial.print(vr_track::lastShift());
   Serial.print(" marg="); Serial.print(vr_track::lastMargin(), 2);
+  Serial.print(" lcorr="); Serial.print(vr_track::lastCorrelation(), 2);
   Serial.print(" corr="); Serial.print(vr_track::corrections());
   Serial.print(" lag="); Serial.print(vr_track::fieldLagDeg(vr_adc::nowT256()), 1);
   Serial.print(" cpps="); Serial.print(vr_hz_cmp, 1);
@@ -432,6 +436,7 @@ static void printClosedLoop() {
   Serial.print(", tracker "); Serial.print(vr_track::learning() ? "learning" : vr_track::learned() ? "learned" : "not learned");
   Serial.print(vr_track::locked() ? ", locked" : ", not locked");
   Serial.print(" (shift "); Serial.print(vr_track::lastShift());
+  Serial.print(", correlation "); Serial.print(vr_track::lastCorrelation(), 2);
   Serial.print(", margin "); Serial.print(vr_track::lastMargin(), 2);
   Serial.print(", corrections "); Serial.print(vr_track::corrections());
   Serial.print("), offset "); Serial.print(vr_track::offsetDeg(), 1);
@@ -579,6 +584,7 @@ void setup() {
   motor.linkDriver(&driver);
 
   motor.controller = MotionControlType::velocity_openloop;
+  motor.foc_modulation = FOCModulationType::SpaceVectorPWM;  // up to VM / sqrt(3)
   motor.voltage_limit = DEFAULT_VOLTAGE;
   motor.velocity_limit = rpmToRad(6000);
   motor.init();
@@ -688,7 +694,7 @@ void loop() {
     last_spd_ms = millis();
     const float meas = vr_track::speedRpm();
     const float err = ramp_rpm - meas;
-    const float cap = min(v_cap, driver.voltage_power_supply * 0.5f);
+    const float cap = min(v_cap, driver.voltage_power_supply * VM_TO_VMAX);
     uq_int = constrain(uq_int + spd_ki * err * dt, 0.0f, cap);
     if (i_set > 0 && reg_n) {
       const float iq = reg_iq_sum / reg_n;
@@ -711,7 +717,7 @@ void loop() {
     last_reg_ms = millis();
     float iq = reg_iq_sum / reg_n;
     reg_iq_sum = 0; reg_n = 0;
-    float cap = min(v_cap, driver.voltage_power_supply * 0.5f);
+    float cap = min(v_cap, driver.voltage_power_supply * VM_TO_VMAX);
     float target = i_set;
     if (i_boost > i_set) {  // taper from i_boost at standstill to i_set at ACCEL_BREAK_RPM
       float f = constrain(fabsf(ramp_rpm) / ACCEL_BREAK_RPM, 0.0f, 1.0f);
