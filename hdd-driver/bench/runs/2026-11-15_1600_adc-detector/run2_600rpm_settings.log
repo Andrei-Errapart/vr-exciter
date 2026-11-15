@@ -1,0 +1,87 @@
+   0.30 >> H4
+   0.40 >> L1000
+   0.50 >> I1.2
+   0.55  Iset 1.20
+   0.60 >> J1.3
+   0.65  Jboost 1.30
+   0.70 >> V5
+   0.75  Vcap 5.00
+   0.80 >> A5
+   0.90 >> F15
+   1.00 >> R600
+   1.05  target rpm 600.00
+   1.10 >> T0
+   1.20 >> K0
+   1.30 >> E1
+   1.35  enabled, run 3 (I=1.20 J=1.30 Vcap=5.0 A=5 F=15 R=600)
+  51.33 >> YP30
+  51.38  VR source adc; adc hyst 30 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  51.43 >> YA3
+  51.48  VR source adc; adc hyst 30 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  51.53 >> S
+  51.58  RUN vm=11.58 rpm=600.0/600.0 Vlim=2.38 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.392 ia=0.118 ib=1.020 idm=0.107 iqm=1.220 iqs=0.000 rph=1.951 n=2550716 |ia|pk=1.46 |ib|pk=1.42 vr=1.755 vrpm=595.0 vpps=595.0 src=adc apps=595.0 apulses=52668 app_mv=169.8 alevel_mv=1537.4 adc_hz=25007 adc_fs=25007.4 aovr=0 cpps=635.1 edges=230488 rej=222134 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=189.3 isr_hz=20000 isr_us=13.9 nFT=1
+  54.54 >> S
+  54.59  RUN vm=11.56 rpm=600.0/600.0 Vlim=2.33 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.400 ia=-0.622 ib=-0.693 idm=0.251 iqm=1.201 iqs=0.061 rph=1.942 n=151648 |ia|pk=1.41 |ib|pk=1.38 vr=1.791 vrpm=597.3 vpps=597.3 src=adc apps=597.3 apulses=54445 app_mv=173.5 alevel_mv=1532.2 adc_hz=25008 adc_fs=25007.4 aovr=0 cpps=617.0 edges=232389 rej=223114 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.8 isr_hz=20001 isr_us=13.7 nFT=1
+  57.55 >> YP20
+  57.60  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  57.65 >> YA3
+  57.70  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  57.75 >> S
+  57.80  RUN vm=11.56 rpm=600.0/600.0 Vlim=2.19 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.356 ia=1.189 ib=-0.796 idm=0.251 iqm=1.202 iqs=0.061 rph=1.822 n=161528 |ia|pk=1.43 |ib|pk=1.39 vr=1.742 vrpm=590.2 vpps=590.2 src=adc apps=590.2 apulses=56339 app_mv=163.9 alevel_mv=1500.1 adc_hz=25004 adc_fs=25007.4 aovr=0 cpps=640.3 edges=234435 rej=224146 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=598.7 isr_hz=20003 isr_us=13.7 nFT=1
+  60.76 >> S
+  60.81  RUN vm=11.56 rpm=600.0/600.0 Vlim=2.20 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.342 ia=-0.801 ib=1.116 idm=0.249 iqm=1.200 iqs=0.062 rph=1.834 n=151611 |ia|pk=1.40 |ib|pk=1.39 vr=1.580 vrpm=587.4 vpps=587.4 src=adc apps=587.4 apulses=58115 app_mv=177.3 alevel_mv=1656.5 adc_hz=25007 adc_fs=25007.4 aovr=0 cpps=627.2 edges=236357 rej=225119 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=598.0 isr_hz=20000 isr_us=13.8 nFT=1
+  63.77 >> YP15
+  63.82  VR source adc; adc hyst 15 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  63.87 >> YA3
+  63.92  VR source adc; adc hyst 15 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  63.97 >> S
+  64.02  RUN vm=11.57 rpm=600.0/600.0 Vlim=2.39 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.369 ia=0.871 ib=-1.132 idm=0.247 iqm=1.197 iqs=0.062 rph=1.998 n=161813 |ia|pk=1.43 |ib|pk=1.39 vr=1.495 vrpm=583.1 vpps=583.1 src=adc apps=583.1 apulses=60009 app_mv=193.6 alevel_mv=1756.1 adc_hz=25005 adc_fs=25007.4 aovr=0 cpps=643.0 edges=238404 rej=226158 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=19998 isr_us=13.7 nFT=1
+  66.98 >> S
+  67.03  RUN vm=11.58 rpm=600.0/600.0 Vlim=2.43 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.381 ia=-0.370 ib=1.128 idm=0.246 iqm=1.199 iqs=0.063 rph=2.025 n=151657 |ia|pk=1.42 |ib|pk=1.39 vr=1.484 vrpm=584.0 vpps=584.0 src=adc apps=584.0 apulses=61784 app_mv=197.0 alevel_mv=1733.6 adc_hz=25012 adc_fs=25007.4 aovr=0 cpps=614.0 edges=240320 rej=227143 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=598.0 isr_hz=20003 isr_us=13.7 nFT=1
+  69.99 >> YP30
+  70.04  VR source adc; adc hyst 30 %, floor 10.0 mV, low-pass 1/8; cmp filter 15 = 6.02 us, lockout 50 %
+  70.09 >> YA2
+  70.14  VR source adc; adc hyst 30 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  70.19 >> S
+  70.25  RUN vm=11.57 rpm=600.0/600.0 Vlim=2.38 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.393 ia=0.049 ib=-1.124 idm=0.244 iqm=1.201 iqs=0.063 rph=1.983 n=161778 |ia|pk=1.43 |ib|pk=1.42 vr=1.839 vrpm=606.5 vpps=606.5 src=adc apps=606.5 apulses=63682 app_mv=219.5 alevel_mv=1425.0 adc_hz=25004 adc_fs=25007.4 aovr=0 cpps=635.6 edges=242361 rej=228138 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.8 isr_hz=19998 isr_us=13.7 nFT=1
+  73.20 >> S
+  73.25  RUN vm=11.53 rpm=600.0/600.0 Vlim=2.34 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.394 ia=0.849 ib=0.397 idm=0.244 iqm=1.201 iqs=0.065 rph=1.948 n=151589 |ia|pk=1.41 |ib|pk=1.39 vr=1.760 vrpm=607.7 vpps=607.7 src=adc apps=607.7 apulses=65488 app_mv=214.2 alevel_mv=1544.4 adc_hz=25011 adc_fs=25007.4 aovr=0 cpps=617.8 edges=244268 rej=229086 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=618.1 isr_hz=20003 isr_us=13.7 nFT=1
+  76.21 >> YP20
+  76.27  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  76.32 >> YA2
+  76.37  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  76.42 >> S
+  76.47  RUN vm=11.53 rpm=600.0/600.0 Vlim=2.15 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.356 ia=-1.059 ib=-0.149 idm=0.244 iqm=1.203 iqs=0.065 rph=1.786 n=161785 |ia|pk=1.42 |ib|pk=1.39 vr=1.760 vrpm=599.9 vpps=599.9 src=adc apps=599.9 apulses=67416 app_mv=218.2 alevel_mv=1528.7 adc_hz=25005 adc_fs=25007.4 aovr=0 cpps=639.9 edges=246315 rej=230156 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.8 isr_hz=19998 isr_us=13.7 nFT=1
+  79.43 >> S
+  79.48  RUN vm=11.55 rpm=600.0/600.0 Vlim=2.14 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.344 ia=1.226 ib=-0.669 idm=0.241 iqm=1.200 iqs=0.065 rph=1.783 n=151593 |ia|pk=1.42 |ib|pk=1.39 vr=1.554 vrpm=598.3 vpps=598.3 src=adc apps=598.3 apulses=69222 app_mv=247.2 alevel_mv=1731.7 adc_hz=25006 adc_fs=25007.4 aovr=0 cpps=638.2 edges=248215 rej=231110 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=598.0 isr_hz=19999 isr_us=13.7 nFT=1
+  82.44 >> YP15
+  82.49  VR source adc; adc hyst 15 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  82.54 >> YA2
+  82.59  VR source adc; adc hyst 15 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  82.64 >> S
+  82.69  RUN vm=11.56 rpm=600.0/600.0 Vlim=2.31 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.347 ia=-1.142 ib=0.774 idm=0.240 iqm=1.197 iqs=0.066 rph=1.933 n=161746 |ia|pk=1.44 |ib|pk=1.41 vr=1.519 vrpm=589.1 vpps=589.1 src=adc apps=589.1 apulses=71147 app_mv=240.6 alevel_mv=1725.4 adc_hz=25006 adc_fs=25007.4 aovr=0 cpps=639.2 edges=250238 rej=232152 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.8 isr_hz=19999 isr_us=13.7 nFT=1
+  85.65 >> S
+  85.70  RUN vm=11.55 rpm=600.0/600.0 Vlim=2.34 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.363 ia=0.998 ib=-0.973 idm=0.238 iqm=1.200 iqs=0.067 rph=1.950 n=151679 |ia|pk=1.43 |ib|pk=1.41 vr=1.747 vrpm=588.7 vpps=588.7 src=adc apps=588.7 apulses=72953 app_mv=230.4 alevel_mv=1632.9 adc_hz=25010 adc_fs=25007.4 aovr=0 cpps=599.0 edges=252140 rej=233114 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.8 isr_hz=20002 isr_us=13.7 nFT=1
+  88.66 >> YP20
+  88.71  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  88.76 >> YA1
+  88.81  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/2; cmp filter 15 = 6.02 us, lockout 50 %
+  88.86 >> S
+  88.91  RUN vm=11.55 rpm=600.0/600.0 Vlim=2.49 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.395 ia=-1.109 ib=1.082 idm=0.233 iqm=1.198 iqs=0.067 rph=2.075 n=161777 |ia|pk=1.43 |ib|pk=1.41 vr=1.721 vrpm=597.3 vpps=597.3 src=adc apps=597.3 apulses=74880 app_mv=253.5 alevel_mv=1554.8 adc_hz=25011 adc_fs=25007.4 aovr=0 cpps=626.7 edges=254212 rej=234182 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=19997 isr_us=13.8 nFT=1
+  91.87 >> S
+  91.92  RUN vm=11.64 rpm=600.0/600.0 Vlim=2.49 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=0.399 ia=0.778 ib=-1.180 idm=0.234 iqm=1.200 iqs=0.068 rph=2.076 n=151654 |ia|pk=1.42 |ib|pk=1.41 vr=1.517 vrpm=596.2 vpps=596.2 src=adc apps=596.2 apulses=76687 app_mv=240.4 alevel_mv=1788.5 adc_hz=25008 adc_fs=25007.4 aovr=0 cpps=606.1 edges=256132 rej=235140 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.8 isr_hz=20001 isr_us=13.7 nFT=1
+  94.88 >> YP20
+  94.93  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/2; cmp filter 15 = 6.02 us, lockout 50 %
+  94.98 >> YA2
+  95.03  VR source adc; adc hyst 20 %, floor 10.0 mV, low-pass 1/4; cmp filter 15 = 6.02 us, lockout 50 %
+  95.09 >> E0
+  95.14  DISABLED: by command (vmmin=11.12)
+  95.29 >> S
+  95.34  OFF vm=11.50 rpm=0.0/0.0 Vlim=2.41 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.003 ib=0.006 idm=0.232 iqm=1.201 iqs=0.069 rph=2.008 n=161798 |ia|pk=1.44 |ib|pk=1.41 vr=1.532 vrpm=611.8 vpps=611.8 src=adc apps=611.8 apulses=78739 app_mv=238.8 alevel_mv=1604.1 adc_hz=25011 adc_fs=25007.4 aovr=0 cpps=662.3 edges=258307 rej=236193 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=562.6 isr_hz=19999 isr_us=13.8 nFT=1
+  96.29 >> S
+  96.34  OFF vm=11.50 rpm=0.0/0.0 Vlim=2.41 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.005 ib=-0.004 |ia|pk=0.04 |ib|pk=0.04 vr=1.711 vrpm=603.1 vpps=603.1 src=adc apps=603.1 apulses=79348 app_mv=213.3 alevel_mv=1713.9 adc_hz=25006 adc_fs=25007.4 aovr=0 cpps=653.2 edges=258951 rej=236504 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20014 isr_us=0.3 nFT=1
+  97.29 >> S
+  97.34  OFF vm=11.52 rpm=0.0/0.0 Vlim=2.41 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=-0.003 ia=-0.007 ib=0.000 |ia|pk=0.04 |ib|pk=0.04 vr=1.671 vrpm=595.1 vpps=595.1 src=adc apps=595.1 apulses=79948 app_mv=209.1 alevel_mv=1642.5 adc_hz=25004 adc_fs=25007.4 aovr=0 cpps=619.2 edges=259619 rej=236770 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19997 isr_us=0.3 nFT=1
+  98.30 >> S
+  98.35  OFF vm=11.50 rpm=0.0/0.0 Vlim=2.41 vmmin=11.12 cap=5.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.005 ib=-0.002 |ia|pk=0.04 |ib|pk=0.04 vr=1.718 vrpm=586.1 vpps=586.1 src=adc apps=586.1 apulses=80539 app_mv=245.2 alevel_mv=1709.9 adc_hz=25008 adc_fs=25007.4 aovr=0 cpps=635.9 edges=260273 rej=237042 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20001 isr_us=0.3 nFT=1
+  99.35  DISABLED: by command (vmmin=11.12)

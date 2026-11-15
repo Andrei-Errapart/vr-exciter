@@ -1,0 +1,343 @@
+   0.30 >> L1000
+   0.60 >> I1.2
+   0.65 Iset 1.20
+    0.9  I1.2 -> Iset 1.20
+   0.90 >> J1.3
+   0.95 Jboost 1.30
+    1.2  J1.3 -> Jboost 1.30
+   1.21 >> V6
+   1.26 Vcap 6.00
+    1.5  V6 -> Vcap 6.00
+   1.51 >> A5
+   1.81 >> T0
+   2.11 >> K1
+   2.41 >> CT0
+   2.46 closed loop: mode OL, tracker not learned, not locked (shift 0, margin 0.00, corrections 0), offset 0.0 deg (spread 0.0), trim 0.0 deg, lead 40 us, speed 0.0 rpm, uq 0.00 V, PI 0.0050 / 0.0200
+    2.7  CT0 -> closed loop: mode OL, tracker not learned, not locked (shift 0, margin 0.00, corrections 0), offset 0.0 deg (spread 0.0), trim 0.0 deg, lead 40 us, speed 0.0 rpm, uq 0.00 V, PI 0.0050 / 0.0200
+   2.71 >> S
+   2.76 OFF vm=11.74 rpm=0.0/0.0 Vlim=1.00 vmmin=99.00 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.004 ib=0.000 |ia|pk=0.04 |ib|pk=0.04 vr=1.645 vrpm=0.0 vpps=0.0 src=adc apps=0.0 apulses=13 app_mv=0.0 alp=8 alevel_mv=1638.7 adc_hz=25004 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=12 shift=0 marg=0.00 corr=0 lag=0.0 cpps=371.7 edges=26769 rej=12812 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20002 isr_us=6.2 nFT=1
+   3.21 >> E1
+    3.2  E1
+   3.21 >> F15
+   3.21 >> I1.2
+   3.21 >> R600
+    3.2  ramp: R600 F15 I1.2, hold 3 s
+   3.21 >> S
+   3.27 enabled, run 1 (I=1.20 J=1.30 Vcap=6.0 A=5 F=0 R=0)
+   3.27 Iset 1.20
+   3.27 target rpm 600.00
+   3.27 ALIGN vm=11.73 rpm=0.0/600.0 Vlim=0.50 vmmin=99.00 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.004 ib=0.165 |ia|pk=0.04 |ib|pk=0.04 vr=1.631 vrpm=0.0 vpps=0.0 src=adc apps=0.0 apulses=13 app_mv=0.0 alp=8 alevel_mv=1638.5 adc_hz=25020 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=12 shift=0 marg=0.00 corr=0 lag=0.0 cpps=278.4 edges=26939 rej=12894 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20014 isr_us=11.7 nFT=1
+    4.2  firmware: enabled, run 1 (I=1.20 J=1.30 Vcap=6.0 A=5 F=0 R=0)
+    4.2  firmware: Iset 1.20
+    4.2  firmware: target rpm 600.00
+   4.22 >> S
+   4.27 RUN vm=11.57 rpm=0.0/600.0 Vlim=2.30 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.388 ia=-0.004 ib=1.122 idm=-0.008 iqm=1.214 iqs=0.190 rph=1.898 n=74023 |ia|pk=0.12 |ib|pk=1.25 vr=1.638 vrpm=0.0 vpps=0.0 src=adc apps=0.0 apulses=20 app_mv=5.3 alp=8 alevel_mv=1627.5 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=19 shift=0 marg=0.00 corr=0 lag=0.0 cpps=0.0 edges=26941 rej=12895 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19986 isr_us=14.1 nFT=1
+    5.2  RUN   OL rpm    0.0 B    7.0        trk    0.0  V 2.30 iq  1.21 id -0.01  vm 11.57 ibus 0.39  lrn 0 lbl 19 shift   0 marg 0.00 corr 0 lag    0.0
+   5.22 >> S
+   5.27 RUN vm=11.58 rpm=5.1/600.0 Vlim=2.31 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.380 ia=-1.140 ib=1.120 idm=-0.003 iqm=1.295 iqs=0.045 rph=1.784 n=63170 |ia|pk=1.22 |ib|pk=1.40 vr=1.643 vrpm=0.0 vpps=0.0 src=adc apps=0.0 apulses=24 app_mv=3.5 alp=8 alevel_mv=1634.3 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=23 shift=0 marg=0.00 corr=0 lag=0.0 cpps=0.0 edges=26943 rej=12896 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=16.1 nFT=1
+    6.2  RUN   OL rpm    5.1 B    4.0        trk    0.0  V 2.31 iq  1.29 id -0.00  vm 11.58 ibus 0.38  lrn 0 lbl 23 shift   0 marg 0.00 corr 0 lag    0.0
+   6.23 >> S
+   6.28 RUN vm=11.58 rpm=10.1/600.0 Vlim=2.30 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.366 ia=1.217 ib=-1.140 idm=-0.002 iqm=1.288 iqs=0.053 rph=1.783 n=53238 |ia|pk=1.43 |ib|pk=1.38 vr=1.646 vrpm=0.0 vpps=0.0 src=adc apps=0.0 apulses=30 app_mv=0.0 alp=8 alevel_mv=1642.4 adc_hz=24988 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=29 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1921.3 edges=27860 rej=13160 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20004 isr_us=16.4 nFT=1
+    7.2  RUN   OL rpm   10.1 B    6.0        trk    0.0  V 2.30 iq  1.29 id -0.00  vm 11.58 ibus 0.37  lrn 0 lbl 29 shift   0 marg 0.00 corr 0 lag    0.0
+   7.23 >> S
+   7.28 RUN vm=11.59 rpm=15.1/600.0 Vlim=2.27 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.365 ia=0.101 ib=-1.076 idm=0.003 iqm=1.280 iqs=0.052 rph=1.777 n=51990 |ia|pk=1.42 |ib|pk=1.40 vr=1.641 vrpm=0.0 vpps=0.0 src=adc apps=0.0 apulses=37 app_mv=2.5 alp=8 alevel_mv=1642.9 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=36 shift=0 marg=0.00 corr=0 lag=0.0 cpps=913.2 edges=28444 rej=13371 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20003 isr_us=16.4 nFT=1
+    8.2  RUN   OL rpm   15.1 B    7.0        trk    0.0  V 2.27 iq  1.28 id  0.00  vm 11.59 ibus 0.36  lrn 0 lbl 36 shift   0 marg 0.00 corr 0 lag    0.0
+   8.24 >> S
+   8.29 RUN vm=11.59 rpm=20.1/600.0 Vlim=2.29 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.359 ia=1.201 ib=-0.997 idm=0.006 iqm=1.270 iqs=0.054 rph=1.803 n=51775 |ia|pk=1.43 |ib|pk=1.39 vr=1.650 vrpm=12.5 vpps=12.5 src=adc apps=12.5 apulses=47 app_mv=6.5 alp=8 alevel_mv=1636.2 adc_hz=25002 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=46 shift=0 marg=0.00 corr=0 lag=0.0 cpps=2481.8 edges=29335 rej=13671 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19996 isr_us=16.5 nFT=1
+    9.2  RUN   OL rpm   20.1 B   10.0        trk    0.0  V 2.29 iq  1.27 id  0.01  vm 11.59 ibus 0.36  lrn 0 lbl 46 shift   0 marg 0.00 corr 0 lag    0.0
+   9.24 >> S
+   9.29 RUN vm=11.60 rpm=25.1/600.0 Vlim=2.30 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.371 ia=-1.146 ib=0.875 idm=0.008 iqm=1.262 iqs=0.053 rph=1.820 n=53082 |ia|pk=1.42 |ib|pk=1.37 vr=1.642 vrpm=33.1 vpps=33.1 src=adc apps=33.1 apulses=65 app_mv=16.4 alp=8 alevel_mv=1634.9 adc_hz=25024 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=0.0 lrn=0 lbl=4 shift=0 marg=0.00 corr=0 lag=0.0 cpps=0.0 edges=29853 rej=13826 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=19994 isr_us=16.5 nFT=1
+   10.2  RUN   OL rpm   25.1 B   17.9 -20.6% trk    0.0  V 2.30 iq  1.26 id  0.01  vm 11.60 ibus 0.37  lrn 0 lbl  4 shift   0 marg 0.00 corr 0 lag    0.0
+  10.24 >> S
+  10.29 RUN vm=11.60 rpm=30.1/600.0 Vlim=2.28 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.362 ia=-0.404 ib=1.205 idm=0.010 iqm=1.255 iqs=0.053 rph=1.820 n=52074 |ia|pk=1.42 |ib|pk=1.37 vr=1.646 vrpm=36.2 vpps=36.2 src=adc apps=36.2 apulses=91 app_mv=21.6 alp=8 alevel_mv=1643.5 adc_hz=24994 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=22.1 lrn=0 lbl=30 shift=0 marg=0.00 corr=0 lag=0.0 cpps=0.0 edges=30605 rej=14351 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20009 isr_us=18.4 nFT=1
+   11.2  RUN   OL rpm   30.1 B   25.9  -6.2% trk   22.1  V 2.28 iq  1.25 id  0.01  vm 11.60 ibus 0.36  lrn 0 lbl 30 shift   0 marg 0.00 corr 0 lag    0.0
+  11.25 >> S
+  11.30 RUN vm=11.59 rpm=35.2/600.0 Vlim=2.28 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.356 ia=-1.261 ib=0.701 idm=0.011 iqm=1.246 iqs=0.053 rph=1.829 n=52661 |ia|pk=1.40 |ib|pk=1.36 vr=1.642 vrpm=42.5 vpps=42.5 src=adc apps=42.5 apulses=124 app_mv=22.9 alp=8 alevel_mv=1648.3 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=32.7 lrn=0 lbl=3 shift=0 marg=0.00 corr=0 lag=0.0 cpps=27.0 edges=31391 rej=14753 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.7 isr_hz=19986 isr_us=18.4 nFT=1
+   12.3  RUN   OL rpm   35.2 B   32.9  +0.7% trk   32.7  V 2.28 iq  1.25 id  0.01  vm 11.59 ibus 0.36  lrn 0 lbl  3 shift   0 marg 0.00 corr 0 lag    0.0
+  12.25 >> S
+  12.30 RUN vm=11.59 rpm=40.2/600.0 Vlim=2.26 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.351 ia=1.231 ib=-0.568 idm=0.014 iqm=1.238 iqs=0.053 rph=1.824 n=51768 |ia|pk=1.38 |ib|pk=1.36 vr=1.636 vrpm=47.5 vpps=47.5 src=adc apps=47.5 apulses=160 app_mv=23.6 alp=8 alevel_mv=1632.2 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=38.1 lrn=0 lbl=39 shift=0 marg=0.00 corr=0 lag=0.0 cpps=2356.6 edges=32415 rej=15874 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20007 isr_us=18.4 nFT=1
+   13.3  RUN   OL rpm   40.2 B   35.8  -4.9% trk   38.1  V 2.26 iq  1.24 id  0.01  vm 11.59 ibus 0.35  lrn 0 lbl 39 shift   0 marg 0.00 corr 0 lag    0.0
+  13.26 >> S
+  13.31 RUN vm=11.60 rpm=45.3/600.0 Vlim=2.25 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.346 ia=0.831 ib=-1.124 idm=0.016 iqm=1.229 iqs=0.052 rph=1.830 n=52492 |ia|pk=1.37 |ib|pk=1.35 vr=1.617 vrpm=52.0 vpps=52.0 src=adc apps=52.0 apulses=203 app_mv=28.9 alp=8 alevel_mv=1626.9 adc_hz=25006 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=44.3 lrn=0 lbl=22 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1512.3 edges=33207 rej=16854 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=20000 isr_us=18.4 nFT=1
+   14.3  RUN   OL rpm   45.3 B   42.8  +0.2% trk   44.3  V 2.25 iq  1.23 id  0.02  vm 11.60 ibus 0.35  lrn 0 lbl 22 shift   0 marg 0.00 corr 0 lag    0.0
+  14.26 >> S
+  14.31 RUN vm=11.60 rpm=50.3/600.0 Vlim=2.24 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.355 ia=1.026 ib=-0.068 idm=0.018 iqm=1.221 iqs=0.052 rph=1.833 n=52178 |ia|pk=1.36 |ib|pk=1.34 vr=1.620 vrpm=55.6 vpps=55.6 src=adc apps=55.6 apulses=250 app_mv=27.8 alp=8 alevel_mv=1628.0 adc_hz=25004 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=49.9 lrn=0 lbl=9 shift=0 marg=0.00 corr=0 lag=0.0 cpps=728.0 edges=34086 rej=18703 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=19996 isr_us=18.3 nFT=1
+   15.3  RUN   OL rpm   50.3 B   46.8  -2.1% trk   49.9  V 2.24 iq  1.22 id  0.02  vm 11.60 ibus 0.35  lrn 0 lbl  9 shift   0 marg 0.00 corr 0 lag    0.0
+  15.26 >> S
+  15.31 RUN vm=11.59 rpm=55.4/600.0 Vlim=2.23 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.352 ia=-0.872 ib=-0.225 idm=0.020 iqm=1.212 iqs=0.052 rph=1.842 n=52061 |ia|pk=1.36 |ib|pk=1.33 vr=1.622 vrpm=58.4 vpps=58.4 src=adc apps=58.4 apulses=302 app_mv=29.3 alp=8 alevel_mv=1623.1 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=54.9 lrn=0 lbl=1 shift=0 marg=0.00 corr=0 lag=0.0 cpps=640.5 edges=35137 rej=20492 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=20005 isr_us=18.3 nFT=1
+   16.3  RUN   OL rpm   55.4 B   51.8  -2.0% trk   54.9  V 2.23 iq  1.21 id  0.02  vm 11.59 ibus 0.35  lrn 0 lbl  1 shift   0 marg 0.00 corr 0 lag    0.0
+  16.27 >> S
+  16.32 RUN vm=11.60 rpm=61.3/600.0 Vlim=2.23 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.345 ia=-1.297 ib=0.697 idm=0.023 iqm=1.204 iqs=0.051 rph=1.851 n=51728 |ia|pk=1.34 |ib|pk=1.32 vr=1.625 vrpm=62.3 vpps=62.3 src=adc apps=62.3 apulses=360 app_mv=35.1 alp=8 alevel_mv=1627.4 adc_hz=24988 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=60.5 lrn=0 lbl=59 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1478.5 edges=36536 rej=22725 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=20004 isr_us=18.4 nFT=1
+   17.3  RUN   OL rpm   61.3 B   57.8  -1.0% trk   60.5  V 2.23 iq  1.20 id  0.02  vm 11.60 ibus 0.34  lrn 0 lbl 59 shift   0 marg 0.00 corr 0 lag    0.0
+  17.27 >> S
+  17.32 RUN vm=11.60 rpm=76.4/600.0 Vlim=2.23 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.339 ia=0.990 ib=0.135 idm=0.027 iqm=1.200 iqs=0.051 rph=1.856 n=51689 |ia|pk=1.34 |ib|pk=1.31 vr=1.601 vrpm=77.4 vpps=77.4 src=adc apps=77.4 apulses=429 app_mv=39.9 alp=8 alevel_mv=1608.4 adc_hz=25013 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=76.3 lrn=0 lbl=8 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1080.9 edges=38044 rej=25526 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=20005 isr_us=18.3 nFT=1
+   18.3  RUN   OL rpm   76.4 B   68.7  -0.2% trk   76.3  V 2.23 iq  1.20 id  0.03  vm 11.60 ibus 0.34  lrn 0 lbl  8 shift   0 marg 0.00 corr 0 lag    0.0
+  18.28 >> S
+  18.33 RUN vm=11.60 rpm=91.4/600.0 Vlim=2.24 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.343 ia=-0.275 ib=-0.850 idm=0.033 iqm=1.200 iqs=0.052 rph=1.864 n=51489 |ia|pk=1.37 |ib|pk=1.32 vr=1.628 vrpm=91.1 vpps=91.1 src=adc apps=91.1 apulses=513 app_mv=46.7 alp=8 alevel_mv=1627.3 adc_hz=25009 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=91.4 lrn=0 lbl=32 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1769.0 edges=39430 rej=28619 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=59.8 isr_hz=20000 isr_us=18.3 nFT=1
+   19.3  RUN   OL rpm   91.4 B   83.7  -0.2% trk   91.4  V 2.24 iq  1.20 id  0.03  vm 11.60 ibus 0.34  lrn 0 lbl 32 shift   0 marg 0.00 corr 0 lag    0.0
+  19.28 >> S
+  19.33 RUN vm=11.59 rpm=106.4/600.0 Vlim=2.25 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.335 ia=-0.588 ib=1.211 idm=0.039 iqm=1.199 iqs=0.052 rph=1.876 n=51791 |ia|pk=1.34 |ib|pk=1.32 vr=1.650 vrpm=105.2 vpps=105.2 src=adc apps=105.2 apulses=613 app_mv=52.8 alp=8 alevel_mv=1641.3 adc_hz=25004 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=106.9 lrn=0 lbl=12 shift=0 marg=0.00 corr=0 lag=0.0 cpps=909.0 edges=40911 rej=31489 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=119.5 isr_hz=19997 isr_us=18.3 nFT=1
+   20.3  RUN   OL rpm  106.4 B   99.6  +0.7% trk  106.9  V 2.25 iq  1.20 id  0.04  vm 11.59 ibus 0.34  lrn 0 lbl 12 shift   0 marg 0.00 corr 0 lag    0.0
+  20.28 >> S
+  20.33 RUN vm=11.60 rpm=121.4/600.0 Vlim=2.25 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.339 ia=1.135 ib=-0.882 idm=0.045 iqm=1.200 iqs=0.052 rph=1.880 n=51820 |ia|pk=1.36 |ib|pk=1.32 vr=1.671 vrpm=118.6 vpps=118.6 src=adc apps=118.6 apulses=727 app_mv=59.6 alp=8 alevel_mv=1673.4 adc_hz=25008 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=122.0 lrn=0 lbl=6 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1331.5 edges=42414 rej=33796 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=119.5 isr_hz=20001 isr_us=18.3 nFT=1
+   21.3  RUN   OL rpm  121.4 B  113.5  -0.3% trk  122.0  V 2.25 iq  1.20 id  0.04  vm 11.60 ibus 0.34  lrn 0 lbl  6 shift   0 marg 0.00 corr 0 lag    0.0
+  21.29 >> S
+  21.34 RUN vm=11.60 rpm=136.4/600.0 Vlim=2.27 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.345 ia=-1.031 ib=-0.024 idm=0.051 iqm=1.199 iqs=0.052 rph=1.890 n=51924 |ia|pk=1.34 |ib|pk=1.32 vr=1.609 vrpm=132.7 vpps=132.7 src=adc apps=132.7 apulses=856 app_mv=65.4 alp=8 alevel_mv=1606.0 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=136.2 lrn=0 lbl=15 shift=0 marg=0.00 corr=0 lag=0.0 cpps=1339.4 edges=43470 rej=35964 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=119.4 isr_hz=19987 isr_us=18.3 nFT=1
+   22.3  RUN   OL rpm  136.4 B  128.3  -0.5% trk  136.2  V 2.27 iq  1.20 id  0.05  vm 11.60 ibus 0.34  lrn 0 lbl 15 shift   0 marg 0.00 corr 0 lag    0.0
+  22.29 >> S
+  22.34 RUN vm=11.60 rpm=151.5/600.0 Vlim=2.27 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.347 ia=0.140 ib=0.951 idm=0.058 iqm=1.200 iqs=0.052 rph=1.892 n=51991 |ia|pk=1.35 |ib|pk=1.33 vr=1.638 vrpm=147.0 vpps=147.0 src=adc apps=147.0 apulses=1001 app_mv=65.3 alp=8 alevel_mv=1642.4 adc_hz=25018 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=150.6 lrn=0 lbl=40 shift=0 marg=0.00 corr=0 lag=0.0 cpps=999.1 edges=44381 rej=37980 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=119.4 isr_hz=20008 isr_us=18.3 nFT=1
+   23.3  RUN   OL rpm  151.5 B  144.4  +0.3% trk  150.6  V 2.27 iq  1.20 id  0.06  vm 11.60 ibus 0.35  lrn 0 lbl 40 shift   0 marg 0.00 corr 0 lag    0.0
+  23.30 >> S
+  23.35 RUN vm=11.60 rpm=166.5/600.0 Vlim=2.28 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.355 ia=0.845 ib=-1.144 idm=0.064 iqm=1.200 iqs=0.052 rph=1.899 n=52187 |ia|pk=1.34 |ib|pk=1.33 vr=1.688 vrpm=159.4 vpps=159.4 src=adc apps=159.4 apulses=1161 app_mv=86.0 alp=8 alevel_mv=1686.3 adc_hz=24993 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=166.0 lrn=0 lbl=20 shift=0 marg=0.00 corr=0 lag=0.0 cpps=332.8 edges=44785 rej=40137 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=179.3 isr_hz=20008 isr_us=18.4 nFT=1
+   24.3  RUN   OL rpm  166.5 B  159.3  +0.2% trk  166.0  V 2.28 iq  1.20 id  0.06  vm 11.60 ibus 0.35  lrn 0 lbl 20 shift   0 marg 0.00 corr 0 lag    0.0
+  24.30 >> S
+  24.35 RUN vm=11.60 rpm=181.5/600.0 Vlim=2.29 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.347 ia=-1.110 ib=0.431 idm=0.070 iqm=1.200 iqs=0.052 rph=1.907 n=52176 |ia|pk=1.34 |ib|pk=1.33 vr=1.595 vrpm=175.4 vpps=175.4 src=adc apps=175.4 apulses=1335 app_mv=79.4 alp=8 alevel_mv=1585.5 adc_hz=25005 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=178.2 lrn=0 lbl=14 shift=0 marg=0.00 corr=0 lag=0.0 cpps=352.8 edges=45098 rej=42141 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=179.3 isr_hz=19999 isr_us=18.3 nFT=1
+   25.3  RUN   OL rpm  181.5 B  173.3  -0.4% trk  178.2  V 2.29 iq  1.20 id  0.07  vm 11.60 ibus 0.35  lrn 0 lbl 14 shift   0 marg 0.00 corr 0 lag    0.0
+  25.31 >> S
+  25.36 RUN vm=11.60 rpm=196.5/600.0 Vlim=2.29 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.357 ia=0.532 ib=0.588 idm=0.076 iqm=1.200 iqs=0.053 rph=1.910 n=52159 |ia|pk=1.35 |ib|pk=1.33 vr=1.612 vrpm=189.7 vpps=189.7 src=adc apps=189.7 apulses=1525 app_mv=101.2 alp=8 alevel_mv=1613.2 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=193.8 lrn=0 lbl=24 shift=0 marg=0.00 corr=0 lag=0.0 cpps=359.2 edges=45464 rej=43950 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=179.1 isr_hz=19984 isr_us=18.3 nFT=1
+   26.3  RUN   OL rpm  196.5 B  189.2  +0.1% trk  193.8  V 2.29 iq  1.20 id  0.08  vm 11.60 ibus 0.36  lrn 0 lbl 24 shift   0 marg 0.00 corr 0 lag    0.0
+  26.31 >> S
+  26.36 RUN vm=11.60 rpm=211.5/600.0 Vlim=2.30 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.343 ia=0.546 ib=-1.193 idm=0.082 iqm=1.200 iqs=0.053 rph=1.914 n=52176 |ia|pk=1.35 |ib|pk=1.33 vr=1.622 vrpm=203.5 vpps=203.5 src=adc apps=203.5 apulses=1730 app_mv=86.7 alp=8 alevel_mv=1619.7 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=209.6 lrn=0 lbl=49 shift=0 marg=0.00 corr=0 lag=0.0 cpps=450.8 edges=45842 rej=45523 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=179.3 isr_hz=20006 isr_us=18.3 nFT=1
+   27.3  RUN   OL rpm  211.5 B  204.1  +0.1% trk  209.6  V 2.30 iq  1.20 id  0.08  vm 11.60 ibus 0.34  lrn 0 lbl 49 shift   0 marg 0.00 corr 0 lag    0.0
+  27.31 >> S
+  27.36 RUN vm=11.60 rpm=226.6/600.0 Vlim=2.31 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.350 ia=-1.174 ib=0.629 idm=0.088 iqm=1.200 iqs=0.054 rph=1.922 n=52325 |ia|pk=1.35 |ib|pk=1.34 vr=1.684 vrpm=218.2 vpps=218.2 src=adc apps=218.2 apulses=1950 app_mv=110.6 alp=8 alevel_mv=1683.3 adc_hz=24987 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=224.7 lrn=0 lbl=29 shift=0 marg=0.00 corr=0 lag=0.0 cpps=613.5 edges=46254 rej=46948 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=239.0 isr_hz=20003 isr_us=18.4 nFT=1
+   28.3  RUN   OL rpm  226.6 B  219.1  +0.0% trk  224.7  V 2.31 iq  1.20 id  0.09  vm 11.60 ibus 0.35  lrn 0 lbl 29 shift   0 marg 0.00 corr 0 lag    0.0
+  28.32 >> S
+  28.37 RUN vm=11.60 rpm=241.6/600.0 Vlim=2.31 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.350 ia=0.635 ib=0.518 idm=0.094 iqm=1.200 iqs=0.054 rph=1.923 n=52280 |ia|pk=1.35 |ib|pk=1.34 vr=1.639 vrpm=231.4 vpps=231.4 src=adc apps=231.4 apulses=2185 app_mv=117.7 alp=8 alevel_mv=1637.6 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=237.0 lrn=0 lbl=24 shift=0 marg=0.00 corr=0 lag=0.0 cpps=404.5 edges=46673 rej=48323 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=239.0 isr_hz=20005 isr_us=18.4 nFT=1
+   29.3  RUN   OL rpm  241.6 B  234.0  -0.0% trk  237.0  V 2.31 iq  1.20 id  0.09  vm 11.60 ibus 0.35  lrn 0 lbl 24 shift   0 marg 0.00 corr 0 lag    0.0
+  29.32 >> S
+  29.37 RUN vm=11.60 rpm=256.6/600.0 Vlim=2.31 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.347 ia=0.553 ib=-1.156 idm=0.100 iqm=1.200 iqs=0.054 rph=1.927 n=52273 |ia|pk=1.37 |ib|pk=1.34 vr=1.562 vrpm=245.8 vpps=245.8 src=adc apps=245.8 apulses=2435 app_mv=102.7 alp=8 alevel_mv=1566.5 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=250.3 lrn=0 lbl=34 shift=0 marg=0.00 corr=0 lag=0.0 cpps=419.2 edges=47109 rej=49537 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=239.0 isr_hz=20002 isr_us=18.4 nFT=1
+   30.3  RUN   OL rpm  256.6 B  249.0  -0.1% trk  250.3  V 2.31 iq  1.20 id  0.10  vm 11.60 ibus 0.35  lrn 0 lbl 34 shift   0 marg 0.00 corr 0 lag    0.0
+  30.33 >> S
+  30.38 RUN vm=11.60 rpm=271.9/600.0 Vlim=2.32 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.346 ia=-1.182 ib=0.439 idm=0.105 iqm=1.200 iqs=0.054 rph=1.935 n=52390 |ia|pk=1.35 |ib|pk=1.35 vr=1.669 vrpm=259.5 vpps=259.5 src=adc apps=259.5 apulses=2700 app_mv=120.4 alp=8 alevel_mv=1673.9 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=268.5 lrn=0 lbl=0 shift=0 marg=0.00 corr=0 lag=0.0 cpps=392.3 edges=47543 rej=50657 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=298.5 isr_hz=19985 isr_us=18.3 nFT=1
+   31.3  RUN   OL rpm  271.9 B  263.9  -0.1% trk  268.5  V 2.32 iq  1.20 id  0.10  vm 11.60 ibus 0.35  lrn 0 lbl  0 shift   0 marg 0.00 corr 0 lag    0.0
+  31.33 >> S
+  31.38 RUN vm=11.60 rpm=287.2/600.0 Vlim=2.32 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.364 ia=0.138 ib=0.969 idm=0.112 iqm=1.200 iqs=0.055 rph=1.937 n=52254 |ia|pk=1.36 |ib|pk=1.35 vr=1.582 vrpm=276.4 vpps=276.4 src=adc apps=276.4 apulses=2981 app_mv=108.7 alp=8 alevel_mv=1584.7 adc_hz=25007 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=281.4 lrn=0 lbl=40 shift=0 marg=0.00 corr=0 lag=0.0 cpps=518.6 edges=48003 rej=51672 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=239.0 isr_hz=20001 isr_us=18.3 nFT=1
+   32.3  RUN   OL rpm  287.2 B  279.9  +0.1% trk  281.4  V 2.32 iq  1.20 id  0.11  vm 11.60 ibus 0.36  lrn 0 lbl 40 shift   0 marg 0.00 corr 0 lag    0.0
+  32.34 >> S
+  32.39 RUN vm=11.59 rpm=302.6/600.0 Vlim=2.33 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.347 ia=1.171 ib=-0.749 idm=0.117 iqm=1.200 iqs=0.055 rph=1.939 n=52362 |ia|pk=1.36 |ib|pk=1.35 vr=1.674 vrpm=294.5 vpps=294.5 src=adc apps=294.5 apulses=3277 app_mv=136.3 alp=4 alevel_mv=1689.6 adc_hz=25018 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=297.4 lrn=0 lbl=37 shift=0 marg=0.00 corr=0 lag=0.0 cpps=510.9 edges=48480 rej=52593 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=298.8 isr_hz=20006 isr_us=18.3 nFT=1
+   33.3  RUN   OL rpm  302.6 B  294.7  -0.1% trk  297.4  V 2.33 iq  1.20 id  0.12  vm 11.59 ibus 0.35  lrn 0 lbl 37 shift   0 marg 0.00 corr 0 lag    0.0
+  33.34 >> S
+  33.39 RUN vm=11.60 rpm=317.9/600.0 Vlim=2.33 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.352 ia=-0.076 ib=-0.981 idm=0.123 iqm=1.200 iqs=0.056 rph=1.940 n=52355 |ia|pk=1.39 |ib|pk=1.35 vr=1.633 vrpm=310.1 vpps=310.1 src=adc apps=310.1 apulses=3589 app_mv=130.1 alp=4 alevel_mv=1612.8 adc_hz=24988 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=311.3 lrn=0 lbl=48 shift=0 marg=0.00 corr=0 lag=0.0 cpps=480.0 edges=48966 rej=53415 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=298.8 isr_hz=20005 isr_us=18.4 nFT=1
+   34.3  RUN   OL rpm  317.9 B  310.7  +0.1% trk  311.3  V 2.33 iq  1.20 id  0.12  vm 11.60 ibus 0.35  lrn 0 lbl 48 shift   0 marg 0.00 corr 0 lag    0.0
+  34.34 >> S
+  34.39 RUN vm=11.60 rpm=333.2/600.0 Vlim=2.33 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.345 ia=-1.172 ib=0.391 idm=0.129 iqm=1.200 iqs=0.056 rph=1.945 n=52431 |ia|pk=1.36 |ib|pk=1.36 vr=1.668 vrpm=324.8 vpps=324.8 src=adc apps=324.8 apulses=3916 app_mv=145.1 alp=4 alevel_mv=1652.0 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=326.7 lrn=0 lbl=15 shift=0 marg=0.00 corr=0 lag=0.0 cpps=539.5 edges=49471 rej=54169 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=358.6 isr_hz=20003 isr_us=18.3 nFT=1
+   35.3  RUN   OL rpm  333.2 B  325.6  +0.0% trk  326.7  V 2.33 iq  1.20 id  0.13  vm 11.60 ibus 0.34  lrn 0 lbl 15 shift   0 marg 0.00 corr 0 lag    0.0
+  35.35 >> S
+  35.40 RUN vm=11.60 rpm=348.5/600.0 Vlim=2.34 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.347 ia=-0.745 ib=1.233 idm=0.135 iqm=1.200 iqs=0.056 rph=1.946 n=52358 |ia|pk=1.39 |ib|pk=1.36 vr=1.571 vrpm=340.6 vpps=340.6 src=adc apps=340.6 apulses=4258 app_mv=151.0 alp=4 alevel_mv=1586.7 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=339.5 lrn=0 lbl=58 shift=0 marg=0.00 corr=0 lag=0.0 cpps=529.1 edges=49996 rej=54890 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=358.2 isr_hz=19986 isr_us=18.3 nFT=1
+   36.4  RUN   OL rpm  348.5 B  340.6  -0.1% trk  339.5  V 2.34 iq  1.20 id  0.14  vm 11.60 ibus 0.35  lrn 0 lbl 58 shift   0 marg 0.00 corr 0 lag    0.0
+  36.35 >> S
+  36.40 RUN vm=11.60 rpm=363.8/600.0 Vlim=2.34 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.349 ia=0.373 ib=0.742 idm=0.140 iqm=1.200 iqs=0.057 rph=1.947 n=52315 |ia|pk=1.38 |ib|pk=1.36 vr=1.584 vrpm=353.8 vpps=353.8 src=adc apps=353.8 apulses=4616 app_mv=157.5 alp=4 alevel_mv=1565.2 adc_hz=25017 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=355.6 lrn=0 lbl=55 shift=0 marg=0.00 corr=0 lag=0.0 cpps=542.1 edges=50542 rej=55510 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=358.6 isr_hz=20006 isr_us=18.3 nFT=1
+   37.4  RUN   OL rpm  363.8 B  356.4  +0.1% trk  355.6  V 2.34 iq  1.20 id  0.14  vm 11.60 ibus 0.35  lrn 0 lbl 55 shift   0 marg 0.00 corr 0 lag    0.0
+  37.36 >> S
+  37.41 RUN vm=11.60 rpm=379.1/600.0 Vlim=2.34 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.350 ia=1.046 ib=-0.131 idm=0.146 iqm=1.200 iqs=0.057 rph=1.946 n=52441 |ia|pk=1.38 |ib|pk=1.36 vr=1.534 vrpm=369.1 vpps=369.1 src=adc apps=369.1 apulses=4989 app_mv=155.2 alp=4 alevel_mv=1513.1 adc_hz=24989 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=372.0 lrn=0 lbl=8 shift=0 marg=0.00 corr=0 lag=0.0 cpps=536.3 edges=51080 rej=56094 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=358.6 isr_hz=20005 isr_us=18.4 nFT=1
+   38.4  RUN   OL rpm  379.1 B  371.4  -0.0% trk  372.0  V 2.34 iq  1.20 id  0.15  vm 11.60 ibus 0.35  lrn 0 lbl  8 shift   0 marg 0.00 corr 0 lag    0.0
+  38.36 >> S
+  38.41 RUN vm=11.60 rpm=394.4/600.0 Vlim=2.34 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.344 ia=1.141 ib=-0.850 idm=0.151 iqm=1.200 iqs=0.057 rph=1.947 n=52354 |ia|pk=1.38 |ib|pk=1.38 vr=1.770 vrpm=383.4 vpps=383.4 src=adc apps=383.4 apulses=5378 app_mv=173.1 alp=4 alevel_mv=1782.6 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=386.8 lrn=0 lbl=37 shift=0 marg=0.00 corr=0 lag=0.0 cpps=605.1 edges=51633 rej=56621 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=358.6 isr_hz=20005 isr_us=18.3 nFT=1
+   39.4  RUN   OL rpm  394.4 B  387.3  +0.2% trk  386.8  V 2.34 iq  1.20 id  0.15  vm 11.60 ibus 0.34  lrn 0 lbl 37 shift   0 marg 0.00 corr 0 lag    0.0
+  39.36 >> S
+  39.42 RUN vm=11.60 rpm=409.8/600.0 Vlim=2.34 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.343 ia=0.841 ib=-1.120 idm=0.157 iqm=1.200 iqs=0.058 rph=1.947 n=52418 |ia|pk=1.37 |ib|pk=1.38 vr=1.693 vrpm=398.8 vpps=398.8 src=adc apps=398.8 apulses=5782 app_mv=182.6 alp=4 alevel_mv=1709.0 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=400.5 lrn=0 lbl=21 shift=0 marg=0.00 corr=0 lag=0.0 cpps=520.3 edges=52193 rej=57134 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=417.9 isr_hz=19985 isr_us=19.0 nFT=1
+   40.4  RUN   OL rpm  409.8 B  402.3  +0.1% trk  400.5  V 2.34 iq  1.20 id  0.16  vm 11.60 ibus 0.34  lrn 0 lbl 21 shift   0 marg 0.00 corr 0 lag    0.0
+  40.37 >> S
+  40.42 RUN vm=11.60 rpm=425.1/600.0 Vlim=2.33 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.353 ia=0.504 ib=-1.164 idm=0.162 iqm=1.200 iqs=0.059 rph=1.945 n=52403 |ia|pk=1.38 |ib|pk=1.38 vr=1.733 vrpm=412.9 vpps=412.9 src=adc apps=412.9 apulses=6201 app_mv=195.2 alp=4 alevel_mv=1700.0 adc_hz=24991 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=416.2 lrn=0 lbl=20 shift=0 marg=0.00 corr=0 lag=0.0 cpps=546.4 edges=52759 rej=57618 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=418.3 isr_hz=20006 isr_us=18.3 nFT=1
+   41.4  RUN   OL rpm  425.1 B  417.2  -0.1% trk  416.2  V 2.33 iq  1.20 id  0.16  vm 11.60 ibus 0.35  lrn 0 lbl 20 shift   0 marg 0.00 corr 0 lag    0.0
+  41.37 >> S
+  41.42 RUN vm=11.60 rpm=440.4/600.0 Vlim=2.33 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.344 ia=0.331 ib=-1.203 idm=0.167 iqm=1.200 iqs=0.059 rph=1.943 n=52374 |ia|pk=1.38 |ib|pk=1.37 vr=1.547 vrpm=428.3 vpps=428.3 src=adc apps=428.3 apulses=6635 app_mv=172.6 alp=4 alevel_mv=1572.3 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=427.3 lrn=0 lbl=35 shift=0 marg=0.00 corr=0 lag=0.0 cpps=558.8 edges=53340 rej=58078 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=418.3 isr_hz=20007 isr_us=18.3 nFT=1
+   42.4  RUN   OL rpm  440.4 B  432.1  -0.1% trk  427.3  V 2.33 iq  1.20 id  0.17  vm 11.60 ibus 0.34  lrn 0 lbl 35 shift   0 marg 0.00 corr 0 lag    0.0
+  42.38 >> S
+  42.43 RUN vm=11.60 rpm=455.7/600.0 Vlim=2.33 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.346 ia=0.285 ib=-1.136 idm=0.172 iqm=1.200 iqs=0.060 rph=1.940 n=52437 |ia|pk=1.38 |ib|pk=1.38 vr=1.727 vrpm=443.5 vpps=443.5 src=adc apps=443.5 apulses=7086 app_mv=193.3 alp=4 alevel_mv=1743.9 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=443.4 lrn=0 lbl=5 shift=0 marg=0.00 corr=0 lag=0.0 cpps=556.3 edges=53915 rej=58509 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=477.6 isr_hz=19986 isr_us=18.3 nFT=1
+   43.4  RUN   OL rpm  455.7 B  449.1  +0.2% trk  443.4  V 2.33 iq  1.20 id  0.17  vm 11.60 ibus 0.35  lrn 0 lbl  5 shift   0 marg 0.00 corr 0 lag    0.0
+  43.38 >> S
+  43.43 RUN vm=11.60 rpm=471.0/600.0 Vlim=2.32 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.340 ia=0.462 ib=-1.211 idm=0.177 iqm=1.200 iqs=0.061 rph=1.936 n=52337 |ia|pk=1.39 |ib|pk=1.39 vr=1.544 vrpm=458.1 vpps=458.1 src=adc apps=458.1 apulses=7551 app_mv=181.6 alp=4 alevel_mv=1526.2 adc_hz=25013 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=465.1 lrn=0 lbl=50 shift=0 marg=0.00 corr=0 lag=0.0 cpps=587.7 edges=54489 rej=58931 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=418.3 isr_hz=20005 isr_us=18.9 nFT=1
+   44.4  RUN   OL rpm  471.0 B  463.1  -0.1% trk  465.1  V 2.32 iq  1.20 id  0.18  vm 11.60 ibus 0.34  lrn 0 lbl 50 shift   0 marg 0.00 corr 0 lag    0.0
+  44.39 >> S
+  44.44 RUN vm=11.60 rpm=486.4/600.0 Vlim=2.32 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.343 ia=0.712 ib=-1.118 idm=0.182 iqm=1.200 iqs=0.061 rph=1.930 n=52392 |ia|pk=1.41 |ib|pk=1.38 vr=1.583 vrpm=474.4 vpps=474.4 src=adc apps=474.4 apulses=8032 app_mv=180.2 alp=4 alevel_mv=1557.3 adc_hz=24988 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=469.3 lrn=0 lbl=51 shift=0 marg=0.00 corr=0 lag=0.0 cpps=591.0 edges=55061 rej=59336 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=478.1 isr_hz=20004 isr_us=19.1 nFT=1
+   45.4  RUN   OL rpm  486.4 B  479.0  +0.1% trk  469.3  V 2.32 iq  1.20 id  0.18  vm 11.60 ibus 0.34  lrn 0 lbl 51 shift   0 marg 0.00 corr 0 lag    0.0
+  45.39 >> S
+  45.44 RUN vm=11.60 rpm=501.7/600.0 Vlim=2.31 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.334 ia=1.066 ib=-0.955 idm=0.187 iqm=1.200 iqs=0.062 rph=1.923 n=52436 |ia|pk=1.40 |ib|pk=1.39 vr=1.592 vrpm=489.8 vpps=489.8 src=adc apps=489.8 apulses=8528 app_mv=204.9 alp=4 alevel_mv=1607.0 adc_hz=25013 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=486.4 lrn=0 lbl=7 shift=0 marg=0.00 corr=0 lag=0.0 cpps=554.1 edges=55639 rej=59741 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=537.8 isr_hz=20005 isr_us=18.3 nFT=1
+   46.4  RUN   OL rpm  501.7 B  493.9  -0.0% trk  486.4  V 2.31 iq  1.20 id  0.19  vm 11.60 ibus 0.33  lrn 0 lbl  7 shift   0 marg 0.00 corr 0 lag    0.0
+  46.39 >> S
+  46.45 RUN vm=11.60 rpm=516.8/600.0 Vlim=2.29 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.334 ia=1.244 ib=-0.465 idm=0.191 iqm=1.201 iqs=0.063 rph=1.911 n=52345 |ia|pk=1.41 |ib|pk=1.39 vr=1.697 vrpm=505.3 vpps=505.3 src=adc apps=505.3 apulses=9040 app_mv=201.8 alp=4 alevel_mv=1676.8 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=507.1 lrn=0 lbl=39 shift=0 marg=0.00 corr=0 lag=0.0 cpps=576.4 edges=56219 rej=60130 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=477.6 isr_hz=19983 isr_us=18.3 nFT=1
+   47.4  RUN   OL rpm  516.8 B  509.9  +0.1% trk  507.1  V 2.29 iq  1.20 id  0.19  vm 11.60 ibus 0.33  lrn 0 lbl 39 shift   0 marg 0.00 corr 0 lag    0.0
+  47.40 >> S
+  47.45 RUN vm=11.61 rpm=531.5/600.0 Vlim=2.28 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.334 ia=0.837 ib=0.190 idm=0.196 iqm=1.201 iqs=0.064 rph=1.900 n=52393 |ia|pk=1.40 |ib|pk=1.40 vr=1.571 vrpm=520.7 vpps=520.7 src=adc apps=520.7 apulses=9566 app_mv=236.0 alp=4 alevel_mv=1612.2 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=519.6 lrn=0 lbl=26 shift=0 marg=0.00 corr=0 lag=0.0 cpps=620.7 edges=56822 rej=60472 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=537.8 isr_hz=20004 isr_us=19.1 nFT=1
+   48.4  RUN   OL rpm  531.5 B  523.8  -0.1% trk  519.6  V 2.28 iq  1.20 id  0.20  vm 11.61 ibus 0.33  lrn 0 lbl 26 shift   0 marg 0.00 corr 0 lag    0.0
+  48.40 >> S
+  48.45 RUN vm=11.61 rpm=546.2/600.0 Vlim=2.26 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.333 ia=0.490 ib=0.709 idm=0.200 iqm=1.201 iqs=0.065 rph=1.886 n=52381 |ia|pk=1.40 |ib|pk=1.41 vr=1.684 vrpm=536.7 vpps=536.7 src=adc apps=536.7 apulses=10108 app_mv=235.0 alp=4 alevel_mv=1667.2 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=531.2 lrn=0 lbl=27 shift=0 marg=0.00 corr=0 lag=0.0 cpps=591.9 edges=57414 rej=60809 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=537.8 isr_hz=20004 isr_us=18.3 nFT=1
+   49.4  RUN   OL rpm  546.2 B  539.7  +0.2% trk  531.2  V 2.26 iq  1.20 id  0.20  vm 11.61 ibus 0.33  lrn 0 lbl 27 shift   0 marg 0.00 corr 0 lag    0.0
+  49.41 >> S
+  49.46 RUN vm=11.61 rpm=561.0/600.0 Vlim=2.25 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.333 ia=0.035 ib=0.953 idm=0.204 iqm=1.201 iqs=0.066 rph=1.871 n=52353 |ia|pk=1.43 |ib|pk=1.40 vr=1.733 vrpm=551.9 vpps=551.9 src=adc apps=551.9 apulses=10664 app_mv=203.1 alp=4 alevel_mv=1690.5 adc_hz=24985 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=547.6 lrn=0 lbl=43 shift=0 marg=0.00 corr=0 lag=0.0 cpps=659.2 edges=58025 rej=61149 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=537.8 isr_hz=20002 isr_us=18.3 nFT=1
+   50.4  RUN   OL rpm  561.0 B  553.7  +0.0% trk  547.6  V 2.25 iq  1.20 id  0.20  vm 11.61 ibus 0.33  lrn 0 lbl 43 shift   0 marg 0.00 corr 0 lag    0.0
+  50.41 >> S
+  50.46 RUN vm=11.61 rpm=575.7/600.0 Vlim=2.22 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.321 ia=-0.336 ib=1.221 idm=0.207 iqm=1.201 iqs=0.067 rph=1.850 n=52406 |ia|pk=1.45 |ib|pk=1.41 vr=1.650 vrpm=568.9 vpps=568.9 src=adc apps=568.9 apulses=11235 app_mv=211.5 alp=4 alevel_mv=1589.5 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=558.3 lrn=0 lbl=14 shift=0 marg=0.00 corr=0 lag=0.0 cpps=598.9 edges=58648 rej=61471 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20007 isr_us=18.3 nFT=1
+   51.4  RUN   OL rpm  575.7 B  568.7  +0.1% trk  558.3  V 2.22 iq  1.20 id  0.21  vm 11.61 ibus 0.32  lrn 0 lbl 14 shift   0 marg 0.00 corr 0 lag    0.0
+  51.42 >> S
+  51.47 RUN vm=11.60 rpm=590.4/600.0 Vlim=2.20 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.338 ia=-0.481 ib=1.203 idm=0.210 iqm=1.201 iqs=0.068 rph=1.833 n=52341 |ia|pk=1.43 |ib|pk=1.41 vr=1.800 vrpm=585.4 vpps=585.4 src=adc apps=585.4 apulses=11821 app_mv=249.6 alp=4 alevel_mv=1782.0 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=581.8 lrn=0 lbl=0 shift=0 marg=0.00 corr=0 lag=0.0 cpps=595.6 edges=59274 rej=61779 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20002 isr_us=18.3 nFT=1
+   52.4  RUN   OL rpm  590.4 B  583.5  +0.1% trk  581.8  V 2.20 iq  1.20 id  0.21  vm 11.60 ibus 0.34  lrn 0 lbl  0 shift   0 marg 0.00 corr 0 lag    0.0
+  52.42 >> S
+  52.47 RUN vm=11.61 rpm=600.0/600.0 Vlim=2.13 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.326 ia=-0.183 ib=1.124 idm=0.210 iqm=1.204 iqs=0.070 rph=1.765 n=52330 |ia|pk=1.46 |ib|pk=1.42 vr=1.621 vrpm=602.1 vpps=602.1 src=adc apps=602.1 apulses=12421 app_mv=248.7 alp=4 alevel_mv=1576.7 adc_hz=25011 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=595.1 lrn=0 lbl=0 shift=0 marg=0.00 corr=0 lag=0.0 cpps=632.0 edges=59912 rej=62075 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.0 isr_hz=19983 isr_us=19.0 nFT=1
+   53.4  RUN   OL rpm  600.0 B  597.5  +0.4% trk  595.1  V 2.13 iq  1.20 id  0.21  vm 11.61 ibus 0.33  lrn 0 lbl  0 shift   0 marg 0.00 corr 0 lag    0.0
+  53.42 >> S
+  53.47 RUN vm=11.61 rpm=600.0/600.0 Vlim=2.12 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.319 ia=-1.208 ib=1.012 idm=0.225 iqm=1.200 iqs=0.072 rph=1.767 n=52359 |ia|pk=1.42 |ib|pk=1.42 vr=1.717 vrpm=603.4 vpps=603.4 src=adc apps=603.4 apulses=13024 app_mv=254.1 alp=2 alevel_mv=1750.2 adc_hz=25013 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=592.3 lrn=0 lbl=3 shift=0 marg=0.00 corr=0 lag=0.0 cpps=636.7 edges=60541 rej=62355 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20004 isr_us=18.3 nFT=1
+   54.4  RUN   OL rpm  600.0 B  600.5  +0.1% trk  592.3  V 2.12 iq  1.20 id  0.23  vm 11.61 ibus 0.32  lrn 0 lbl  3 shift   0 marg 0.00 corr 0 lag    0.0
+  54.43 >> S
+  54.48 RUN vm=11.60 rpm=600.0/600.0 Vlim=2.12 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.338 ia=-0.960 ib=-0.221 idm=0.225 iqm=1.200 iqs=0.072 rph=1.765 n=52356 |ia|pk=1.42 |ib|pk=1.42 vr=1.530 vrpm=605.1 vpps=605.1 src=adc apps=605.1 apulses=13626 app_mv=240.7 alp=4 alevel_mv=1601.8 adc_hz=24991 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=597.8 lrn=0 lbl=6 shift=0 marg=0.00 corr=0 lag=0.0 cpps=642.5 edges=61174 rej=62663 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20006 isr_us=18.3 nFT=1
+   55.4  RUN   OL rpm  600.0 B  599.4  -0.1% trk  597.8  V 2.12 iq  1.20 id  0.23  vm 11.60 ibus 0.34  lrn 0 lbl  6 shift   0 marg 0.00 corr 0 lag    0.0
+  55.43 >> S
+  55.48 RUN vm=11.60 rpm=600.0/600.0 Vlim=2.12 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.333 ia=0.236 ib=-1.172 idm=0.224 iqm=1.200 iqs=0.072 rph=1.763 n=52351 |ia|pk=1.47 |ib|pk=1.41 vr=1.626 vrpm=606.2 vpps=606.2 src=adc apps=606.2 apulses=14229 app_mv=230.2 alp=4 alevel_mv=1562.4 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=596.7 lrn=0 lbl=8 shift=0 marg=0.00 corr=0 lag=0.0 cpps=647.1 edges=61833 rej=62954 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20006 isr_us=18.3 nFT=1
+   56.4  RUN   OL rpm  600.0 B  600.4  +0.1% trk  596.7  V 2.12 iq  1.20 id  0.22  vm 11.60 ibus 0.33  lrn 0 lbl  8 shift   0 marg 0.00 corr 0 lag    0.0
+  56.44 >> CL10
+  56.49 learning
+   56.7  CL10 -> learning
+  56.74 >> S
+  56.79 RUN vm=11.60 rpm=600.0/600.0 Vlim=2.39 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.344 ia=1.175 ib=-0.467 idm=0.228 iqm=1.189 iqs=0.072 rph=2.007 n=68051 |ia|pk=1.43 |ib|pk=1.42 vr=1.529 vrpm=587.4 vpps=587.4 src=adc apps=587.4 apulses=15009 app_mv=222.4 alp=4 alevel_mv=1491.7 adc_hz=25002 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=589.7 lrn=2 lbl=8 shift=0 marg=0.00 corr=0 lag=0.0 cpps=628.0 edges=62658 rej=63356 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.2 isr_hz=19995 isr_us=23.8 nFT=1
+   57.7  RUN   OL rpm  600.0 B  597.4  -0.4% trk  589.7  V 2.39 iq  1.19 id  0.23  vm 11.60 ibus 0.34  lrn 2 lbl  8 shift   0 marg 0.00 corr 0 lag    0.0
+  57.74 >> S
+  57.79 RUN vm=11.60 rpm=600.0/600.0 Vlim=2.36 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.349 ia=0.486 ib=0.679 idm=0.223 iqm=1.202 iqs=0.072 rph=1.964 n=51743 |ia|pk=1.43 |ib|pk=1.42 vr=1.722 vrpm=586.9 vpps=586.9 src=adc apps=586.9 apulses=15612 app_mv=225.5 alp=2 alevel_mv=1671.6 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=587.2 lrn=1 lbl=11 shift=0 marg=0.75 corr=0 lag=26.6 cpps=646.4 edges=63306 rej=63661 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20006 isr_us=24.2 nFT=1
+   58.7  RUN   OL rpm  600.0 B  600.6  +0.1% trk  587.2  V 2.36 iq  1.20 id  0.22  vm 11.60 ibus 0.35  lrn 1 lbl 11 shift   0 marg 0.75 corr 0 lag   26.6
+  58.75 >> S
+  58.80 RUN vm=11.60 rpm=600.0/600.0 Vlim=2.34 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.340 ia=-0.614 ib=1.161 idm=0.222 iqm=1.201 iqs=0.072 rph=1.945 n=51072 |ia|pk=1.43 |ib|pk=1.42 vr=1.596 vrpm=586.6 vpps=586.6 src=adc apps=586.6 apulses=16214 app_mv=239.2 alp=4 alevel_mv=1636.5 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=OL uq=0.00 trk_rpm=586.4 lrn=1 lbl=14 shift=0 marg=0.76 corr=0 lag=22.0 cpps=633.3 edges=63935 rej=63976 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20001 isr_us=18.3 nFT=1
+   59.8  RUN   OL rpm  600.0 B  599.5  -0.1% trk  586.4  V 2.34 iq  1.20 id  0.22  vm 11.60 ibus 0.34  lrn 1 lbl 14 shift   0 marg 0.76 corr 0 lag   22.0
+  59.75 >> C
+  59.80 closed loop: mode OL, tracker learned, locked (shift 0, margin 0.75, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 586.1 rpm, uq 0.00 V, PI 0.0050 / 0.0200
+   60.1  C -> closed loop: mode OL, tracker learned, locked (shift 0, margin 0.75, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 586.1 rpm, uq 0.00 V, PI 0.0050 / 0.0200
+  60.05 >> C1
+  60.10 closed loop on
+   60.4  C1 -> closed loop on
+  60.35 >> S
+  60.40 RUN vm=11.62 rpm=600.0/600.0 Vlim=2.30 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.309 ia=0.575 ib=0.472 idm=0.176 iqm=1.177 iqs=0.074 rph=1.952 n=81754 |ia|pk=1.43 |ib|pk=1.42 vr=1.707 vrpm=627.4 vpps=627.4 src=adc apps=627.4 apulses=17184 app_mv=273.8 alp=2 alevel_mv=1835.4 adc_hz=25004 adc_fs=25007.4 aovr=0 mode=CL uq=2.30 trk_rpm=631.6 lrn=1 lbl=23 shift=0 marg=0.74 corr=0 lag=-161.9 cpps=656.1 edges=64965 rej=64419 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=485.4 isr_hz=19998 isr_us=19.8 nFT=1
+   61.4  RUN   CL rpm  600.0 B  603.7  +0.6% trk  631.6  V 2.30 iq  1.18 id  0.18  vm 11.62 ibus 0.31  lrn 1 lbl 23 shift   0 marg 0.74 corr 0 lag -161.9
+  61.36 >> S
+  61.41 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.85 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=0.023 ia=-0.219 ib=0.196 idm=-0.007 iqm=0.670 iqs=0.235 rph=1.276 n=50925 |ia|pk=1.11 |ib|pk=1.10 vr=1.530 vrpm=676.5 vpps=676.5 src=adc apps=676.5 apulses=17847 app_mv=310.8 alp=2 alevel_mv=1459.7 adc_hz=25008 adc_fs=25007.4 aovr=0 mode=CL uq=0.85 trk_rpm=677.8 lrn=1 lbl=26 shift=0 marg=0.73 corr=0 lag=109.7 cpps=696.8 edges=65641 rej=64599 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20002 isr_us=20.1 nFT=1
+   62.4  RUN   CL rpm  600.0 B  660.3 +10.1% trk  677.8  V 0.85 iq  0.67 id -0.01  vm 11.73 ibus 0.02  lrn 1 lbl 26 shift   0 marg 0.73 corr 0 lag  109.7
+  62.36 >> S
+  62.41 RUN vm=11.75 rpm=600.0/600.0 Vlim=0.00 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=0.105 ib=-0.187 idm=-0.063 iqm=-0.062 iqs=0.132 n=50923 |ia|pk=0.34 |ib|pk=0.29 vr=1.505 vrpm=663.5 vpps=663.5 src=adc apps=663.5 apulses=18522 app_mv=238.4 alp=2 alevel_mv=1559.3 adc_hz=25009 adc_fs=25007.4 aovr=0 mode=CL uq=0.00 trk_rpm=661.1 lrn=1 lbl=42 shift=0 marg=0.74 corr=0 lag=107.1 cpps=673.1 edges=66323 rej=64699 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20000 isr_us=20.1 nFT=1
+   63.4  RUN   CL rpm  600.0 B  672.2 +12.0% trk  661.1  V 0.00 iq -0.06 id -0.06  vm 11.75 ibus -0.00  lrn 1 lbl 42 shift   0 marg 0.74 corr 0 lag  107.1
+  63.37 >> S
+  63.42 RUN vm=11.75 rpm=600.0/600.0 Vlim=0.00 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=0.015 ib=0.147 idm=-0.073 iqm=-0.169 iqs=0.009 n=50945 |ia|pk=0.33 |ib|pk=0.24 vr=1.733 vrpm=637.0 vpps=637.0 src=adc apps=637.0 apulses=19173 app_mv=264.9 alp=2 alevel_mv=1622.4 adc_hz=25011 adc_fs=25007.4 aovr=0 mode=CL uq=0.00 trk_rpm=635.4 lrn=1 lbl=32 shift=0 marg=0.76 corr=0 lag=-26.8 cpps=635.4 edges=66980 rej=64788 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19983 isr_us=20.1 nFT=1
+   64.4  RUN   CL rpm  600.0 B  648.2  +8.0% trk  635.4  V 0.00 iq -0.17 id -0.07  vm 11.75 ibus -0.00  lrn 1 lbl 32 shift   0 marg 0.76 corr 0 lag  -26.8
+  64.37 >> S
+  64.42 RUN vm=11.75 rpm=600.0/600.0 Vlim=0.00 vmmin=11.20 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=0.148 ib=-0.151 idm=-0.070 iqm=-0.163 iqs=0.009 n=51006 |ia|pk=0.33 |ib|pk=0.22 vr=1.512 vrpm=613.1 vpps=613.1 src=adc apps=613.1 apulses=19798 app_mv=248.4 alp=4 alevel_mv=1528.7 adc_hz=25009 adc_fs=25007.4 aovr=0 mode=CL uq=0.00 trk_rpm=611.0 lrn=1 lbl=58 shift=0 marg=0.76 corr=0 lag=85.8 cpps=620.7 edges=67614 rej=64904 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20001 isr_us=20.1 nFT=1
+   65.4  RUN   CL rpm  600.0 B  622.6  +3.8% trk  611.0  V 0.00 iq -0.16 id -0.07  vm 11.75 ibus -0.00  lrn 1 lbl 58 shift   0 marg 0.76 corr 0 lag   85.8
+  65.37 >> CT-30
+  65.42 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.76, corrections 0), offset 171.4 deg (spread 90.0), trim -30.0 deg, lead 40 us, speed 588.4 rpm, uq 0.12 V, PI 0.0050 / 0.0200
+   65.7  CT-30 -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.76, corrections 0), offset 171.4 deg (spread 90.0), trim -30.0 deg, lead 40 us, speed 588.4 rpm, uq 0.12 V, PI 0.0050 / 0.0200
+  65.68 >> S
+  65.73 RUN vm=11.75 rpm=600.0/600.0 Vlim=0.23 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=0.017 ib=-0.040 idm=-0.044 iqm=-0.124 iqs=0.038 n=66322 |ia|pk=0.31 |ib|pk=0.23 vr=1.573 vrpm=584.5 vpps=584.5 src=adc apps=584.5 apulses=20576 app_mv=243.8 alp=2 alevel_mv=1511.4 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=CL uq=0.23 trk_rpm=584.4 lrn=1 lbl=55 shift=0 marg=0.76 corr=0 lag=137.5 cpps=585.4 edges=68404 rej=65057 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20006 isr_us=20.1 nFT=1
+   66.7  RUN   CL rpm  600.0 B  596.0  -0.7% trk  584.4  V 0.23 iq -0.12 id -0.04  vm 11.75 ibus -0.00  lrn 1 lbl 55 shift   0 marg 0.76 corr 0 lag  137.5
+  66.68 >> S
+  66.73 RUN vm=11.74 rpm=600.0/600.0 Vlim=0.65 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.011 ia=0.160 ib=-0.036 idm=0.029 iqm=0.048 iqs=0.060 n=51033 |ia|pk=0.24 |ib|pk=0.20 vr=1.596 vrpm=577.9 vpps=577.9 src=adc apps=577.9 apulses=21158 app_mv=234.5 alp=2 alevel_mv=1677.8 adc_hz=24988 adc_fs=25007.4 aovr=0 mode=CL uq=0.65 trk_rpm=578.7 lrn=1 lbl=38 shift=0 marg=0.76 corr=0 lag=-159.3 cpps=617.2 edges=69004 rej=65283 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=20.2 nFT=1
+   67.7  RUN   CL rpm  600.0 B  579.5  -3.4% trk  578.7  V 0.65 iq  0.05 id  0.03  vm 11.74 ibus 0.01  lrn 1 lbl 38 shift   0 marg 0.76 corr 0 lag -159.3
+  67.68 >> S
+  67.73 RUN vm=11.72 rpm=600.0/600.0 Vlim=0.93 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.034 ia=0.232 ib=0.093 idm=0.053 iqm=0.249 iqs=0.048 rph=3.727 n=51037 |ia|pk=0.41 |ib|pk=0.36 vr=1.743 vrpm=590.0 vpps=590.0 src=adc apps=590.0 apulses=21745 app_mv=286.5 alp=2 alevel_mv=1760.1 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=CL uq=0.93 trk_rpm=590.2 lrn=1 lbl=24 shift=0 marg=0.76 corr=0 lag=171.0 cpps=598.4 edges=69608 rej=65553 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=20.1 nFT=1
+   68.7  RUN   CL rpm  600.0 B  584.5  -2.6% trk  590.2  V 0.93 iq  0.25 id  0.05  vm 11.72 ibus 0.03  lrn 1 lbl 24 shift   0 marg 0.76 corr 0 lag  171.0
+  68.69 >> CT-15
+  68.74 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.76, corrections 0), offset 171.4 deg (spread 90.0), trim -15.0 deg, lead 40 us, speed 606.7 rpm, uq 0.87 V, PI 0.0050 / 0.0200
+   69.0  CT-15 -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.76, corrections 0), offset 171.4 deg (spread 90.0), trim -15.0 deg, lead 40 us, speed 606.7 rpm, uq 0.87 V, PI 0.0050 / 0.0200
+  68.99 >> S
+  69.04 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.80 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.021 ia=-0.225 ib=0.059 idm=0.048 iqm=0.294 iqs=0.032 rph=2.719 n=66345 |ia|pk=0.39 |ib|pk=0.37 vr=1.794 vrpm=608.5 vpps=608.5 src=adc apps=608.5 apulses=22530 app_mv=279.9 alp=2 alevel_mv=1756.6 adc_hz=25001 adc_fs=25007.4 aovr=0 mode=CL uq=0.80 trk_rpm=611.1 lrn=1 lbl=29 shift=0 marg=0.74 corr=0 lag=47.0 cpps=620.1 edges=70421 rej=65890 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19995 isr_us=20.1 nFT=1
+   70.0  RUN   CL rpm  600.0 B  601.3  +0.2% trk  611.1  V 0.80 iq  0.29 id  0.05  vm 11.73 ibus 0.02  lrn 1 lbl 29 shift   0 marg 0.74 corr 0 lag   47.0
+  69.99 >> S
+  70.04 RUN vm=11.74 rpm=600.0/600.0 Vlim=0.51 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.004 ia=-0.042 ib=-0.024 idm=-0.001 iqm=0.144 iqs=0.051 rph=3.520 n=50990 |ia|pk=0.26 |ib|pk=0.26 vr=1.492 vrpm=614.9 vpps=614.9 src=adc apps=614.9 apulses=23146 app_mv=211.0 alp=4 alevel_mv=1490.7 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=CL uq=0.51 trk_rpm=614.1 lrn=1 lbl=45 shift=0 marg=0.73 corr=0 lag=14.5 cpps=625.5 edges=71056 rej=66111 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=20.1 nFT=1
+   71.0  RUN   CL rpm  600.0 B  613.4  +2.2% trk  614.1  V 0.51 iq  0.14 id -0.00  vm 11.74 ibus 0.00  lrn 1 lbl 45 shift   0 marg 0.73 corr 0 lag   14.5
+  71.00 >> S
+  71.05 RUN vm=11.74 rpm=600.0/600.0 Vlim=0.33 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=-0.008 ib=-0.012 idm=-0.007 iqm=0.014 iqs=0.023 n=51014 |ia|pk=0.11 |ib|pk=0.10 vr=1.565 vrpm=607.9 vpps=607.9 src=adc apps=607.9 apulses=23759 app_mv=251.6 alp=2 alevel_mv=1668.5 adc_hz=25009 adc_fs=25007.4 aovr=0 mode=CL uq=0.33 trk_rpm=606.1 lrn=1 lbl=59 shift=0 marg=0.75 corr=0 lag=58.4 cpps=608.9 edges=71673 rej=66269 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20000 isr_us=20.2 nFT=1
+   72.0  RUN   CL rpm  600.0 B  610.5  +1.7% trk  606.1  V 0.33 iq  0.01 id -0.01  vm 11.74 ibus -0.00  lrn 1 lbl 59 shift   0 marg 0.75 corr 0 lag   58.4
+  72.00 >> CT0
+  72.05 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.77, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 596.6 rpm, uq 0.35 V, PI 0.0050 / 0.0200
+   72.3  CT0 -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.77, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 596.6 rpm, uq 0.35 V, PI 0.0050 / 0.0200
+  72.30 >> S
+  72.35 RUN vm=11.74 rpm=600.0/600.0 Vlim=0.39 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.000 ia=0.041 ib=-0.036 idm=-0.016 iqm=-0.006 iqs=0.016 n=66344 |ia|pk=0.12 |ib|pk=0.12 vr=1.499 vrpm=594.9 vpps=594.9 src=adc apps=594.9 apulses=24542 app_mv=236.7 alp=4 alevel_mv=1575.6 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=CL uq=0.39 trk_rpm=593.6 lrn=1 lbl=2 shift=0 marg=0.76 corr=0 lag=-13.7 cpps=605.5 edges=72477 rej=66442 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19991 isr_us=20.0 nFT=1
+   73.3  RUN   CL rpm  600.0 B  599.8  -0.0% trk  593.6  V 0.39 iq -0.01 id -0.02  vm 11.74 ibus 0.00  lrn 1 lbl  2 shift   0 marg 0.76 corr 0 lag  -13.7
+  73.31 >> S
+  73.36 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.59 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.008 ia=-0.114 ib=0.147 idm=-0.045 iqm=0.075 iqs=0.033 rph=7.892 n=51007 |ia|pk=0.17 |ib|pk=0.17 vr=1.593 vrpm=589.8 vpps=589.8 src=adc apps=589.8 apulses=25136 app_mv=245.4 alp=2 alevel_mv=1515.5 adc_hz=24992 adc_fs=25007.4 aovr=0 mode=CL uq=0.59 trk_rpm=590.1 lrn=1 lbl=55 shift=0 marg=0.75 corr=0 lag=138.5 cpps=609.0 edges=73090 rej=66624 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20009 isr_us=20.1 nFT=1
+   74.3  RUN   CL rpm  600.0 B  591.5  -1.4% trk  590.1  V 0.59 iq  0.07 id -0.04  vm 11.73 ibus 0.01  lrn 1 lbl 55 shift   0 marg 0.75 corr 0 lag  138.5
+  74.31 >> S
+  74.36 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.73 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.018 ia=0.212 ib=-0.137 idm=-0.043 iqm=0.177 iqs=0.028 rph=4.127 n=50980 |ia|pk=0.29 |ib|pk=0.26 vr=1.560 vrpm=593.2 vpps=593.2 src=adc apps=593.2 apulses=25731 app_mv=210.3 alp=2 alevel_mv=1631.9 adc_hz=25016 adc_fs=25007.4 aovr=0 mode=CL uq=0.73 trk_rpm=594.3 lrn=1 lbl=50 shift=0 marg=0.76 corr=0 lag=-86.8 cpps=624.1 edges=73717 rej=66830 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19987 isr_us=20.1 nFT=1
+   75.3  RUN   CL rpm  600.0 B  592.4  -1.3% trk  594.3  V 0.73 iq  0.18 id -0.04  vm 11.73 ibus 0.02  lrn 1 lbl 50 shift   0 marg 0.76 corr 0 lag  -86.8
+  75.32 >> CT15
+  75.37 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.76, corrections 0), offset 171.4 deg (spread 90.0), trim 15.0 deg, lead 40 us, speed 602.0 rpm, uq 0.72 V, PI 0.0050 / 0.0200
+   75.6  CT15 -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.76, corrections 0), offset 171.4 deg (spread 90.0), trim 15.0 deg, lead 40 us, speed 602.0 rpm, uq 0.72 V, PI 0.0050 / 0.0200
+  75.62 >> S
+  75.67 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.70 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.017 ia=-0.010 ib=0.228 idm=-0.052 iqm=0.217 iqs=0.016 rph=3.227 n=66313 |ia|pk=0.30 |ib|pk=0.28 vr=1.488 vrpm=603.2 vpps=603.2 src=adc apps=603.2 apulses=26513 app_mv=248.2 alp=2 alevel_mv=1540.5 adc_hz=25015 adc_fs=25007.4 aovr=0 mode=CL uq=0.70 trk_rpm=603.2 lrn=1 lbl=53 shift=0 marg=0.77 corr=0 lag=-156.3 cpps=613.2 edges=74528 rej=67092 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=20.1 nFT=1
+   76.6  RUN   CL rpm  600.0 B  599.2  -0.1% trk  603.2  V 0.70 iq  0.22 id -0.05  vm 11.73 ibus 0.02  lrn 1 lbl 53 shift   0 marg 0.77 corr 0 lag -156.3
+  76.62 >> S
+  76.67 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.61 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.010 ia=-0.036 ib=-0.145 idm=-0.087 iqm=0.191 iqs=0.021 rph=3.173 n=51037 |ia|pk=0.29 |ib|pk=0.27 vr=1.714 vrpm=604.5 vpps=604.5 src=adc apps=604.5 apulses=27120 app_mv=260.0 alp=2 alevel_mv=1626.7 adc_hz=25008 adc_fs=25007.4 aovr=0 mode=CL uq=0.61 trk_rpm=604.7 lrn=1 lbl=59 shift=0 marg=0.76 corr=0 lag=42.8 cpps=604.5 edges=75154 rej=67274 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20000 isr_us=20.1 nFT=1
+   77.6  RUN   CL rpm  600.0 B  604.5  +0.8% trk  604.7  V 0.61 iq  0.19 id -0.09  vm 11.73 ibus 0.01  lrn 1 lbl 59 shift   0 marg 0.76 corr 0 lag   42.8
+  77.63 >> S
+  77.68 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.55 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.008 ia=0.103 ib=0.036 idm=-0.088 iqm=0.148 iqs=0.016 rph=3.731 n=51035 |ia|pk=0.24 |ib|pk=0.23 vr=1.779 vrpm=602.4 vpps=602.4 src=adc apps=602.4 apulses=27726 app_mv=253.2 alp=2 alevel_mv=1715.0 adc_hz=24987 adc_fs=25007.4 aovr=0 mode=CL uq=0.55 trk_rpm=601.9 lrn=1 lbl=5 shift=0 marg=0.77 corr=0 lag=-96.6 cpps=603.0 edges=75780 rej=67449 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20003 isr_us=20.1 nFT=1
+   78.6  RUN   CL rpm  600.0 B  603.5  +0.6% trk  601.9  V 0.55 iq  0.15 id -0.09  vm 11.73 ibus 0.01  lrn 1 lbl  5 shift   0 marg 0.77 corr 0 lag  -96.6
+  78.63 >> CT30
+  78.68 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.75, corrections 0), offset 171.4 deg (spread 90.0), trim 30.0 deg, lead 40 us, speed 598.6 rpm, uq 0.56 V, PI 0.0050 / 0.0200
+   78.9  CT30 -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.75, corrections 0), offset 171.4 deg (spread 90.0), trim 30.0 deg, lead 40 us, speed 598.6 rpm, uq 0.56 V, PI 0.0050 / 0.0200
+  78.93 >> S
+  78.98 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.58 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.012 ia=-0.151 ib=0.210 idm=-0.096 iqm=0.148 iqs=0.025 rph=3.965 n=66378 |ia|pk=0.27 |ib|pk=0.30 vr=1.745 vrpm=597.7 vpps=597.7 src=adc apps=597.7 apulses=28509 app_mv=228.2 alp=4 alevel_mv=1685.5 adc_hz=25021 adc_fs=25007.4 aovr=0 mode=CL uq=0.58 trk_rpm=597.0 lrn=1 lbl=8 shift=0 marg=0.75 corr=0 lag=-170.2 cpps=607.7 edges=76587 rej=67688 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19997 isr_us=20.1 nFT=1
+   79.9  RUN   CL rpm  600.0 B  599.7  -0.1% trk  597.0  V 0.58 iq  0.15 id -0.10  vm 11.73 ibus 0.01  lrn 1 lbl  8 shift   0 marg 0.75 corr 0 lag -170.2
+  79.94 >> S
+  79.99 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.71 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.023 ia=0.168 ib=0.123 idm=-0.122 iqm=0.227 iqs=0.025 rph=3.116 n=51001 |ia|pk=0.33 |ib|pk=0.32 vr=1.621 vrpm=593.5 vpps=593.5 src=adc apps=593.5 apulses=29106 app_mv=249.7 alp=2 alevel_mv=1540.3 adc_hz=24989 adc_fs=25007.4 aovr=0 mode=CL uq=0.71 trk_rpm=593.2 lrn=1 lbl=5 shift=0 marg=0.76 corr=0 lag=-102.3 cpps=603.4 edges=77198 rej=67877 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=20.2 nFT=1
+   80.9  RUN   CL rpm  600.0 B  594.4  -0.9% trk  593.2  V 0.71 iq  0.23 id -0.12  vm 11.73 ibus 0.02  lrn 1 lbl  5 shift   0 marg 0.76 corr 0 lag -102.3
+  80.94 >> S
+  80.99 RUN vm=11.72 rpm=600.0/600.0 Vlim=0.84 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.034 ia=0.234 ib=-0.334 idm=-0.118 iqm=0.304 iqs=0.027 rph=2.747 n=51030 |ia|pk=0.41 |ib|pk=0.39 vr=1.587 vrpm=594.2 vpps=594.2 src=adc apps=594.2 apulses=29702 app_mv=238.3 alp=4 alevel_mv=1540.7 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=CL uq=0.84 trk_rpm=594.4 lrn=1 lbl=1 shift=0 marg=0.75 corr=0 lag=-4.6 cpps=604.0 edges=77801 rej=68101 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20005 isr_us=20.1 nFT=1
+   81.9  RUN   CL rpm  600.0 B  593.5  -1.1% trk  594.4  V 0.84 iq  0.30 id -0.12  vm 11.72 ibus 0.03  lrn 1 lbl  1 shift   0 marg 0.75 corr 0 lag   -4.6
+  81.94 >> CT0
+  81.99 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.77, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 599.0 rpm, uq 0.89 V, PI 0.0050 / 0.0200
+   82.2  CT0 -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.77, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 599.0 rpm, uq 0.89 V, PI 0.0050 / 0.0200
+  82.25 >> S
+  82.30 RUN vm=11.72 rpm=600.0/600.0 Vlim=0.86 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.030 ia=0.009 ib=-0.270 idm=-0.098 iqm=0.343 iqs=0.033 rph=2.507 n=66353 |ia|pk=0.44 |ib|pk=0.43 vr=1.496 vrpm=602.3 vpps=602.3 src=adc apps=602.3 apulses=30482 app_mv=239.6 alp=4 alevel_mv=1483.8 adc_hz=25003 adc_fs=25007.4 aovr=0 mode=CL uq=0.86 trk_rpm=603.2 lrn=1 lbl=1 shift=0 marg=0.76 corr=0 lag=-8.6 cpps=602.3 edges=78599 rej=68390 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19996 isr_us=20.1 nFT=1
+   83.2  RUN   CL rpm  600.0 B  597.3  -0.4% trk  603.2  V 0.86 iq  0.34 id -0.10  vm 11.72 ibus 0.03  lrn 1 lbl  1 shift   0 marg 0.76 corr 0 lag   -8.6
+  83.25 >> S
+  83.30 RUN vm=11.73 rpm=600.0/600.0 Vlim=0.65 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.012 ia=-0.167 ib=0.081 idm=-0.042 iqm=0.228 iqs=0.040 rph=2.851 n=50969 |ia|pk=0.37 |ib|pk=0.33 vr=1.653 vrpm=611.8 vpps=611.8 src=adc apps=611.8 apulses=31093 app_mv=250.0 alp=4 alevel_mv=1599.7 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=CL uq=0.65 trk_rpm=611.9 lrn=1 lbl=12 shift=0 marg=0.74 corr=0 lag=90.5 cpps=621.5 edges=79223 rej=68588 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20001 isr_us=20.1 nFT=1
+   84.3  RUN   CL rpm  600.0 B  608.6  +1.4% trk  611.9  V 0.65 iq  0.23 id -0.04  vm 11.73 ibus 0.01  lrn 1 lbl 12 shift   0 marg 0.74 corr 0 lag   90.5
+  84.25 >> S
+  84.30 RUN vm=11.74 rpm=600.0/600.0 Vlim=0.43 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.002 ia=-0.062 ib=0.012 idm=-0.047 iqm=0.094 iqs=0.037 rph=4.597 n=50990 |ia|pk=0.20 |ib|pk=0.20 vr=1.633 vrpm=611.2 vpps=611.2 src=adc apps=611.2 apulses=31707 app_mv=281.2 alp=2 alevel_mv=1526.5 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=CL uq=0.43 trk_rpm=609.6 lrn=1 lbl=26 shift=0 marg=0.76 corr=0 lag=114.0 cpps=619.9 edges=79840 rej=68760 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20004 isr_us=20.1 nFT=1
+   85.3  RUN   CL rpm  600.0 B  611.4  +1.9% trk  609.6  V 0.43 iq  0.09 id -0.05  vm 11.74 ibus 0.00  lrn 1 lbl 26 shift   0 marg 0.76 corr 0 lag  114.0
+  85.26 >> C
+  85.31 closed loop: mode CL, tracker learned, locked (shift 0, margin 0.77, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 600.6 rpm, uq 0.37 V, PI 0.0050 / 0.0200
+   85.6  C -> closed loop: mode CL, tracker learned, locked (shift 0, margin 0.77, corrections 0), offset 171.4 deg (spread 90.0), trim 0.0 deg, lead 40 us, speed 600.6 rpm, uq 0.37 V, PI 0.0050 / 0.0200
+  85.56 >> C0
+  85.61 open loop
+   85.9  C0 -> open loop
+  85.86 >> S
+  85.91 RUN vm=11.58 rpm=600.0/600.0 Vlim=2.41 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.360 ia=1.181 ib=-0.544 idm=-0.028 iqm=0.179 iqs=0.357 rph=13.477 n=81710 |ia|pk=1.25 |ib|pk=1.24 vr=1.592 vrpm=610.6 vpps=610.6 src=adc apps=610.6 apulses=32678 app_mv=259.7 alp=2 alevel_mv=1569.5 adc_hz=25011 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=616.2 lrn=1 lbl=37 shift=0 marg=0.74 corr=0 lag=48.4 cpps=640.7 edges=80838 rej=69025 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=111.9 isr_hz=19991 isr_us=20.2 nFT=1
+   86.9  RUN   OL rpm  600.0 B  604.1  +0.7% trk  616.2  V 2.41 iq  0.18 id -0.03  vm 11.58 ibus 0.36  lrn 1 lbl 37 shift   0 marg 0.74 corr 0 lag   48.4
+  86.86 >> S
+  86.92 RUN vm=11.58 rpm=600.0/600.0 Vlim=2.47 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.377 ia=0.440 ib=0.717 idm=0.191 iqm=1.197 iqs=0.082 rph=2.068 n=51078 |ia|pk=1.44 |ib|pk=1.43 vr=1.543 vrpm=598.9 vpps=598.9 src=adc apps=598.9 apulses=33279 app_mv=241.6 alp=4 alevel_mv=1528.9 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=605.0 lrn=1 lbl=38 shift=0 marg=0.75 corr=0 lag=82.3 cpps=658.7 edges=81484 rej=69288 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=597.6 isr_hz=20001 isr_us=18.2 nFT=1
+   87.9  RUN   OL rpm  600.0 B  598.5  -0.2% trk  605.0  V 2.47 iq  1.20 id  0.19  vm 11.58 ibus 0.38  lrn 1 lbl 38 shift   0 marg 0.75 corr 0 lag   82.3
+  87.87 >> S
+  87.92 RUN vm=11.58 rpm=600.0/600.0 Vlim=2.46 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=0.366 ia=-0.491 ib=1.149 idm=0.198 iqm=1.201 iqs=0.084 rph=2.049 n=51045 |ia|pk=1.46 |ib|pk=1.45 vr=1.525 vrpm=588.4 vpps=588.4 src=adc apps=588.4 apulses=33881 app_mv=213.0 alp=4 alevel_mv=1535.5 adc_hz=24994 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=593.7 lrn=1 lbl=40 shift=0 marg=0.76 corr=0 lag=84.1 cpps=607.8 edges=82122 rej=69569 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=598.2 isr_hz=20008 isr_us=18.3 nFT=1
+   88.9  RUN   OL rpm  600.0 B  600.1  +0.0% trk  593.7  V 2.46 iq  1.20 id  0.20  vm 11.58 ibus 0.37  lrn 1 lbl 40 shift   0 marg 0.76 corr 0 lag   84.1
+   88.9  sequence done
+   88.9  E0 sent
+  88.92 DISABLED: by command (vmmin=11.05)
+  89.37 >> S
+  89.42 OFF vm=11.75 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=-0.004 ib=-0.002 idm=0.192 iqm=1.206 iqs=0.082 rph=1.948 n=51052 |ia|pk=1.46 |ib|pk=1.44 vr=1.830 vrpm=581.0 vpps=581.0 src=adc apps=581.0 apulses=34777 app_mv=207.1 alp=2 alevel_mv=1825.2 adc_hz=25011 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=580.0 lrn=1 lbl=36 shift=0 marg=0.75 corr=0 lag=-158.7 cpps=680.6 edges=83078 rej=69986 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=398.7 isr_hz=20001 isr_us=18.3 nFT=1
+   90.4  OFF   OL rpm    0.0 B  594.9 +98.3% trk  580.0  V 2.35 iq  1.21 id  0.19  vm 11.75 ibus -0.00  lrn 1 lbl 36 shift   0 marg 0.75 corr 0 lag -158.7
+  90.38 >> S
+  90.43 OFF vm=11.75 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.006 ib=0.008 |ia|pk=0.04 |ib|pk=0.04 vr=1.633 vrpm=573.0 vpps=573.0 src=adc apps=573.0 apulses=35355 app_mv=212.0 alp=4 alevel_mv=1601.8 adc_hz=25005 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=572.2 lrn=1 lbl=14 shift=0 marg=0.74 corr=0 lag=4.8 cpps=673.2 edges=83723 rej=70284 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19998 isr_us=8.1 nFT=1
+   91.4  OFF   OL rpm    0.0 B  575.6        trk  572.2  V 2.35 iq  0.00 id  0.00  vm 11.75 ibus -0.00  lrn 1 lbl 14 shift   0 marg 0.74 corr 0 lag    4.8
+  91.38 >> S
+  91.43 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=-0.004 ib=0.002 |ia|pk=0.04 |ib|pk=0.04 vr=1.754 vrpm=563.1 vpps=563.1 src=adc apps=563.1 apulses=35925 app_mv=203.3 alp=4 alevel_mv=1741.8 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=563.4 lrn=1 lbl=44 shift=0 marg=0.74 corr=0 lag=7.2 cpps=609.1 edges=84372 rej=70599 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20006 isr_us=8.1 nFT=1
+   92.4  OFF   OL rpm    0.0 B  567.6        trk  563.4  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 44 shift   0 marg 0.74 corr 0 lag    7.2
+  92.39 >> S
+  92.44 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.004 ib=-0.002 |ia|pk=0.04 |ib|pk=0.04 vr=1.553 vrpm=555.8 vpps=555.8 src=adc apps=555.8 apulses=36486 app_mv=227.5 alp=4 alevel_mv=1559.2 adc_hz=25013 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=555.4 lrn=1 lbl=5 shift=0 marg=0.73 corr=0 lag=-148.3 cpps=679.9 edges=85034 rej=70894 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19985 isr_us=8.1 nFT=1
+   93.4  OFF   OL rpm    0.0 B  558.6        trk  555.4  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl  5 shift   0 marg 0.73 corr 0 lag -148.3
+  93.39 >> S
+  93.44 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.004 ib=0.006 |ia|pk=0.04 |ib|pk=0.04 vr=1.647 vrpm=546.6 vpps=546.6 src=adc apps=546.6 apulses=37040 app_mv=209.0 alp=4 alevel_mv=1647.5 adc_hz=25012 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=546.8 lrn=1 lbl=19 shift=0 marg=0.74 corr=0 lag=-105.3 cpps=636.1 edges=85678 rej=71222 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20003 isr_us=8.1 nFT=1
+   94.4  OFF   OL rpm    0.0 B  551.7        trk  546.8  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 19 shift   0 marg 0.74 corr 0 lag -105.3
+  94.40 >> S
+  94.45 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=-0.004 ib=-0.004 |ia|pk=0.04 |ib|pk=0.03 vr=1.750 vrpm=540.1 vpps=540.1 src=adc apps=540.1 apulses=37585 app_mv=253.7 alp=4 alevel_mv=1736.7 adc_hz=24990 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=539.3 lrn=1 lbl=24 shift=0 marg=0.72 corr=0 lag=129.2 cpps=619.4 edges=86332 rej=71558 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20006 isr_us=8.1 nFT=1
+   95.4  OFF   OL rpm    0.0 B  542.7        trk  539.3  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 24 shift   0 marg 0.72 corr 0 lag  129.2
+  95.40 >> S
+  95.45 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=-0.004 ib=-0.002 |ia|pk=0.04 |ib|pk=0.04 vr=1.675 vrpm=531.0 vpps=531.0 src=adc apps=531.0 apulses=38122 app_mv=222.2 alp=4 alevel_mv=1680.1 adc_hz=25013 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=531.3 lrn=1 lbl=21 shift=0 marg=0.72 corr=0 lag=-162.9 cpps=650.3 edges=86972 rej=71895 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20004 isr_us=8.2 nFT=1
+   96.4  OFF   OL rpm    0.0 B  534.8        trk  531.3  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 21 shift   0 marg 0.72 corr 0 lag -162.9
+  96.40 >> S
+  96.45 OFF vm=11.75 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.001 ia=-0.004 ib=0.000 |ia|pk=0.04 |ib|pk=0.04 vr=1.513 vrpm=523.1 vpps=523.1 src=adc apps=523.1 apulses=38651 app_mv=200.4 alp=4 alevel_mv=1523.1 adc_hz=25014 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=523.4 lrn=1 lbl=10 shift=0 marg=0.70 corr=0 lag=91.9 cpps=682.1 edges=87641 rej=72259 cmp=1 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=19987 isr_us=8.1 nFT=1
+   97.4  OFF   OL rpm    0.0 B  526.7        trk  523.4  V 2.35 iq  0.00 id  0.00  vm 11.75 ibus -0.00  lrn 1 lbl 10 shift   0 marg 0.70 corr 0 lag   91.9
+  97.41 >> S
+  97.46 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.006 ib=-0.002 |ia|pk=0.04 |ib|pk=0.04 vr=1.721 vrpm=516.1 vpps=516.1 src=adc apps=516.1 apulses=39173 app_mv=187.1 alp=4 alevel_mv=1706.2 adc_hz=25010 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=515.8 lrn=1 lbl=52 shift=0 marg=0.73 corr=0 lag=175.4 cpps=635.1 edges=88285 rej=72633 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20001 isr_us=8.1 nFT=1
+   98.4  OFF   OL rpm    0.0 B  519.9        trk  515.8  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 52 shift   0 marg 0.73 corr 0 lag  175.4
+  98.41 >> S
+  98.46 OFF vm=11.74 rpm=0.0/0.0 Vlim=2.35 vmmin=11.05 cap=6.0 Iset=1.20 pp=4 ibus=-0.002 ia=-0.006 ib=-0.002 |ia|pk=0.04 |ib|pk=0.04 vr=1.743 vrpm=509.7 vpps=509.7 src=adc apps=509.7 apulses=39687 app_mv=229.7 alp=4 alevel_mv=1732.0 adc_hz=25011 adc_fs=25007.4 aovr=0 mode=OL uq=0.38 trk_rpm=508.7 lrn=1 lbl=26 shift=0 marg=0.73 corr=0 lag=80.0 cpps=589.5 edges=88910 rej=72987 cmp=0 thr=1650 filt_us=6.02 lock=50 pwm_hz=25000 fieldrpm=0.0 isr_hz=20003 isr_us=8.2 nFT=1
+   99.4  OFF   OL rpm    0.0 B  511.9        trk  508.7  V 2.35 iq  0.00 id  0.00  vm 11.74 ibus -0.00  lrn 1 lbl 26 shift   0 marg 0.73 corr 0 lag   80.0
+  99.42 >> E0
+  99.47 DISABLED: by command (vmmin=11.05)
